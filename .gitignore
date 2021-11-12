@@ -1,1 +1,4 @@
 node_modules
+target/classes/META-INF/VAADIN/config/flow-build-info.json
+frontend/generated/theme-test.generated.js
+package-lock.json
