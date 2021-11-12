@@ -1,5 +1,6 @@
-import {applyTheme} from 'generated/theme.js';
-if(window.Vaadin.theme.flowBootstrap) applyTheme(document);
+const div = document.createElement('div');
+div.innerHTML = '<custom-style>    <style include="lumo-color lumo-typography"></style></custom-style>';
+document.head.insertBefore(div.firstElementChild, document.head.firstChild);
 
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-list/iron-list.js';
