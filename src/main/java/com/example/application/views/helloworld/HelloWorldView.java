@@ -1,5 +1,8 @@
 package com.example.application.views.helloworld;
 
+import java.sql.*;
+
+import com.example.application.bdd.App;
 // |||| unused imports
 // import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.button.Button;
@@ -31,6 +34,14 @@ public class HelloWorldView extends HorizontalLayout {
         setVerticalComponentAlignment(Alignment.END, name, sayHello);
         sayHello.addClickListener(e -> {
             Notification.show("Hello " + name.getValue());
+            try (Connection con = App.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+                java.sql.Date date = java.sql.Date.valueOf("2002-08-02");
+                String nom = name.getValue();
+                App.createPerson(con, nom, date);
+                App.afficheToutesPersonnes(con);
+            } catch (Exception err) {
+                System.out.println(err);
+            }
         });
     }
 
