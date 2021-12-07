@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package classes;
 
 import java.sql.Connection;
@@ -9,10 +5,6 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author thiba
- */
 public class Etudiant extends Personne{
     
     Date dateNaiss ; //date de naissance
@@ -95,7 +87,7 @@ public class Etudiant extends Personne{
         super.setNom(nom); //To change body of generated methods, choose Tools | Templates.
     }
     
-   public static final String[][] PERSONNES_ALEA = new String[][]{
+    public static final String[][] PERSONNES_ALEA = new String[][]{
         {"1", "Pauline", "Giroux", "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55",  "5/7/2002", "true"},
         {"2", "Peppin", "David", "PeppinDavid@insa-strasbourg.fr","AttaqueT!tanesque0", "11/1/2002","true"},
         {"3", "Aurore", "Benjamin", "AuroreBenjamin@insa-strasbourg.fr","ViveJava47?",  "10/18/2002","true"},
@@ -216,7 +208,7 @@ public class Etudiant extends Personne{
         {"118", "Bruce", "Wayne", "BruceWayne@insa-strasbourg.fr","joker",  "4/17/2002","true"},
         {"119", "Peter", "Parker", "PeterParker@insa-strasbourg.fr","maryjane",  "8/15/2002","true"},
         {"120", "Thor", "Odinson", "ThorOdinson@insa-strasbourg.fr","foudre",  "8/1/2002","true"},
-   };
+    };
     public static List<String> noms() {
         return Arrays.stream(PERSONNES_ALEA).map((t) -> {
             return t[2];
@@ -251,9 +243,7 @@ public class Etudiant extends Personne{
             return t[6];
         }).toList();
     }
-
-
-    }
+}
 
 
 

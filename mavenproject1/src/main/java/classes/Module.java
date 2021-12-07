@@ -1,17 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package classes;
 
 import static classes.Etudiant.PERSONNES_ALEA;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author thiba
- */
 public class Module {
     
     String intitule ; //nom du module
@@ -109,38 +101,35 @@ public class Module {
         {"10", "LV2 - Allemand (Intermédiaire & Avancé - Cycle 1) 2LF", "Developper ses compétences en allemand", "25", "16", "TOUTE"},
         
        
-   };
+    };
      
-      public static List<String> intitule() {
-        return Arrays.stream(MODULE).map((t) -> {
-            return t[2];
-        }).toList();
+    public static List<String> intitule() {
+    return Arrays.stream(MODULE).map((t) -> {
+        return t[2];
+    }).toList();
     }
     
-      public static List<String> description() {
-        return Arrays.stream(MODULE).map((t) -> {
-            return t[1];
-        }).toList();
+    public static List<String> description() {
+    return Arrays.stream(MODULE).map((t) -> {
+        return t[1];
+    }).toList();
     }
       
-      public static List<String> nbrplacemin() {
-        return Arrays.stream(MODULE).map((t) -> {
-            return t[3];
-        }).toList();
+    public static List<String> nbrplacemin() {
+    return Arrays.stream(MODULE).map((t) -> {
+        return t[3];
+    }).toList();
     }
-      
-       public static List<String> nbrplacemax() {
-        return Arrays.stream(MODULE).map((t) -> {
-            return t[4];
-        }).toList();
-       }
-        
-        public static List<String> classeacceptee() {
-        return Arrays.stream(MODULE).map((t) -> {
-            return t[5];
-        }).toList();
+    
+    public static List<String> nbrplacemax() {
+    return Arrays.stream(MODULE).map((t) -> {
+        return t[4];
+    }).toList();
     }
-        
     
-    
+    public static List<String> classeacceptee() {
+    return Arrays.stream(MODULE).map((t) -> {
+        return t[5];
+    }).toList();
+    }  
 }
