@@ -8,10 +8,15 @@ public class Initialisation {
     //classe contenant tout les éléments permettant d'initialiser la base de donnée
     public static void init() {
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+            con.setAutoCommit(false);
+            
             Commandes.tabledrop(con, "Etudiant");
-            Commandes.tabledrop(con, "Module");
             tableEtudiant(con);
+            System.out.println("Table Etudiant créée");
+
+            Commandes.tabledrop(con, "Module");
             tableModule(con);
+            System.out.println("Table Module créée");
             
         } catch (Exception err) {
             System.out.println(err);
@@ -293,7 +298,7 @@ public class Initialisation {
         "- de connaître les tarifs de rachat et les modalités de raccordement au réseau de distribution public,\n" +
         "- d’évaluer la rentabilité économique d’une installation,\n" +
         "- de connaître le marché du solaire photovoltaïque (mondial, européen et français) ainsi que son potentiel\n" +
-        "de développement avenir,", "25", "16", "TOUTE"},
+        "de développement avenir,", "25", "16", "TOUTE" },
         
         {"12", "Filmer la science", "L'objectif premier sera de répondre à la question suivante : quelles formes peut prendre la science lorsqu'elle est filmée, lorsqu'elle est observée au travers du prisme du cinéma ?\n" +
         "Le cinéma est un art visuel et narratif. Il permet de donner corps à des fantasmes, qu'ils soient scientifiques ou non, de créer un univers fictionnel singulier, mais aussi de témoigner de l'existant.\n" +
@@ -308,29 +313,29 @@ public class Initialisation {
         
         {"15", "Statistiques", "Ce cours est une introduction aux statistiques. L'objectif est de présenter ce que permettent de faire les statistiques mais aussi ce qu'elles ne permettent pas de faire.", "25", "16","TOUTE"},
         
-        
+       
         
    };
 
     public static List<String> intitule() {
         return Arrays.stream(MODULE).map((t) -> {
-            return t[2];
+            return t[1];
         }).toList();
     }
 
     public static List<String> description() {
         return Arrays.stream(MODULE).map((t) -> {
-            return t[1];
+            return t[2];
         }).toList();
     }
 
-    public static List<String> nbrplacemin() {
+    public static List<String> nbrplacemax() {
         return Arrays.stream(MODULE).map((t) -> {
             return t[3];
         }).toList();
     }
 
-    public static List<String> nbrplacemax() {
+    public static List<String> nbrplacemin() {
         return Arrays.stream(MODULE).map((t) -> {
             return t[4];
         }).toList();
@@ -342,28 +347,31 @@ public class Initialisation {
         }).toList();
     }
      public static void tableModule(Connection con) throws SQLException {
-       //méthode permettant de créer la table qui va contenir les étudiants
+       //méthode permettant de créer la table qui va contenir les modules
         try (Statement st = con.createStatement()) {
             st.executeUpdate("""
                          create table Module(
                          id integer primary key generated always as identity,
-                         intitulé varchar(50) not null,
+                         intitule varchar(100) not null,
                          description text not null,
                          nbPlaceMax integer not null,
                          nbPlaceMin integer not null,
-                         classeacceptee varchar(100) not null,
+                         classeacceptee varchar(100) not null
                          
                          )
                          """);
         }
+        //on récupère ensuite les différents éléments du tableau MODULE
+       
         List<String> intitules = Initialisation.intitule();
         List<String> descriptions = Initialisation.description();
         List<String> nbrplacemaxs = Initialisation.nbrplacemax();
         List<String> nbrplacemins = Initialisation.nbrplacemin();
         List<String> classeacceptees = Initialisation.classeacceptee();
-        for (int i = 0; i < ETUDIANT.length; i++) {
+        for (int i = 0; i < MODULE.length; i++) {
             Commandes.AjoutModule(con, intitules.get(i), descriptions.get(i), nbrplacemaxs.get(i), nbrplacemins.get(i), classeacceptees.get(i));
         }
+       
         
         
     }
