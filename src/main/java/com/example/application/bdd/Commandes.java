@@ -76,11 +76,6 @@ public class Commandes
                     VALUES (?,?,?,?,?)
                     """)){
         con.setAutoCommit(false);
-        System.out.println(intitule);
-        System.out.println(description);
-        System.out.println(nbplacemax);
-        System.out.println(nbplacemin);
-        System.out.println(classeacceptee);
         pst.setString(1, intitule);
         pst.setString(2, description);
         pst.setInt(3, Integer.parseInt(nbplacemax));

@@ -1,8 +1,5 @@
 package com.example.application.classes;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class Module {
 
     String intitule; // nom du module
@@ -69,5 +66,4 @@ public class Module {
                 + ", nbPlaceMin=" + nbPlaceMin + ", classeacceptee=" + classeacceptee + '}';
     }
 
- 
 }
