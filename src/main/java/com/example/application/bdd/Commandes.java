@@ -2,7 +2,8 @@ package com.example.application.bdd;
 
 import java.sql.*;
 
-public class Commandes {
+public class Commandes 
+{
 
     public static Connection connect(String host, int port, String database, String user, String pass)
             throws ClassNotFoundException, SQLException {
@@ -16,6 +17,7 @@ public class Commandes {
     }
 
     public static void tabledrop(Connection con, String nomtable) throws SQLException {
+        //méthode permettant d'effacer une table de la base de donnée
         try {
             try (Statement st = con.createStatement()) {
                 st.executeUpdate("drop table " + nomtable);
@@ -25,7 +27,9 @@ public class Commandes {
         }
     }
 
-    public static void AjoutEtudiant(Connection con, String nom, String prenom, String adresse, String mdp, String date, String dispo, String classe) throws SQLException{
+    public static void AjoutEtudiant(Connection con, String nom, String prenom, String adresse, String mdp, String date, String dispo, String classe) throws SQLException
+    {
+       //méthode permettant d'ajouter un étudiant à la table contenant tous les étudiants
         try (PreparedStatement pst = con.prepareStatement(
             """
                     INSERT INTO Etudiant (nom,prenom,adresse,mdp,dateNaissance,disponibilite,classe)
@@ -58,13 +62,40 @@ public class Commandes {
         pst.setString(3, adresse);
         pst.setString(4, mdp);
         pst.setDate(5, java.sql.Date.valueOf(date));
-        pst.executeUpdate();
-        con.commit();
         } catch (SQLException ex) {
             con.rollback();
             System.out.println("ERROR : problem during AjoutAdmin");
         }
     }
+    public static void AjoutModule(Connection con, String intitule, String description, String nbplacemax, String nbplacemin, String classeacceptee) throws SQLException
+    {
+        //méthode permettant d'ajouter un module à la base de donnée
+        try (PreparedStatement pst = con.prepareStatement(
+            """
+                    INSERT INTO Module (intitule,description,nbPlaceMax,nbPlaceMin,classeacceptee)
+                    VALUES (?,?,?,?,?)
+                    """)){
+        con.setAutoCommit(false);
+        System.out.println(intitule);
+        System.out.println(description);
+        System.out.println(nbplacemax);
+        System.out.println(nbplacemin);
+        System.out.println(classeacceptee);
+        pst.setString(1, intitule);
+        pst.setString(2, description);
+        pst.setInt(3, Integer.parseInt(nbplacemax));
+        pst.setInt(4, Integer.parseInt(nbplacemin));
+        pst.setString(5, classeacceptee);
+        pst.executeUpdate();
+        con.commit();
+        } catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutModule");
+        }
+    }
+        
+ 
+}
     // exemple drop table
     // public static void tabledrop(Connection con) throws SQLException {
     //     try {
@@ -113,4 +144,3 @@ public class Commandes {
     //         }
     //     }
     // }
-}

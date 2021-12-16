@@ -15,7 +15,7 @@ import com.vaadin.flow.component.dependency.NpmPackage;
 public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        // try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+        //try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
         //     Commandes.tabledrop(con);
         //     Commandes.table(con);
         // } catch (Exception e) {
