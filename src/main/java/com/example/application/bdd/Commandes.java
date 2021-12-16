@@ -62,6 +62,8 @@ public class Commandes
         pst.setString(3, adresse);
         pst.setString(4, mdp);
         pst.setDate(5, java.sql.Date.valueOf(date));
+        pst.executeUpdate();
+        con.commit();
         } catch (SQLException ex) {
             con.rollback();
             System.out.println("ERROR : problem during AjoutAdmin");
