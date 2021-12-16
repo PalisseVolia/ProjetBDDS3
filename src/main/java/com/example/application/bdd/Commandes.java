@@ -21,8 +21,7 @@ public class Commandes {
                 st.executeUpdate("drop table " + nomtable);
             }
         } catch (Exception e) {
-            con.rollback();
-            System.out.println("table inexistante");
+            System.out.println("table " + nomtable + " inexistante, première éxécution ?");
         }
     }
 
@@ -45,6 +44,25 @@ public class Commandes {
         } catch (SQLException ex) {
             con.rollback();
             System.out.println("ERROR : problem during AjoutEtudiant");
+        }
+    }
+    public static void AjoutAdmin(Connection con,  String nom, String prenom, String adresse, String mdp, String date) throws SQLException{
+        try (PreparedStatement pst = con.prepareStatement(
+            """
+                    INSERT INTO Admin (nom,prenom,adresse,mdp,dateNaissance)
+                    VALUES (?,?,?,?,?)
+                    """)){
+        con.setAutoCommit(false);
+        pst.setString(1, nom);
+        pst.setString(2, prenom);
+        pst.setString(3, adresse);
+        pst.setString(4, mdp);
+        pst.setDate(5, java.sql.Date.valueOf(date));
+        pst.executeUpdate();
+        con.commit();
+        } catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutAdmin");
         }
     }
     // exemple drop table
