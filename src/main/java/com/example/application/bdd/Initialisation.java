@@ -126,144 +126,145 @@ public class Initialisation {
         List<String> adresses = Initialisation.adresse();
         List<String> mdps = Initialisation.mdp();
         List<String> dates = Initialisation.datenaiss();
+        List<String> classe = Initialisation.classe();
         for (int i = 0; i < ETUDIANT.length; i++) {
-            Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i), dates.get(i), "dispo", "classe");
+            Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i), dates.get(i), "dispo", classe.get(i));
         }
     }
 
     public static final String[][] ETUDIANT = new String[][]{
-        {"Pauline", "Giroux", "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55",  "2002-05-07", "true"},
-        {"Peppin", "David", "PeppinDavid@insa-strasbourg.fr","AttaqueT!tanesque0", "2002-01-11","true"},
-        {"Aurore", "Benjamin", "AuroreBenjamin@insa-strasbourg.fr","ViveJava47?",  "2002-10-18","true"},
-        {"Dominic", "Rochefort", "DominicRochefort@insa-strasbourg.fr","?PublicStatic02",  "2002-08-07","true"},
-        {"Gérard", "Parenteau", "GerardParenteau@insa-strasbourg.fr", "Pizza4Fromage!", "2002-06-29","true"},
-        {"Melusina", "Simon", "MelusinaSimon@insa-strasbourg.fr","InsaStras67!", "2002-01-27","true"},
-        {"Calandre", "Béland", "CalandreBeland@insa-strasbourg.fr", "?Jb007",  "2002-03-20","true"},
-        {"Édith", "Caya", "EdithCaya@insa-strasbourg.fr", "XxMessixX05!","2002-03-25","true"},
-        {"Eugène", "Chrétien", "EugeneChretien@insa-strasbourg.fr","LeBronJames7!8", "2002-03-16","true"},
-        {"Searlas", "Guay", "SearlasGuay@insa-strasbourg.fr", "Xaeo14!5B", "2002-01-28","true"},
-        {"Pierrette", "Gadbois", "PierretteGadbois@insa-strasbourg.fr","fnzhj65H", "2002-05-04","true"},
-        {"Zurie", "Bonami", "ZurieBonami@insa-strasbourg.fr","nfjezG;14",  "2002-05-23","true"},
-        {"Alphonsine", "Cloutier", "AlphonsineCloutier@insa-strasbourg.fr","dhebdG4","2002-10-03","true"},
-        {"Pierpont", "Dumont", "PierpontDumont@insa-strasbourg.fr",  "thibautlbp01", "2002-11-05","true"},
-        {"Yvon", "Primeau", "YvonPrimeau@insa-strasbourg.fr", "thibautsecritsansl88","2002-09-21","true"},
-        {"Albertine", "Rossignol", "AlbertineRossignol@insa-strasbourg.fr","VoliaRugueux0", "2002-10-28","true"},
-        {"Christien", "Laderoute", "ChristienLaderoute@insa-strasbourg.fr","CouscousMerguez5", "2002-09-09","true"},
-        {"Lance", "Gosselin", "LanceGosselin@insa-strasbourg.fr", "PinkFloyd5", "2002-10-19","true"},
-        {"Somerville", "Brisebois", "SomervilleBrisebois@insa-strasbourg.fr","Juice999!",  "2002-08-15","true"},
-        {"Auriville", "Beauchemin", "AurivilleBeauchemin@insa-strasbourg.fr","RocketLeague4", "2001-03-23","true"},
-        {"Hugues", "Houle", "HuguesHoule@insa-strasbourg.fr",  "fhjs!fFz4", "2001-10-16","true"},
-        {"Ogier", "Josseaume", "OgierJosseaume@insa-strasbourg.fr","F!Sgjr5", "2001-03-07","true"},
-        {"Armina", "Massé", "ArminaMasse@insa-strasbourg.fr","fDSfdfFz4!","2001-04-18","true"},
-        {"Océane", "Lamare", "OceaneLamare@insa-strasbourg.fr","R!EZzfz4", "2001-04-15","true"},
-        {"Beltane", "Pariseau", "BeltanePariseau@insa-strasbourg.fr","Jgfh!FGsFz4", "2001-01-08","true"},
-        {"Maryse", "Guibord", "MaryseGuibord@insa-strasbourg.fr",  "HJ!Lrdq!Fz4","2001-01-21","true"},
-        {"Émilie", "Desnoyers", "EmilieDesnoyers@insa-strasbourg.fr","Frdgzjks!fFz4",  "2001-07-05","true"},
-        {"Melville", "Duplessis", "MelvilleDuplessis@insa-strasbourg.fr","Mh!ytkere4",  "2001-06-06","true"},
-        {"Michel", "Baril", "MichelBaril@insa-strasbourg.fr","FZkfn?c475", "2001-11-14","true"},
-        {"Bertrand", "Turgeon", "BertrandTurgeon@insa-strasbourg.fr","NarutoHokage", "2001-12-03","true"},
-        {"Landers", "Lemieux", "LandersLemieux@insa-strasbourg.fr","ViveSpiderman054!", "2001-03-05","true"},
-        {"La Roux", "Cotuand", "LaRouxCotuand@insa-strasbourg.fr","ProutLol:!4", "2001-01-30","true"},
-        {"Serge", "Givry", "SergeGivry@insa-strasbourg.fr","fdhjzffzh2", "2001-06-06","true"},
-        {"Ignace", "Quiron", "IgnaceQuiron@insa-strasbourg.fr","pokemon4", "2001-09-20","true"},
-        {"Aleron", "Fréchette", "AleronFrechette@insa-strasbourg.fr","voiturerouge", "2001-10-15","true"},
-        {"Fortun", "Savoie", "FortunSavoie@insa-strasbourg.fr","travailleurfrontalier", "2001-02-18","true"},
-        {"Fusberta", "Dufour", "FusbertaDufour@insa-strasbourg.fr"," thdbadvc54!", "2000-11-23","true"},
-        {"Merle", "Dupont", "MerleDupont@insa-strasbourg.fr", "Ggezf44", "1999-01-23","true"},
-        {"Ferrau", "Déziel", "FerrauDeziel@insa-strasbourg.fr","Gkzjdbacv15",  "2001-03-24","true"},
-        {"Joseph", "Laforge", "JosephLaforge@insa-strasbourg.fr","GKbdb1qn",  "2000-10-28","true"},
-        {"David", "Laderoute", "DavidLaderoute@insa-strasbourg.fr","MatthieuLutzlpb",  "2001-04-15","true"},
-        {"Eugène", "Busson", "EugeneBusson@insa-strasbourg.fr","yaatiktok",  "2000-07-15","true"},
-        {"Joséphine", "Chandonnet", "JosephineChandonnet@insa-strasbourg.fr","salutsalut",  "2001-12-10","true"},
-        {"Ambra", "Bourget", "AmbraBourget@insa-strasbourg.fr","Fzjfknbv",  "2000-03-19","true"},
-        {"Merle", "Lapointe", "MerleLapointe@insa-strasbourg.fr","InfoBaseDeDonnee",  "2000-08-29","true"},
-        {"Arthur", "Sevier", "ArthurSevier@insa-strasbourg.fr", "HGejkd", "2000-05-24","true"},
-        {"Quennel", "Verreau", "QuennelVerreau@insa-strasbourg.fr","ZFhdbnfz", "2000-08-23","true"},
-        {"Aubrey", "Gauthier", "AubreyGauthier@insa-strasbourg.fr", "DFsnjkzf", "2000-02-09","true"},
-        {"Gill", "Vaillancour", "GillVaillancour@insa-strasbourg.fr", "Sjgioemnd65", "2000-09-26","true"},
-        {"Talon", "Rhéaume", "TalonRheaume@insa-strasbourg.fr","dzFaknfv1",  "2000-04-25","true"},
-        {"Latimer", "Morneau", "LatimerMorneau@insa-strasbourg.fr","PommePoire7",  "2001-03-25","true"},
-        {"Chapin", "Sansouci", "ChapinSansouci@insa-strasbourg.fr", "BananeFraise",  "2001-04-26","true"},
-        {"Cosette", "Chesnay", "CosetteChesnay@insa-strasbourg.fr","VanilleChocolat",  "2001-08-18","true"},
-        {"Nicole", "Gregoire", "NicoleGregoire@insa-strasbourg.fr","SauceEpicee",  "1999-02-06","true"},
-        {"Curtis", "Larocque", "CurtisLarocque@insa-strasbourg.fr","DonutSucreAuSucre", "1999-06-29","true"},
-        {"Philippe", "Audet", "PhilippeAudet@insa-strasbourg.fr", "Tftyako", "1999-07-10","true"},
-        {"Arnaud", "Rouze", "ArnaudRouze@insa-strasbourg.fr", "scottdgb", "1999-06-04","true"},
-        {"Sumner", "Bizier", "SumnerBizier@insa-strasbourg.fr","ApexLegend",  "1999-05-28","true"},
-        {"Rosamonde", "Laisné", "RosamondeLaisne@insa-strasbourg.fr", "JusticeLeague", "2000-04-04","true"},
-        {"Rive", "Beauchamps", "RiveBeauchamps@ginsa-strasbourg.fr","BruceWayneEstBatman",  "2000-05-18","true"},
-        {"Lotye", "Angélil", "LotyeAngelil@insa-strasbourg.fr", "djiflzb", "2000-04-16","true"},
-        {"Jesper", "Chartier", "JesperChartier@insa-strasbourg.fr","SDjzefjkbv",  "2000-06-22","true"},
-        {"Armina", "Langlais", "ArminaLanglais@insa-strasbourg.fr", "DJFzbfbn","1998-06-17","true"},
-        {"Brigitte", "Pelchat", "BrigittePelchat@insa-strasbourg.fr","Djfzakb",  "1997-11-06","true"},
-        {"Henry", "Brisebois", "HenryBrisebois@insa-strasbourg.fr","KHrjfn",  "1999-11-07","true"},
-        {"Matilda", "Sevier", "MatildaSevier@insa-strasbourg.fr","Tjekilbvhjl", "2001-07-03","true"},
-        {"Minette", "Roy", "MinetteRoy@insa-strasbourg.fr","HJriomnbjfd",  "2001-12-11","true"},
-        {"Burkett", "Guertin", "BurkettGuertin@insa-strasbourg.fr", "htopn,kfl", "2001-02-25","true"},
-        {"Halette", "Barteaux", "HaletteBarteaux@insa-strasbourg.fr", "JLpynfkz", "2000-11-18","true"},
-        {"Jewel", "Fournier", "JewelFournier@insa-strasbourg.fr","egfnjker", "2001-10-26","true"},
-        {"Raina", "Garcia", "RainaGarcia@insa-strasbourg.fr", "EGjeiuvb", "2000-08-27","true"},
-        {"Peppin", "Ménard", "PeppinMenard@insa-strasbourg.fr","GFEzgviogn", "2000-07-15","true"},
-        {"Fealty", "Allard", "FealtyAllard@insa-strasbourg.fr", "DVkfoivn","2000-06-30","true"},
-        {"Percy", "Bériault", "PercyBeriault@insa-strasbourg.fr","Rkothnv", "2000-12-14","true"},
-        {"Merlin", "Massé", "MerlinMasse@insa-strasbourg.fr","syrielzfjiu", "2000-10-25","true"},
-        {"Damiane", "Vernadeau", "DamianeVernadeau@insa-strasbourg.fr","bolognaise>carbo",  "2000-10-20","true"},
-        {"Byron", "LaGrande", "ByronLaGrande@insa-strasbourg.fr","sushipasbon", "2000-01-25","true"},
-        {"Sibyla", "Roux", "SibylaRoux@insa-strasbourg.fr", "tonystarkXx", "2000-03-22","true"},
-        {"Joséphine", "Grivois", "JosephineGrivois@insa-strasbourg.fr","sncf=retard",  "2000-08-23","true"},
-        {"Pascaline", "DuLin", "PascalineDuLin@insa-strasbourg.fr","marchedenoel", "2000-10-19","true"},
-        {"Galatee", "Bordeaux", "GalateeBordeaux@insa-strasbourg.fr", "yeeeepnji", "2000-01-22","true"},
-        {"Pomeroy", "Fournier", "PomeroyFournier@insa-strasbourg.fr", "donda15","2002-04-12","true"},
-        {"Artus", "Thibodeau", "ArtusThibodeau@insa-strasbourg.fre", "Efgkoe", "2000-02-25","true"},
-        {"Arianne", "CinqMars", "ArianneCinqMars@insa-strasbourg.fr","VFeiovne", "2001-06-06","true"},
-        {"Curtis", "Mainville", "CurtisMainville@insa-strasbourg.fr","claviersouris", "2001-10-02","true"},
-        {"Viollette", "Bélanger", "ViolletteBelanger@ginsa-strasbourg.fr","manettedejeu",  "2001-10-06","true"},
-        {"Warrane", "Raymond", "WarraneRaymond@insa-strasbourg.fr", "lessiestescestbien", "2001-11-11","true"},
-        {"Rosemarie", "Roux", "RosemarieRoux@insa-strasbourg.fr", "dormircestlavie", "2001-06-07","true"},
-        {"Bradamate", "Rossignol", "BradamateRossignol@insa-strasbourg.fr","jaimepaslecovid", "2001-06-25","true"},
-        {"Céline", "Bertrand", "CelineBertrand@insa-strasbourg.fr", "jfzomfhz", "2001-05-12","true"},
-        {"Françoise", "Raymond", "FrancoiseRaymond@insa-strasbourg.fr","KVeibc",  "2000-04-17","true"},
-        {"Granville", "Baron", "GranvilleBaron@insa-strasbourg.fr", "Kzefizbvvz", "2001-06-08","true"},
-        {"Serge", "Caya", "SergeCaya@insa-strasbourg.fr", "Kbirbvzlo", "2001-01-03","true"},
-        {"Dixie", "Couet", "DixieCouet@insa-strasbourg.fr", "VKeojvnzkz", "2001-06-21","true"},
-        {"Melusina", "Barrientos", "MelusinaBarrientos@insa-strasbourg.fr", "Veiovhbe,","2001-08-03","true"},
-        {"Isaac", "Auclair", "IsaacAuclair@insa-strasbourg.fr", "Vekovbzkjbb", "2001-06-22","true"},
-        {"Jeannine", "Poulin", "JeanninePoulin@insa-strasbourg.fr", "VEveubvb","2001-01-01","true"},
-        {"Maurice", "Pirouet", "MauricePirouet@insa-strasbourg.fr", "jTrbzo", "1999-10-28","true"},
-        {"Marc", "Meunier", "MarcMeunier@insa-strasbourg.fr","HBeiovndm",  "2000-09-03","true"},
-        {"Valérie", "Cressac", "ValerieCressac@insa-strasbourg.fr","Jyerg,n",  "1998-06-30","true"},
-        {"Daniel", "Craig", "DanielCraig@insa-strasbourg.fr", "Vreomnb", "1998-02-03","true"},
-        {"Brad", "Pitt", "BradPitt@insa-strasbourg.fr", "aefvnt", "2003-12-18","true"},
-        {"Angélina", "Jolie", "AngelinaJolie@insa-strasbourg.fr", "Broeibp^n", "2003-05-22","true"},
-        {"Scarlett", "Johansson", "ScarlettJohansson@insa-strasbourg.fr","Rkopbnek",  "2002-02-03","true"},
-        {"Lionel", "Messi", "LionelMessi@insa-strasbourg.fr","hkemVe",  "2000-08-15","true"},
-        {"Teddy", "Riner", "TeddyRiner@insa-strasbourg.fr","DNgir",  "2000-04-07","true"},
-        {"Lewis", "Hamilton", "LewisHamilton@insa-strasbourg.fr","EKRolv",  "2002-01-07","true"},
-        {"Charles", "Leclerc", "CharlesLeclerc@insa-strasbourg.fr","EDKoeq",  "2002-10-16","true"},
-        {"Max", "Verstappen", "MaxVerstappen@insa-strasbourg.fr","Dbvozezf",  "2002-09-30","true"},
-        {"Valtteri", "Bottas", "ValterriBottas@insa-strasbourg.fr","FDkoev",  "2001-08-28","true"},
-        {"Sebastian", "Vettel", "SebastianVettel@insa-strasbourg.fr","VKopac",  "2001-03-07","true"},
-        {"Sergio", "Pérez", "SergioPerez@insa-strasbourg.fr","VDSjkoizf",  "2001-10-26","true"},
-        {"Daniel", "Ricciardo", "DanielRicciardo@insa-strasbourg.fr","Fkozpc",  "2000-01-07","true"},
-        {"Elerson", "Echiéjilé", "EldersonEchiejile@insa-strasbourg.fr","sVikzf",  "2000-01-20","true"},
-        {"Erling", "Haaland", "ErlingHaaland@insa-strasbourg.fr","SD?jizv",  "2001-07-21","true"},
-        {"Karim", "Benzema", "KarimBenzema@insa-strasbourg.fr","VJbdlnv",  "2001-12-19","true"},
-        {"Cristiano", "Ronaldo", "CristianoRonaldo@insa-strasbourg.fr","VDKozevs",  "1999-08-21","true"},
-        {"Bruce", "Wayne", "BruceWayne@insa-strasbourg.fr","joker",  "2002-04-17","true"},
-        {"Peter", "Parker", "PeterParker@insa-strasbourg.fr","maryjane",  "2002-08-15","true"},
-        {"Thor", "Odinson", "ThorOdinson@insa-strasbourg.fr","foudre",  "2002-08-01","true"},
-        {"Lounès", "Youxes", "Lounes@insa-strasbourg.fr","015705jgdfkjsbvh",  "1984-07-20","true"},
+        {"Pauline", "Giroux", "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55",  "2002-05-07", "true","GE2"},
+        {"Peppin", "David", "PeppinDavid@insa-strasbourg.fr","AttaqueT!tanesque0", "2002-01-11","true","GE2"},
+        {"Aurore", "Benjamin", "AuroreBenjamin@insa-strasbourg.fr","ViveJava47?",  "2002-10-18","true","GE2"},
+        {"Dominic", "Rochefort", "DominicRochefort@insa-strasbourg.fr","?PublicStatic02",  "2002-08-07","true","GE2"},
+        {"Gérard", "Parenteau", "GerardParenteau@insa-strasbourg.fr", "Pizza4Fromage!", "2002-06-29","true","GE2"},
+        {"Melusina", "Simon", "MelusinaSimon@insa-strasbourg.fr","InsaStras67!", "2002-01-27","true","GE2"},
+        {"Calandre", "Béland", "CalandreBeland@insa-strasbourg.fr", "?Jb007",  "2002-03-20","true","GE2"},
+        {"Édith", "Caya", "EdithCaya@insa-strasbourg.fr", "XxMessixX05!","2002-03-25","true","GE2"},
+        {"Eugène", "Chrétien", "EugeneChretien@insa-strasbourg.fr","LeBronJames7!8", "2002-03-16","true","GE2"},
+        {"Searlas", "Guay", "SearlasGuay@insa-strasbourg.fr", "Xaeo14!5B", "2002-01-28","true","GE2"},
+        {"Pierrette", "Gadbois", "PierretteGadbois@insa-strasbourg.fr","fnzhj65H", "2002-05-04","true","GE2"},
+        {"Zurie", "Bonami", "ZurieBonami@insa-strasbourg.fr","nfjezG;14",  "2002-05-23","true","GE2"},
+        {"Alphonsine", "Cloutier", "AlphonsineCloutier@insa-strasbourg.fr","dhebdG4","2002-10-03","true","GE2"},
+        {"Pierpont", "Dumont", "PierpontDumont@insa-strasbourg.fr",  "thibautlbp01", "2002-11-05","true","GE2"},
+        {"Yvon", "Primeau", "YvonPrimeau@insa-strasbourg.fr", "thibautsecritsansl88","2002-09-21","true","GE2"},
+        {"Albertine", "Rossignol", "AlbertineRossignol@insa-strasbourg.fr","VoliaRugueux0", "2002-10-28","true","GM2"},
+        {"Christien", "Laderoute", "ChristienLaderoute@insa-strasbourg.fr","CouscousMerguez5", "2002-09-09","true","GM2"},
+        {"Lance", "Gosselin", "LanceGosselin@insa-strasbourg.fr", "PinkFloyd5", "2002-10-19","true","GM2"},
+        {"Somerville", "Brisebois", "SomervilleBrisebois@insa-strasbourg.fr","Juice999!",  "2002-08-15","true","GM2"},
+        {"Auriville", "Beauchemin", "AurivilleBeauchemin@insa-strasbourg.fr","RocketLeague4", "2001-03-23","true","GM2"},
+        {"Hugues", "Houle", "HuguesHoule@insa-strasbourg.fr",  "fhjs!fFz4", "2001-10-16","true","GM2"},
+        {"Ogier", "Josseaume", "OgierJosseaume@insa-strasbourg.fr","F!Sgjr5", "2001-03-07","true","GM2"},
+        {"Armina", "Massé", "ArminaMasse@insa-strasbourg.fr","fDSfdfFz4!","2001-04-18","true","GM2"},
+        {"Océane", "Lamare", "OceaneLamare@insa-strasbourg.fr","R!EZzfz4", "2001-04-15","true","GM2"},
+        {"Beltane", "Pariseau", "BeltanePariseau@insa-strasbourg.fr","Jgfh!FGsFz4", "2001-01-08","true","GM2"},
+        {"Maryse", "Guibord", "MaryseGuibord@insa-strasbourg.fr",  "HJ!Lrdq!Fz4","2001-01-21","true","GM2"},
+        {"Émilie", "Desnoyers", "EmilieDesnoyers@insa-strasbourg.fr","Frdgzjks!fFz4",  "2001-07-05","true","GM2"},
+        {"Melville", "Duplessis", "MelvilleDuplessis@insa-strasbourg.fr","Mh!ytkere4",  "2001-06-06","true","GM2"},
+        {"Michel", "Baril", "MichelBaril@insa-strasbourg.fr","FZkfn?c475", "2001-11-14","true","GM2"},
+        {"Bertrand", "Turgeon", "BertrandTurgeon@insa-strasbourg.fr","NarutoHokage", "2001-12-03","true","GM2"},
+        {"Landers", "Lemieux", "LandersLemieux@insa-strasbourg.fr","ViveSpiderman054!", "2001-03-05","true","GM2"},
+        {"La Roux", "Cotuand", "LaRouxCotuand@insa-strasbourg.fr","ProutLol:!4", "2001-01-30","true","GE3"},
+        {"Serge", "Givry", "SergeGivry@insa-strasbourg.fr","fdhjzffzh2", "2001-06-06","true","GE3"},
+        {"Ignace", "Quiron", "IgnaceQuiron@insa-strasbourg.fr","pokemon4", "2001-09-20","true","GE3"},
+        {"Aleron", "Fréchette", "AleronFrechette@insa-strasbourg.fr","voiturerouge", "2001-10-15","true","GE3"},
+        {"Fortun", "Savoie", "FortunSavoie@insa-strasbourg.fr","travailleurfrontalier", "2001-02-18","true","GE3"},
+        {"Fusberta", "Dufour", "FusbertaDufour@insa-strasbourg.fr"," thdbadvc54!", "2000-11-23","true","GE3"},
+        {"Merle", "Dupont", "MerleDupont@insa-strasbourg.fr", "Ggezf44", "1999-01-23","true","GE3"},
+        {"Ferrau", "Déziel", "FerrauDeziel@insa-strasbourg.fr","Gkzjdbacv15",  "2001-03-24","true","GE3"},
+        {"Joseph", "Laforge", "JosephLaforge@insa-strasbourg.fr","GKbdb1qn",  "2000-10-28","true","GE3"},
+        {"David", "Laderoute", "DavidLaderoute@insa-strasbourg.fr","MatthieuLutzlpb",  "2001-04-15","true","GE3"},
+        {"Eugène", "Busson", "EugeneBusson@insa-strasbourg.fr","yaatiktok",  "2000-07-15","true","GE3"},
+        {"Joséphine", "Chandonnet", "JosephineChandonnet@insa-strasbourg.fr","salutsalut",  "2001-12-10","true","GE3"},
+        {"Ambra", "Bourget", "AmbraBourget@insa-strasbourg.fr","Fzjfknbv",  "2000-03-19","true","GE3"},
+        {"Merle", "Lapointe", "MerleLapointe@insa-strasbourg.fr","InfoBaseDeDonnee",  "2000-08-29","true","GE3"},
+        {"Arthur", "Sevier", "ArthurSevier@insa-strasbourg.fr", "HGejkd", "2000-05-24","true","GE3"},
+        {"Quennel", "Verreau", "QuennelVerreau@insa-strasbourg.fr","ZFhdbnfz", "2000-08-23","true","GE3"},
+        {"Aubrey", "Gauthier", "AubreyGauthier@insa-strasbourg.fr", "DFsnjkzf", "2000-02-09","true","GM3"},
+        {"Gill", "Vaillancour", "GillVaillancour@insa-strasbourg.fr", "Sjgioemnd65", "2000-09-26","true","GM3"},
+        {"Talon", "Rhéaume", "TalonRheaume@insa-strasbourg.fr","dzFaknfv1",  "2000-04-25","true","GM3"},
+        {"Latimer", "Morneau", "LatimerMorneau@insa-strasbourg.fr","PommePoire7",  "2001-03-25","true","GM3"},
+        {"Chapin", "Sansouci", "ChapinSansouci@insa-strasbourg.fr", "BananeFraise",  "2001-04-26","true","GM3"},
+        {"Cosette", "Chesnay", "CosetteChesnay@insa-strasbourg.fr","VanilleChocolat",  "2001-08-18","true","GM3"},
+        {"Nicole", "Gregoire", "NicoleGregoire@insa-strasbourg.fr","SauceEpicee",  "1999-02-06","true","GM3"},
+        {"Curtis", "Larocque", "CurtisLarocque@insa-strasbourg.fr","DonutSucreAuSucre", "1999-06-29","true","GM3"},
+        {"Philippe", "Audet", "PhilippeAudet@insa-strasbourg.fr", "Tftyako", "1999-07-10","true","GM3"},
+        {"Arnaud", "Rouze", "ArnaudRouze@insa-strasbourg.fr", "scottdgb", "1999-06-04","true","GM3"},
+        {"Sumner", "Bizier", "SumnerBizier@insa-strasbourg.fr","ApexLegend",  "1999-05-28","true","GM3"},
+        {"Rosamonde", "Laisné", "RosamondeLaisne@insa-strasbourg.fr", "JusticeLeague", "2000-04-04","true","GM3"},
+        {"Rive", "Beauchamps", "RiveBeauchamps@ginsa-strasbourg.fr","BruceWayneEstBatman",  "2000-05-18","true","GM3"},
+        {"Lotye", "Angélil", "LotyeAngelil@insa-strasbourg.fr", "djiflzb", "2000-04-16","true","GM3"},
+        {"Jesper", "Chartier", "JesperChartier@insa-strasbourg.fr","SDjzefjkbv",  "2000-06-22","true","GM3"},
+        {"Armina", "Langlais", "ArminaLanglais@insa-strasbourg.fr", "DJFzbfbn","1998-06-17","true","GM3"},
+        {"Brigitte", "Pelchat", "BrigittePelchat@insa-strasbourg.fr","Djfzakb",  "1997-11-06","true","GM3"},
+        {"Henry", "Brisebois", "HenryBrisebois@insa-strasbourg.fr","KHrjfn",  "1999-11-07","true","GM3"},
+        {"Matilda", "Sevier", "MatildaSevier@insa-strasbourg.fr","Tjekilbvhjl", "2001-07-03","true","GM3"},
+        {"Minette", "Roy", "MinetteRoy@insa-strasbourg.fr","HJriomnbjfd",  "2001-12-11","true","GM3"},
+        {"Burkett", "Guertin", "BurkettGuertin@insa-strasbourg.fr", "htopn,kfl", "2001-02-25","true","GM3"},
+        {"Halette", "Barteaux", "HaletteBarteaux@insa-strasbourg.fr", "JLpynfkz", "2000-11-18","true","GE4"},
+        {"Jewel", "Fournier", "JewelFournier@insa-strasbourg.fr","egfnjker", "2001-10-26","true","GE4"},
+        {"Raina", "Garcia", "RainaGarcia@insa-strasbourg.fr", "EGjeiuvb", "2000-08-27","true","GE4"},
+        {"Peppin", "Ménard", "PeppinMenard@insa-strasbourg.fr","GFEzgviogn", "2000-07-15","true","GE4"},
+        {"Fealty", "Allard", "FealtyAllard@insa-strasbourg.fr", "DVkfoivn","2000-06-30","true","GE4"},
+        {"Percy", "Bériault", "PercyBeriault@insa-strasbourg.fr","Rkothnv", "2000-12-14","true","GE4"},
+        {"Merlin", "Massé", "MerlinMasse@insa-strasbourg.fr","syrielzfjiu", "2000-10-25","true","GE4"},
+        {"Damiane", "Vernadeau", "DamianeVernadeau@insa-strasbourg.fr","bolognaise>carbo",  "2000-10-20","true","GE4"},
+        {"Byron", "LaGrande", "ByronLaGrande@insa-strasbourg.fr","sushipasbon", "2000-01-25","true","GE4"},
+        {"Sibyla", "Roux", "SibylaRoux@insa-strasbourg.fr", "tonystarkXx", "2000-03-22","true","GE4"},
+        {"Joséphine", "Grivois", "JosephineGrivois@insa-strasbourg.fr","sncf=retard",  "2000-08-23","true","GE4"},
+        {"Pascaline", "DuLin", "PascalineDuLin@insa-strasbourg.fr","marchedenoel", "2000-10-19","true","GE4"},
+        {"Galatee", "Bordeaux", "GalateeBordeaux@insa-strasbourg.fr", "yeeeepnji", "2000-01-22","true","GE4"},
+        {"Pomeroy", "Fournier", "PomeroyFournier@insa-strasbourg.fr", "donda15","2002-04-12","true","GE4"},
+        {"Artus", "Thibodeau", "ArtusThibodeau@insa-strasbourg.fre", "Efgkoe", "2000-02-25","true","GE4"},
+        {"Arianne", "CinqMars", "ArianneCinqMars@insa-strasbourg.fr","VFeiovne", "2001-06-06","true","GE4"},
+        {"Curtis", "Mainville", "CurtisMainville@insa-strasbourg.fr","claviersouris", "2001-10-02","true","GE4"},
+        {"Viollette", "Bélanger", "ViolletteBelanger@ginsa-strasbourg.fr","manettedejeu",  "2001-10-06","true","GE4"},
+        {"Warrane", "Raymond", "WarraneRaymond@insa-strasbourg.fr", "lessiestescestbien", "2001-11-11","true","GE4"},
+        {"Rosemarie", "Roux", "RosemarieRoux@insa-strasbourg.fr", "dormircestlavie", "2001-06-07","true","GE4"},
+        {"Bradamate", "Rossignol", "BradamateRossignol@insa-strasbourg.fr","jaimepaslecovid", "2001-06-25","true","GE4"},
+        {"Céline", "Bertrand", "CelineBertrand@insa-strasbourg.fr", "jfzomfhz", "2001-05-12","true","GE4"},
+        {"Françoise", "Raymond", "FrancoiseRaymond@insa-strasbourg.fr","KVeibc",  "2000-04-17","true","GE4"},
+        {"Granville", "Baron", "GranvilleBaron@insa-strasbourg.fr", "Kzefizbvvz", "2001-06-08","true","GE4"},
+        {"Serge", "Caya", "SergeCaya@insa-strasbourg.fr", "Kbirbvzlo", "2001-01-03","true","GE4"},
+        {"Dixie", "Couet", "DixieCouet@insa-strasbourg.fr", "VKeojvnzkz", "2001-06-21","true","GE4"},
+        {"Melusina", "Barrientos", "MelusinaBarrientos@insa-strasbourg.fr", "Veiovhbe,","2001-08-03","true","GE4"},
+        {"Isaac", "Auclair", "IsaacAuclair@insa-strasbourg.fr", "Vekovbzkjbb", "2001-06-22","true","GCE2"},
+        {"Jeannine", "Poulin", "JeanninePoulin@insa-strasbourg.fr", "VEveubvb","2001-01-01","true","GCE2"},
+        {"Maurice", "Pirouet", "MauricePirouet@insa-strasbourg.fr", "jTrbzo", "1999-10-28","true","GCE2"},
+        {"Marc", "Meunier", "MarcMeunier@insa-strasbourg.fr","HBeiovndm",  "2000-09-03","true","GCE2"},
+        {"Valérie", "Cressac", "ValerieCressac@insa-strasbourg.fr","Jyerg,n",  "1998-06-30","true","GCE2"},
+        {"Daniel", "Craig", "DanielCraig@insa-strasbourg.fr", "Vreomnb", "1998-02-03","true","GCE2"},
+        {"Brad", "Pitt", "BradPitt@insa-strasbourg.fr", "aefvnt", "2003-12-18","true","GCE2"},
+        {"Angélina", "Jolie", "AngelinaJolie@insa-strasbourg.fr", "Broeibp^n", "2003-05-22","true","GCE2"},
+        {"Scarlett", "Johansson", "ScarlettJohansson@insa-strasbourg.fr","Rkopbnek",  "2002-02-03","true","GCE2"},
+        {"Lionel", "Messi", "LionelMessi@insa-strasbourg.fr","hkemVe",  "2000-08-15","true","GCE2"},
+        {"Teddy", "Riner", "TeddyRiner@insa-strasbourg.fr","DNgir",  "2000-04-07","true","GCE2"},
+        {"Lewis", "Hamilton", "LewisHamilton@insa-strasbourg.fr","EKRolv",  "2002-01-07","true","GCE2"},
+        {"Charles", "Leclerc", "CharlesLeclerc@insa-strasbourg.fr","EDKoeq",  "2002-10-16","true","GCE2"},
+        {"Max", "Verstappen", "MaxVerstappen@insa-strasbourg.fr","Dbvozezf",  "2002-09-30","true","GCE2"},
+        {"Valtteri", "Bottas", "ValterriBottas@insa-strasbourg.fr","FDkoev",  "2001-08-28","true","GCE2"},
+        {"Sebastian", "Vettel", "SebastianVettel@insa-strasbourg.fr","VKopac",  "2001-03-07","true","GCE2"},
+        {"Sergio", "Pérez", "SergioPerez@insa-strasbourg.fr","VDSjkoizf",  "2001-10-26","true","GCE2"},
+        {"Daniel", "Ricciardo", "DanielRicciardo@insa-strasbourg.fr","Fkozpc",  "2000-01-07","true","GCE2"},
+        {"Elerson", "Echiéjilé", "EldersonEchiejile@insa-strasbourg.fr","sVikzf",  "2000-01-20","true","GCE2"},
+        {"Erling", "Haaland", "ErlingHaaland@insa-strasbourg.fr","SD?jizv",  "2001-07-21","true","GCE2"},
+        {"Karim", "Benzema", "KarimBenzema@insa-strasbourg.fr","VJbdlnv",  "2001-12-19","true","GCE2"},
+        {"Cristiano", "Ronaldo", "CristianoRonaldo@insa-strasbourg.fr","VDKozevs",  "1999-08-21","true","GCE2"},
+        {"Bruce", "Wayne", "BruceWayne@insa-strasbourg.fr","joker",  "2002-04-17","true","GCE2"},
+        {"Peter", "Parker", "PeterParker@insa-strasbourg.fr","maryjane",  "2002-08-15","true","GCE2"},
+        {"Thor", "Odinson", "ThorOdinson@insa-strasbourg.fr","foudre",  "2002-08-01","true","GE4"},
+        {"Lounès", "Youbi", "Lounes@insa-strasbourg.fr","015705jgdfkjsbvh",  "1984-07-20","true","GE2"},
    };
 
     public static List<String> noms() {
         return Arrays.stream(ETUDIANT).map((t) -> {
-            return t[0];
+            return t[1];
         }).toList();
     }
 
     public static List<String> prenoms() {
         return Arrays.stream(ETUDIANT).map((t) -> {
-            return t[1];
+            return t[0];
         }).toList();
     }
 
@@ -288,6 +289,12 @@ public class Initialisation {
     public static List<String> dispo() {
         return Arrays.stream(ETUDIANT).map((t) -> {
             return t[5];
+        }).toList();
+    }
+
+    public static List<String> classe() {
+        return Arrays.stream(ETUDIANT).map((t) -> {
+            return t[6];
         }).toList();
     }
     
@@ -492,17 +499,25 @@ public class Initialisation {
                         create table GrpModule(
                         idSemestre integer not null,
                         idGroupe integer not null,
-                        idModule integer not null,
-
-                        
-                        foreign key (idModule) references module(id),
-                        
-                        foreign key (idSemestre) references semestre(id)
+                        idModule integer not null
                          
                         )
                         """);
+            st.executeUpdate(
+                            """
+                        alter table GrpModule
+                        add constraint moduleAppartient  
+                        foreign key (idModule) references module(id)
+                            """);
+            st.executeUpdate(
+                                """
+                        alter table GrpModule
+                        add constraint moduleOuvert
+                        foreign key (idSemestre) references semestre(id) 
+                          """);                
         }
-             
+        
+                            
         List<String> semestre = Initialisation.idsemestre();
         List<String> grp = Initialisation.grpmodule();
         List<String> mod = Initialisation.module();
@@ -588,6 +603,21 @@ public class Initialisation {
         {"4", "4", "15"},
         {"4", "4", "7"},
         {"4", "4", "11"},
+
+        //semestre 2 2020 : 3NG
+
+        {"5", "1", "13"},
+        {"5", "1", "14"},
+        {"5", "1", "15"},
+        //grp2
+        {"5", "2", "1"},
+        {"5", "2", "3"},
+        {"5", "2", "9"},
+        //grp3
+        {"5", "3", "7"},
+        {"5", "3", "8"},
+        {"5", "3", "11"},
+       
         
     };
 
@@ -619,17 +649,111 @@ public class Initialisation {
         try (Statement st = con.createStatement()) {
             st.executeUpdate("""
                         create table Voeux(
+                        idSemestre integer not null,
                         idEtudiant integer not null,
                         idModule integer not null,
                         numeroVoeux integer not null,
-                        idSemestre integer not null,
-                        foreign key (idEtudiant) references etudiant(id),
-                        foreign key (idModule) references module(id)
 
                         )
                         """);
+            st.executeUpdate(
+                            """
+                        alter table Voeux
+                        add constraint etudiantinscrit 
+                        foreign key (idEtudiant) references etudiant(id),
+                            """);
+            st.executeUpdate(
+                                """
+                        alter table Voeux
+                        add constraint moduleOuvert
+                        foreign key (idModule) references module(id) 
+                          """);    
         }
 
     }
+    public static final String[][] VOEUX = new String[][]{
+        //Etudiant 1, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        {"5", "1", "13"},
+        {"5", "1", "3"},
+        {"5", "1", "8"},
+
+        //Etudiant 120, GE4, a fait les modules en 2018,2019,2020
+        {"2", "1", "5"},
+        {"2", "1", "6"},
+        {"2", "1", "11"},
+
+        {"3", "1", "5"},
+        {"3", "1", "6"},
+        {"3", "1", "11"},
+        //grp2
+        {"1", "2", "4"},
+        {"1", "2", "5"},
+        {"1", "2", "6"},
+        //grp3
+        {"1", "3", "7"},
+        {"1", "3", "8"},
+        {"1", "3", "9"},
+        //grp4
+        {"1", "4", "10"},
+        {"1", "4", "11"},
+        {"1", "4", "12"},
+
+        //semestre 2 2018 : 3 NG
+        {"2", "1", "5"},
+        {"2", "1", "10"},
+        {"2", "1", "15"},
+
+        {"2", "2", "1"},
+        {"2", "2", "6"},
+        {"2", "2", "11"},
+
+        {"2", "3", "2"},
+        {"2", "3", "7"},
+        {"2", "3", "12"},
+
+        //semestre 1 2019: 3NG
+        {"3", "1", "1"},
+        {"3", "1", "3"},
+        {"3", "1", "5"},
+
+        {"3", "2", "2"},
+        {"3", "2", "4"},
+        {"3", "2", "6"},
+
+        {"3", "3", "11"},
+        {"3", "3", "12"},
+        {"3", "3", "13"},
+
+        //semestre 2 2019: 3NG
+        {"3", "1", "1"},
+        {"3", "1", "3"},
+        {"3", "1", "5"},
+
+        {"3", "2", "2"},
+        {"3", "2", "4"},
+        {"3", "2", "6"},
+
+        {"3", "3", "11"},
+        {"3", "3", "12"},
+        {"3", "3", "13"},
+
+        //semestre 1 2020 : 4NG
+        {"4", "1", "3"},
+        {"4", "1", "6"},
+        {"4", "1", "9"},
+        //grp2
+        {"4", "2", "4"},
+        {"4", "2", "8"},
+        {"4", "2", "12"},
+        //grp3
+        {"4", "3", "1"},
+        {"4", "3", "5"},
+        {"4", "3", "10"},
+        //grp4
+        {"4", "4", "15"},
+        {"4", "4", "7"},
+        {"4", "4", "11"},
+        
+    };
 
 }
