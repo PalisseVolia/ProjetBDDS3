@@ -2,12 +2,14 @@ package com.example.application.classes;
 
 public class Module {
 
+    //Attributs
     String intitule; // nom du module
     String description; // description du module
     int nbPlaceMax; // nombre de personne maximum pouvant s'inscire au module
     int nbPlaceMin; // nombre de personne nécessaire à l'ouverture du module
     String classeacceptee; // exemple GE/GCE/MIQ
 
+    //Constructeur
     public Module(String intitule, String description, int nbPlaceMax, int nbPlaceMin, String classeacceptee) {
         this.intitule = intitule;
         this.description = description;
@@ -20,6 +22,7 @@ public class Module {
 
     }
 
+    //méthodes get
     public String getIntitule() {
         return intitule;
     }
@@ -40,6 +43,7 @@ public class Module {
         return classeacceptee;
     }
 
+    //méthodes set
     public void setIntitule(String intitule) {
         this.intitule = intitule;
     }
@@ -60,7 +64,6 @@ public class Module {
         this.classeacceptee = classeacceptee;
     }
 
-    @Override
     public String toString() {
         return "Module{" + "intitule=" + intitule + ", description=" + description + ", nbPlaceMax=" + nbPlaceMax
                 + ", nbPlaceMin=" + nbPlaceMin + ", classeacceptee=" + classeacceptee + '}';

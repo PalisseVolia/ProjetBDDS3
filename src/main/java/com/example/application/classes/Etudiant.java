@@ -4,6 +4,7 @@ import java.sql.Date;
 
 public class Etudiant extends Personne {
 
+    //attributs
     Date dateNaiss; // date de naissance
     boolean disponibilite; // permet de définir si un éttudiant peut s'inscire ou non à un electif. Exemple
                            // : si il part en mobilité
