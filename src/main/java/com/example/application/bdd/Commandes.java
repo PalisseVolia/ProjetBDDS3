@@ -140,6 +140,24 @@ public class Commandes
         }
     }
 
+    public static void AjoutVoeux(Connection con, String idsemestre, String idetudiant, String idmodule) throws SQLException {
+        //méthode permettant d'ajouter un groupe de module
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                insert into Voeux (idSemestre,idEtudiant,idModule) values (?,?,?)
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, Integer.parseInt(idsemestre));
+            pst.setInt(2, Integer.parseInt(idetudiant));
+            pst.setInt(3, Integer.parseInt(idmodule));
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutVoeux");
+        }
+    }
+
 
 
     //-----------------------------------------------------------------
@@ -160,7 +178,7 @@ public class Commandes
     }
 
     public static void afficheModTest(Connection con) throws SQLException {
-        //méthode test : affiche dans la console tous les modules du grp 1 du s2 de 2018
+        //méthode test : affiche dans la console tous les modules du grp 1 du s2 de 2019
         try ( Statement st = con.createStatement()) {
              try ( ResultSet tla = st.executeQuery(
                     """

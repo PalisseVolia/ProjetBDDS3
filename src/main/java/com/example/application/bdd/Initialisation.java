@@ -24,6 +24,7 @@ public class Initialisation {
             tableModule(con);
             tableSemestre(con);
             tableGrpModule(con);
+            System.out.println("grp modules creee");
             tableVoeux(con);
 
             System.out.println("Création des tables terminée");
@@ -387,13 +388,22 @@ public class Initialisation {
         "trois). Etude de dossiers afin d’établir un rapport concernant les désordres observés, les moyens d’analyses\n" +
         "des pathologies et de leur évolutions.", "25", "16", "TOUTE"},
         
-        {"Introduction à l'informatique quantique", "Introduction à l'informatique quantique", "25", "16","TOUTE"},
+        {"Introduction à l'informatique quantique", "L'informatique quantique est le sous-domaine de l'informatique qui traite des calculateurs quantiques utilisant des phénomènes de la mécanique quantique, par opposition à ceux de l'électricité exclusivement, pour l'informatique dite « classique ».", "25", "16","TOUTE"},
         
         {"Statistiques", "Ce cours est une introduction aux statistiques. L'objectif est de présenter ce que permettent de faire les statistiques mais aussi ce qu'elles ne permettent pas de faire.", "25", "16","TOUTE"},
         
-       
+        {"Lean Construction : les fondamentaux", "Ce module électif permettra aux futur(e)s ingénieur(e)s de découvrir l’essentiel de la démarche LEAN CONSTRUCTION. Il permettra aux participants d’acquérir les bases de cette démarche innovante, connaitre les outils par la pratique et prendre conscience des gains possibles sur leurs futurs projets de construction en termes de Sécurit Qualit Délais et Coûts (SQDC).", "25", "16","TOUTE"},
         
-   };
+        {"Big Data", "Le terme de Big Data désigne de vastes ensembles de données collectées par les entreprises, pouvant être explorées et analysées afin d’en dégager des informations exploitables ou utilisées pour des projets de Machine Learning.", "25", "16","TOUTE"},
+   
+        {"Thermographie infrarouge", "La thermographie infrarouge est une technique non-intrusive de mesure radiométrique basée sur la théorie de rayonnement du corps noir et relève de la cartographie bidimensionnelle de distribution du flux radiatif rayonné par une surface. ", "25", "16","TOUTE"},
+
+        {"Inventive design and Innovation", "Large companies but also smaller ones (SME-SMIs) have all adopted the idea of placing innovation at the heart of their strategy. Thus messages stemming from top management are unambiguous: we must innovate or disappear. But beyond words, very few of them have implemented how to methodologically support the innovation processes.", "25", "16","TOUTE"},
+
+        {"Initiation au BIM (Building Information Modeling)", " BIM désigne les outils de modélisation des informations de la construction implémentés par des applications qui permettent la modélisation des données du bâtiment, d'une structure, d'un édifice ou d'un ouvrage.", "25", "16","TOUTE"},
+
+        
+    };
 
     public static List<String> intitule() {
         return Arrays.stream(MODULE).map((t) -> {
@@ -456,9 +466,7 @@ public class Initialisation {
 
     public static final String[][] SEMESTRE = new String[][]{
         
-        {"2018", "1", "4", "2"}, //semestre 1 de l'année 2018, il y a 4 NG et 1 NC
-        {"2018", "2", "3", "1"},
-        {"2019", "1", "3", "1"},
+        {"2019", "1", "3", "1"},//semestre 1 de l'année 2019, il y a 3 NG et 1 NC
         {"2019", "2", "3", "1"},
         {"2020", "1", "4", "2"},
         {"2020", "2", "3", "1"}, 
@@ -519,104 +527,74 @@ public class Initialisation {
         
                             
         List<String> semestre = Initialisation.idsemestre();
-        List<String> grp = Initialisation.grpmodule();
+        List<String> etudiant = Initialisation.etudiantVoeux();
         List<String> mod = Initialisation.module();
 
         for(int i=0;i<GRPMODULE.length;i++){
-            Commandes.AjoutGrpModule(con,semestre.get(i),grp.get(i),mod.get(i));
+            Commandes.AjoutGrpModule(con,semestre.get(i),etudiant.get(i),mod.get(i));
         }
-        System.out.println("grp modules creee");
+        
 
     }
 
     public static final String[][] GRPMODULE = new String[][]{
-        //semestre 1 2018 : 4 NG
-        {"1", "1", "1"},
-        //idSemestre, idGrp, idModule
-        {"1", "1", "2"},
-        {"1", "1", "3"},
-        //grp2
-        {"1", "2", "4"},
-        {"1", "2", "5"},
-        {"1", "2", "6"},
-        //grp3
-        {"1", "3", "7"},
-        {"1", "3", "8"},
-        {"1", "3", "9"},
-        //grp4
-        {"1", "4", "10"},
-        {"1", "4", "11"},
-        {"1", "4", "12"},
-
-        //semestre 2 2018 : 3 NG
-        {"2", "1", "5"},
-        {"2", "1", "10"},
-        {"2", "1", "15"},
-
-        {"2", "2", "1"},
-        {"2", "2", "6"},
-        {"2", "2", "11"},
-
-        {"2", "3", "2"},
-        {"2", "3", "7"},
-        {"2", "3", "12"},
 
         //semestre 1 2019: 3NG
-        {"3", "1", "1"},
-        {"3", "1", "3"},
-        {"3", "1", "5"},
+        {"1", "1", "1"},
+        {"1", "1", "3"},
+        {"1", "1", "5"},
+        //idsemestre, idGrp,idModule 
+        {"1", "2", "2"},
+        {"1", "2", "4"},
+        {"1", "2", "6"},
 
-        {"3", "2", "2"},
-        {"3", "2", "4"},
-        {"3", "2", "6"},
-
-        {"3", "3", "11"},
-        {"3", "3", "12"},
-        {"3", "3", "13"},
+        {"1", "3", "11"},
+        {"1", "3", "12"},
+        {"1", "3", "13"},
 
         //semestre 2 2019: 3NG
-        {"3", "1", "1"},
-        {"3", "1", "3"},
-        {"3", "1", "5"},
+        {"2", "1", "1"},
+        {"2", "1", "3"},
+        {"2", "1", "5"},
 
-        {"3", "2", "2"},
-        {"3", "2", "4"},
-        {"3", "2", "6"},
+        {"2", "2", "2"},
+        {"2", "2", "4"},
+        {"2", "2", "6"},
 
-        {"3", "3", "11"},
-        {"3", "3", "12"},
-        {"3", "3", "13"},
+        {"2", "3", "11"},
+        {"2", "3", "12"},
+        {"2", "3", "13"},
 
         //semestre 1 2020 : 4NG
-        {"4", "1", "3"},
-        {"4", "1", "6"},
-        {"4", "1", "9"},
+        {"3", "1", "3"},
+        {"3", "1", "6"},
+        {"3", "1", "9"},
         //grp2
-        {"4", "2", "4"},
-        {"4", "2", "8"},
-        {"4", "2", "12"},
+        {"3", "2", "4"},
+        {"3", "2", "8"},
+        {"3", "2", "12"},
         //grp3
-        {"4", "3", "1"},
-        {"4", "3", "5"},
-        {"4", "3", "10"},
+        {"3", "3", "1"},
+        {"3", "3", "5"},
+        {"3", "3", "10"},
         //grp4
-        {"4", "4", "15"},
-        {"4", "4", "7"},
-        {"4", "4", "11"},
+        {"3", "4", "15"},
+        {"3", "4", "7"},
+        {"3", "4", "11"},
 
         //semestre 2 2020 : 3NG
 
-        {"5", "1", "13"},
-        {"5", "1", "14"},
-        {"5", "1", "15"},
+        {"4", "1", "13"},
+        {"4", "1", "14"},
+        {"4", "1", "15"},
         //grp2
-        {"5", "2", "1"},
-        {"5", "2", "3"},
-        {"5", "2", "9"},
+        {"4", "2", "1"},
+        {"4", "2", "3"},
+        {"4", "2", "9"},
         //grp3
-        {"5", "3", "7"},
-        {"5", "3", "8"},
-        {"5", "3", "11"},
+        {"4", "3", "7"},
+        {"4", "3", "8"},
+        {"4", "3", "11"},
        
         
     };
@@ -648,112 +626,264 @@ public class Initialisation {
         //méthode permettant de créer la table qui va contenir les voeux
         try (Statement st = con.createStatement()) {
             st.executeUpdate("""
+
                         create table Voeux(
                         idSemestre integer not null,
                         idEtudiant integer not null,
                         idModule integer not null,
-                        numeroVoeux integer not null,
+                        numeroVoeux integer not null
 
                         )
                         """);
             st.executeUpdate(
-                            """
+                        """
                         alter table Voeux
                         add constraint etudiantinscrit 
-                        foreign key (idEtudiant) references etudiant(id),
+                        foreign key (idEtudiant) references etudiant(id)
                             """);
             st.executeUpdate(
-                                """
+                        """
                         alter table Voeux
                         add constraint moduleOuvert
                         foreign key (idModule) references module(id) 
                           """);    
         }
 
+        List<String> semestre = Initialisation.idsemestreVoeux();
+        List<String> grp = Initialisation.grpmodule();
+        List<String> mod = Initialisation.moduleVoeux();
+
+        for(int i=0;i<GRPMODULE.length;i++){
+            Commandes.AjoutGrpModule(con,semestre.get(i),grp.get(i),mod.get(i));
+        }
+
     }
     public static final String[][] VOEUX = new String[][]{
         //Etudiant 1, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
-        {"5", "1", "13"},
-        {"5", "1", "3"},
-        {"5", "1", "8"},
-
-        //Etudiant 120, GE4, a fait les modules en 2018,2019,2020
-        {"2", "1", "5"},
-        {"2", "1", "6"},
-        {"2", "1", "11"},
-
-        {"3", "1", "5"},
-        {"3", "1", "6"},
-        {"3", "1", "11"},
-        //grp2
-        {"1", "2", "4"},
-        {"1", "2", "5"},
-        {"1", "2", "6"},
-        //grp3
-        {"1", "3", "7"},
-        {"1", "3", "8"},
-        {"1", "3", "9"},
-        //grp4
-        {"1", "4", "10"},
-        {"1", "4", "11"},
-        {"1", "4", "12"},
-
-        //semestre 2 2018 : 3 NG
-        {"2", "1", "5"},
-        {"2", "1", "10"},
-        {"2", "1", "15"},
-
-        {"2", "2", "1"},
-        {"2", "2", "6"},
-        {"2", "2", "11"},
-
-        {"2", "3", "2"},
-        {"2", "3", "7"},
-        {"2", "3", "12"},
-
-        //semestre 1 2019: 3NG
-        {"3", "1", "1"},
-        {"3", "1", "3"},
-        {"3", "1", "5"},
-
-        {"3", "2", "2"},
-        {"3", "2", "4"},
-        {"3", "2", "6"},
-
-        {"3", "3", "11"},
-        {"3", "3", "12"},
-        {"3", "3", "13"},
-
-        //semestre 2 2019: 3NG
-        {"3", "1", "1"},
-        {"3", "1", "3"},
-        {"3", "1", "5"},
-
-        {"3", "2", "2"},
-        {"3", "2", "4"},
-        {"3", "2", "6"},
-
-        {"3", "3", "11"},
-        {"3", "3", "12"},
-        {"3", "3", "13"},
-
-        //semestre 1 2020 : 4NG
+        //idSemestre,idEtudiant,idModule
+        {"4", "1", "13"},
         {"4", "1", "3"},
-        {"4", "1", "6"},
-        {"4", "1", "9"},
-        //grp2
-        {"4", "2", "4"},
+        {"4", "1", "8"},
+
+        //Etudiant 120, GE4, a fait les modules au  s2 2019, et au s1 et s2 2020
+        
+        //s2 2019
+        {"2", "120", "5"},
+        {"2", "120", "6"},
+        {"2", "120", "13"},
+        //s1 2020
+        {"3", "120", "9"},
+        {"3", "120", "8"},
+        {"3", "120", "10"},
+        {"3", "120", "15"},
+        //s2 2020
+        {"4", "120", "14"},
+        {"4", "120", "3"},
+        {"4", "120", "8"},
+
+        //Etudiant 2, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "2", "13"},
+        {"4", "2", "3"},
         {"4", "2", "8"},
-        {"4", "2", "12"},
-        //grp3
-        {"4", "3", "1"},
-        {"4", "3", "5"},
-        {"4", "3", "10"},
-        //grp4
-        {"4", "4", "15"},
-        {"4", "4", "7"},
-        {"4", "4", "11"},
+
+        //Etudiant 3, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "3", "13"},
+        {"4", "3", "3"},
+        {"4", "3", "8"},
+
+        //Etudiant 4, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "4", "13"},
+        {"4", "4", "3"},
+        {"4", "4", "8"},
+
+        //Etudiant 5, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "5", "13"},
+        {"4", "5", "3"},
+        {"4", "5", "8"},
+
+        //Etudiant 6, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "6", "13"},
+        {"4", "6", "3"},
+        {"4", "6", "8"},
+
+        //Etudiant 7, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "7", "13"},
+        {"4", "7", "3"},
+        {"4", "7", "8"},
+
+        //Etudiant 8, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "8", "13"},
+        {"4", "8", "3"},
+        {"4", "8", "8"},
+
+        //Etudiant 9, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "9", "13"},
+        {"4", "9", "3"},
+        {"4", "9", "8"},
+
+        //Etudiant 10, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "10", "13"},
+        {"4", "10", "3"},
+        {"4", "10", "8"},
+
+        //Etudiant 11, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "11", "13"},
+        {"4", "11", "3"},
+        {"4", "11", "8"},
+
+        //Etudiant 12, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "12", "13"},
+        {"4", "12", "3"},
+        {"4", "12", "8"},
+
+        //Etudiant 13, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "13", "13"},
+        {"4", "13", "3"},
+        {"4", "13", "8"},
+
+        //Etudiant 14, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "14", "13"},
+        {"4", "14", "3"},
+        {"4", "14", "8"},
+
+        //Etudiant 15, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "15", "13"},
+        {"4", "15", "3"},
+        {"4", "15", "8"},
+
+        //Etudiant 16, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "16", "14"},
+        {"4", "16", "9"},
+        {"4", "16", "11"},
+
+        //Etudiant 17, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "17", "14"},
+        {"4", "17", "9"},
+        {"4", "17", "11"},
+
+        //Etudiant 18, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "18", "14"},
+        {"4", "18", "9"},
+        {"4", "18", "11"},
+
+        //Etudiant 16, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "19", "14"},
+        {"4", "19", "9"},
+        {"4", "19", "11"},
+
+        //Etudiant 20, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "20", "14"},
+        {"4", "20", "9"},
+        {"4", "20", "11"},
+
+        //Etudiant 21, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "21", "14"},
+        {"4", "21", "9"},
+        {"4", "21", "11"},
+
+        //Etudiant 22, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "22", "14"},
+        {"4", "22", "9"},
+        {"4", "22", "11"},
+
+        //Etudiant 23, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "23", "14"},
+        {"4", "23", "9"},
+        {"4", "23", "11"},
+
+        //Etudiant 24, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "24", "14"},
+        {"4", "24", "9"},
+        {"4", "24", "11"},
+
+        //Etudiant 25, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "25", "14"},
+        {"4", "25", "9"},
+        {"4", "25", "11"},
+
+        //Etudiant 26, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "26", "14"},
+        {"4", "26", "9"},
+        {"4", "26", "11"},
+
+        //Etudiant 27, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "27", "14"},
+        {"4", "27", "9"},
+        {"4", "27", "11"},
+
+        //Etudiant 28, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "28", "14"},
+        {"4", "28", "9"},
+        {"4", "28", "11"},
+
+        //Etudiant 29, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
+        //idSemestre,idEtudiant,idModule
+        {"4", "29", "14"},
+        {"4", "29", "9"},
+        {"4", "29", "11"},
+
+
+        //Etudiant 120, GE4, a fait les modules au  s2 2019, et au s1 et s2 2020
+        
+        //s2 2019
+        {"2", "120", "5"},
+        {"2", "120", "6"},
+        {"2", "120", "13"},
+        //s1 2020
+        {"3", "120", "9"},
+        {"3", "120", "8"},
+        {"3", "120", "10"},
+        {"3", "120", "15"},
+        //s2 2020
+        {"4", "120", "14"},
+        {"4", "120", "3"},
+        {"4", "120", "8"},
+
         
     };
+
+    public static List<String> idsemestreVoeux() {
+        return Arrays.stream(GRPMODULE).map((t) -> {
+            return t[0];
+        }).toList();
+    }
+
+    public static List<String> etudiantVoeux() {
+        return Arrays.stream(GRPMODULE).map((t) -> {
+            return t[1];
+        }).toList();
+    }
+    public static List<String> moduleVoeux() {
+        return Arrays.stream(GRPMODULE).map((t) -> {
+            return t[2];
+        }).toList();
+    }
 
 }
