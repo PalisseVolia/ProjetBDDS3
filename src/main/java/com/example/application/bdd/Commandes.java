@@ -18,6 +18,7 @@ public class Commandes
         return con;
     }
 
+
     public static void tabledrop(Connection con, String nomtable) throws SQLException {
         //méthode permettant d'effacer une table de la base de donnée
         try {
@@ -26,6 +27,17 @@ public class Commandes
             }
         } catch (Exception e) {
             System.out.println("table " + nomtable + " inexistante, première éxécution ?");
+        }
+    }
+
+    public static void SupprimeContrainte(Connection con, String nomtable, String contrainte) throws SQLException {
+        //méthode permettant d'effacer une table de la base de donnée
+        try {
+            try (Statement st = con.createStatement()) {
+                st.executeUpdate("alter table " + nomtable + "drop constraint " + contrainte);
+            }
+        } catch (Exception e) {
+            System.out.println("Erreur dans la suppression de la contrainte "+ contrainte);
         }
     }
 
@@ -198,6 +210,29 @@ public class Commandes
         }
 
     }
+
+    public static void testconnection(Connection con,String adresse, String mdp) throws SQLException{
+        //méthode permettant de comparer l'adresse et le mdp rentré par l'utilisateur a ceux de la bdd
+        //ne fonctionne pas pour l'instant
+        int test=0;
+        int compteur=0;
+        mdp=security.CreateHash(mdp);
+        final String queryCheck = "SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'";
+        try ( PreparedStatement pst = con.prepareStatement(queryCheck)) {
+            //pst.setString(1,adresse );
+            //pst.setString(2,mdp );
+            ResultSet tla = pst.executeQuery();
+                    
+            System.out.println("Etudiant :");
+            System.out.println("------------------");
+            while (tla.next()) {
+            System.out.println(tla.getString(1));
+                }
+           
+       }
+
+    }
+
 
     
 }
