@@ -527,11 +527,11 @@ public class Initialisation {
         
                             
         List<String> semestre = Initialisation.idsemestre();
-        List<String> etudiant = Initialisation.etudiantVoeux();
+        List<String> grp = Initialisation.grpmodule();
         List<String> mod = Initialisation.module();
 
         for(int i=0;i<GRPMODULE.length;i++){
-            Commandes.AjoutGrpModule(con,semestre.get(i),etudiant.get(i),mod.get(i));
+            Commandes.AjoutGrpModule(con,semestre.get(i),grp.get(i),mod.get(i));
         }
         
 
@@ -631,7 +631,7 @@ public class Initialisation {
                         idSemestre integer not null,
                         idEtudiant integer not null,
                         idModule integer not null,
-                        numeroVoeux integer not null
+                        numeroVoeux integer
 
                         )
                         """);
@@ -650,11 +650,11 @@ public class Initialisation {
         }
 
         List<String> semestre = Initialisation.idsemestreVoeux();
-        List<String> grp = Initialisation.grpmodule();
+        List<String> grp = Initialisation.etudiantVoeux();
         List<String> mod = Initialisation.moduleVoeux();
 
         for(int i=0;i<GRPMODULE.length;i++){
-            Commandes.AjoutGrpModule(con,semestre.get(i),grp.get(i),mod.get(i));
+            Commandes.AjoutVoeux(con,semestre.get(i),grp.get(i),mod.get(i));
         }
 
     }

@@ -126,7 +126,8 @@ public class Commandes
         //méthode permettant d'ajouter un groupe de module
         try ( PreparedStatement pst = con.prepareStatement(
                 """
-                insert into GrpModule (idSemestre,idGroupe,idModule) values (?,?,?)
+                insert into GrpModule (idSemestre,idGroupe,idModule) 
+                values (?,?,?)
                 """)) {
             con.setAutoCommit(false);
             pst.setInt(1, Integer.parseInt(idsemestre));
@@ -144,7 +145,8 @@ public class Commandes
         //méthode permettant d'ajouter un groupe de module
         try ( PreparedStatement pst = con.prepareStatement(
                 """
-                insert into Voeux (idSemestre,idEtudiant,idModule) values (?,?,?)
+                insert into Voeux (idSemestre,idEtudiant,idModule) 
+                values (?,?,?)
                 """)) {
             con.setAutoCommit(false);
             pst.setInt(1, Integer.parseInt(idsemestre));
