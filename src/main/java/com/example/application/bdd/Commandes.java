@@ -42,7 +42,7 @@ public class Commandes
     }
 
     //-----------------------------------------------------------------
-    //           METHODES D'AJOUT D'ELEMENTS DANS UNE TABLE 
+    //           METHODES DE MODIFICATION DE TABLE 
     //-----------------------------------------------------------------
 
     public static void AjoutEtudiant(Connection con, String nom, String prenom, String adresse, String mdp, String date, String dispo, String classe) throws SQLException
@@ -170,7 +170,45 @@ public class Commandes
             con.rollback();
             System.out.println("ERROR : problem during AjoutVoeux");
         }
+
     }
+
+    //TODO méthodes à faire
+
+    public static void deleteEtudiant(Connection con){
+        //méthode qui permet de supprimer un étudiant
+
+
+    }
+
+    public static void deleteModule(Connection con){
+        //méthode qui permet de supprimer un module
+
+
+    }
+
+    public static void deleteGroupe(Connection con){
+        //méthode qui permet de supprimer un groupe de module
+
+
+    }
+
+    public static void ModificationGrp(Connection con){
+        //méthode qui permet de à un admin de modifier les groupes de modules
+
+
+    }
+
+    public static void ModificationVoeux(Connection con){
+        //méthode qui permet de à un étudiant de modifier ses voeux si il change d'avis
+        //ne fonctionne que pour le semestre actuel (on ne modifie pas l'historique)
+
+
+    }
+
+    
+
+
 
 
 
@@ -211,27 +249,62 @@ public class Commandes
 
     }
 
-    public static void testconnection(Connection con,String adresse, String mdp) throws SQLException{
-        //méthode permettant de comparer l'adresse et le mdp rentré par l'utilisateur a ceux de la bdd
-        //ne fonctionne pas pour l'instant
-        int test=0;
-        int compteur=0;
-        mdp=security.CreateHash(mdp);
-        final String queryCheck = "SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'";
-        try ( PreparedStatement pst = con.prepareStatement(queryCheck)) {
-            //pst.setString(1,adresse );
-            //pst.setString(2,mdp );
-            ResultSet tla = pst.executeQuery();
-                    
-            System.out.println("Etudiant :");
-            System.out.println("------------------");
-            while (tla.next()) {
-            System.out.println(tla.getString(1));
-                }
-           
-       }
+    //TODO les méthodes a partir d'ici sont à faire j'ai mis void pour chacune mais faudra changer
+
+    public static void login(Connection con, String adresse, String mdp) throws SQLException {
+        //ne marche pas pour l'instant
+        //permet de verifier si une adresse mail et un mdp appartiennent a la bdd
+        System.out.println("Requete :");
+        System.out.println("SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'");
+        try ( Statement st = con.createStatement()) {
+             try ( ResultSet tla = st.executeQuery(
+                    """
+                    SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'
+
+                     """)) {
+                
+                System.out.println("liste des Etudiant :");
+                System.out.println("------------------");
+                while (tla.next()) {
+                    int id = tla.getInt("id");
+                    System.out.println(id);
+                    String nom = tla.getString("nom");
+                    String prenom= tla.getString("prenom");  
+                    System.out.println("id : "+id+ "nom : "+nom+" ; prenom : "+ prenom);
+                 }
+            }
+        }
 
     }
+
+    public static void ModulesDuSemestre(Connection con){
+        //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
+
+
+    }
+
+    public static void ModulesPossible(Connection con){
+        //méthode qui permet à un étudiant de voir la liste des modules auxquels il peut s'inscrire 
+
+
+    }
+
+    public static void EtudiantDispo(Connection con){
+        //méthode qui permet d'avoir la liste des étudiants pouvant s'inscrire à un semestre
+        //pour ca, finir la disponibilite
+
+
+    }
+
+
+    public static void historique(Connection con, int idEtud){
+        //méthode pour recuperer l'historique des modules d'un etudiant
+
+
+    }
+
+    
+    
 
 
     

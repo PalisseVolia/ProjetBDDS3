@@ -1,5 +1,6 @@
 package com.example.application.bdd;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.sql.*;
@@ -10,6 +11,14 @@ public class Initialisation {
     // méthode à appeler pour initialiser la base de donnée
     public static void init() {
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+            
+            //suppression des contraintes
+            Commandes.SupprimeContrainte(con, "GrpModule", "moduleAppartient");
+            Commandes.SupprimeContrainte(con, "GrpModule", "moduleOuvert");
+            Commandes.SupprimeContrainte(con, "Voeux", "etudiantinscrit");
+            Commandes.SupprimeContrainte(con, "Voeux", "moduleOuvert");
+
+            //suppression des tables
             Commandes.tabledrop(con, "Etudiant");
             Commandes.tabledrop(con, "Admin");
             Commandes.tabledrop(con, "Module");
@@ -19,17 +28,28 @@ public class Initialisation {
 
             System.out.println("Supression des tables terminée");
 
+            //création des tables
             tableEtudiant(con);
             tableAdmin(con);
             tableModule(con);
             tableSemestre(con);
             tableGrpModule(con);
-            System.out.println("grp modules creee");
             tableVoeux(con);
 
             System.out.println("Création des tables terminée");
 
+        } catch (Exception err) {
+            System.out.println(err);
+        }
+    }
+
+    public static void testrequete() {
+        //méthode a utiliser pour tester les requetes : la bdd doit deja etre initialisée
+        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+            
             Commandes.afficheModTest(con);
+            System.out.println("Méthode sans preparedstatement :");
+            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
 
         } catch (Exception err) {
             System.out.println(err);
@@ -108,6 +128,7 @@ public class Initialisation {
     //-----------------------------------------------------------------
 
     public static void tableEtudiant(Connection con) throws SQLException {
+        //TODO finir la disponibilté 
         try (Statement st = con.createStatement()) {
             st.executeUpdate("""
                         create table Etudiant(
@@ -126,9 +147,16 @@ public class Initialisation {
         List<String> prenoms = Initialisation.prenoms();
         List<String> adresses = Initialisation.adresse();
         List<String> mdps = Initialisation.mdp();
+        //on hash le mot de passe 
+        ArrayList<String> mdpshash = new ArrayList<String>();
+        for(int i=0;i<mdps.size();i++){
+            mdpshash.add(security.CreateHash(mdps.get(i)));
+        }
+        
         List<String> dates = Initialisation.datenaiss();
         List<String> classe = Initialisation.classe();
         for (int i = 0; i < ETUDIANT.length; i++) {
+            //TODO penser à remettre la liste des mdp hashés une fois le test fini
             Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i), dates.get(i), "dispo", classe.get(i));
         }
     }
@@ -659,27 +687,13 @@ public class Initialisation {
 
     }
     public static final String[][] VOEUX = new String[][]{
+        //TODO continuer la liste si vous êtes motivés pour
+
         //Etudiant 1, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
         //idSemestre,idEtudiant,idModule
         {"4", "1", "13"},
         {"4", "1", "3"},
         {"4", "1", "8"},
-
-        //Etudiant 120, GE4, a fait les modules au  s2 2019, et au s1 et s2 2020
-        
-        //s2 2019
-        {"2", "120", "5"},
-        {"2", "120", "6"},
-        {"2", "120", "13"},
-        //s1 2020
-        {"3", "120", "9"},
-        {"3", "120", "8"},
-        {"3", "120", "10"},
-        {"3", "120", "15"},
-        //s2 2020
-        {"4", "120", "14"},
-        {"4", "120", "3"},
-        {"4", "120", "8"},
 
         //Etudiant 2, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
         //idSemestre,idEtudiant,idModule
