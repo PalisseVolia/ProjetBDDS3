@@ -181,8 +181,7 @@ public class Commandes
 
         try ( PreparedStatement pst = con.prepareStatement(
                 """
-                delete from Etudiant where id = (id) 
-                values (?)
+                delete from Etudiant where id = ? 
                 """)) {
             con.setAutoCommit(false);
             pst.setInt(1, id);
@@ -198,14 +197,41 @@ public class Commandes
 
     }
 
-    public static void deleteModule(Connection con){
+    public static void deleteModule(Connection con, int id) throws SQLException{
         //méthode qui permet de supprimer un module
+        //méthode qui permet de supprimer un étudiant grace a son id
+
+
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                delete from Module where id = ? 
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during deleteModule");
+        }
 
 
     }
 
-    public static void deleteGroupe(Connection con){
+    public static void deleteGroupe(Connection con, int id) throws SQLException{
         //méthode qui permet de supprimer un groupe de module
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                delete from GrpModule where idGroupe = ? 
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during deleteGroupe");
+        }
 
 
     }
@@ -271,8 +297,8 @@ public class Commandes
    
     public static void login(Connection con, String adresse, String mdp) throws SQLException {
         //permet de verifier si une adresse mail et un mdp appartiennent a la bdd
-        String mdphash = security.CreateHash(mdp);
-        final String requete ="SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdphash+"'";
+       // String mdphash = security.CreateHash(mdp);
+        final String requete ="SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'";
         try ( Statement st = con.createStatement()) {
              try ( ResultSet tla = st.executeQuery(
                     requete)) {
