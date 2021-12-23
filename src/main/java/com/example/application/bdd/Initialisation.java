@@ -11,20 +11,16 @@ public class Initialisation {
     // méthode à appeler pour initialiser la base de donnée
     public static void init() {
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
-            
-            //suppression des contraintes
-            Commandes.SupprimeContrainte(con, "GrpModule", "moduleAppartient");
-            Commandes.SupprimeContrainte(con, "GrpModule", "moduleOuvert");
-            Commandes.SupprimeContrainte(con, "Voeux", "etudiantinscrit");
-            Commandes.SupprimeContrainte(con, "Voeux", "moduleOuvert");
+    
 
             //suppression des tables
+            Commandes.tabledrop(con, "GrpModule");
+            Commandes.tabledrop(con, "Voeux");
             Commandes.tabledrop(con, "Etudiant");
             Commandes.tabledrop(con, "Admin");
             Commandes.tabledrop(con, "Module");
             Commandes.tabledrop(con, "Semestre");
-            Commandes.tabledrop(con, "GrpModule");
-            Commandes.tabledrop(con, "Voeux");
+            
 
             System.out.println("Supression des tables terminée");
 
@@ -152,12 +148,10 @@ public class Initialisation {
         for(int i=0;i<mdps.size();i++){
             mdpshash.add(security.CreateHash(mdps.get(i)));
         }
-        
         List<String> dates = Initialisation.datenaiss();
         List<String> classe = Initialisation.classe();
         for (int i = 0; i < ETUDIANT.length; i++) {
-            //TODO penser à remettre la liste des mdp hashés une fois le test fini
-            Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i), dates.get(i), "dispo", classe.get(i));
+            Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i), mdpshash.get(i), dates.get(i), "dispo", classe.get(i));
         }
     }
 
@@ -544,12 +538,16 @@ public class Initialisation {
                         alter table GrpModule
                         add constraint moduleAppartient  
                         foreign key (idModule) references module(id)
+                        ON DELETE CASCADE
+                        
                             """);
             st.executeUpdate(
                                 """
                         alter table GrpModule
-                        add constraint moduleOuvert
-                        foreign key (idSemestre) references semestre(id) 
+                        add constraint moduleSemestre
+                        foreign key (idSemestre) references semestre(id)
+                        ON DELETE CASCADE
+                       
                           """);                
         }
         
@@ -668,12 +666,15 @@ public class Initialisation {
                         alter table Voeux
                         add constraint etudiantinscrit 
                         foreign key (idEtudiant) references etudiant(id)
+                        ON DELETE CASCADE
+                        
                             """);
             st.executeUpdate(
                         """
                         alter table Voeux
                         add constraint moduleOuvert
                         foreign key (idModule) references module(id) 
+                        ON DELETE CASCADE
                           """);    
         }
 

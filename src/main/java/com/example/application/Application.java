@@ -24,6 +24,7 @@ public class Application extends SpringBootServletInitializer {
         //     System.out.println(e);
         // }
         Initialisation.init();
+        Initialisation.testrequete();
         //LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
 
     }

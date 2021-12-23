@@ -175,8 +175,25 @@ public class Commandes
 
     //TODO méthodes à faire
 
-    public static void deleteEtudiant(Connection con){
-        //méthode qui permet de supprimer un étudiant
+    public static void deleteEtudiant(Connection con, int id) throws SQLException{
+        //méthode qui permet de supprimer un étudiant grace a son id
+
+
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                delete from Etudiant where id = (id) 
+                values (?)
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during deleteEtudiant");
+        }
+        
+        
 
 
     }
@@ -251,27 +268,22 @@ public class Commandes
 
     //TODO les méthodes a partir d'ici sont à faire j'ai mis void pour chacune mais faudra changer
 
+   
     public static void login(Connection con, String adresse, String mdp) throws SQLException {
-        //ne marche pas pour l'instant
         //permet de verifier si une adresse mail et un mdp appartiennent a la bdd
-        System.out.println("Requete :");
-        System.out.println("SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'");
+        String mdphash = security.CreateHash(mdp);
+        final String requete ="SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdphash+"'";
         try ( Statement st = con.createStatement()) {
              try ( ResultSet tla = st.executeQuery(
-                    """
-                    SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'
-
-                     """)) {
+                    requete)) {
                 
                 System.out.println("liste des Etudiant :");
                 System.out.println("------------------");
                 while (tla.next()) {
-                    int id = tla.getInt("id");
-                    System.out.println(id);
-                    String nom = tla.getString("nom");
-                    String prenom= tla.getString("prenom");  
-                    System.out.println("id : "+id+ "nom : "+nom+" ; prenom : "+ prenom);
-                 }
+                    System.out.println(tla.getString(1));
+                    System.out.println(tla.getString(2));
+                    System.out.println(tla.getString(3));
+                }
             }
         }
 
@@ -303,7 +315,20 @@ public class Commandes
 
     }
 
-    
+    public static void main(String[] args) {
+        //pour faire des tests
+        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+            
+            Commandes.afficheModTest(con);
+            System.out.println("Méthode sans preparedstatement :");
+            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
+            Commandes.deleteEtudiant(con, 2);
+
+        } catch (Exception err) {
+            System.out.println(err);
+        }
+
+    }
     
 
 
