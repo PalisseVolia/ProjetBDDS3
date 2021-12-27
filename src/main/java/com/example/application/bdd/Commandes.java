@@ -1,29 +1,52 @@
+/* Les commandes déjà réalisées sont :
+
+    - connect () -> retourne une connection à la bdd
+    - tabledrop(con,table) -> efface la table "table" de la bdd lié à la connection "con"
+    -
+    -
+
+ */
+
 package com.example.application.bdd;
 
 import java.sql.*;
 
 public class Commandes 
 {
+    public static int findPersonne(Connection con, String table, String nom, String prenom) throws SQLException {
+        //Trouve la PREMIERE personne qui a ce nom et prénom et renvoie son identifiant
+        int id = -1;
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                SELECT id FROM ? WHERE nom = '?' and prenom = '?'
+                """)) {
+            pst.setString(1,table);
+            pst.setString(2,nom);
+            pst.setString(3,prenom);
+            id = Integer.parseInt(String.valueOf(pst.executeQuery()));
+        }
+        return id;
+    }
 
-    public static Connection connect(String host, int port, String database, String user, String pass)
-            throws ClassNotFoundException, SQLException {
+    public static Connection connect(String host, int port, String database, String user, String pass) throws ClassNotFoundException, SQLException {
         // teste la présence du driver postgresql
         Class.forName("org.postgresql.Driver");
-        Connection con = DriverManager.getConnection("jdbc:postgresql://" + host + ":" + port + "/" + database,
-                database, pass);
+        Connection con = DriverManager.getConnection("jdbc:postgresql://" + host + ":" + port + "/" + database,database, pass);
         // fixe le plus haut degré d'isolation entre transactions
         con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         return con;
     }
 
-    public static void tabledrop(Connection con, String nomtable) throws SQLException {
+    public static void tabledrop(Connection con, String table) throws SQLException {
         //méthode permettant d'effacer une table de la base de donnée
-        try {
-            try (Statement st = con.createStatement()) {
-                st.executeUpdate("drop table " + nomtable);
-            }
-        } catch (Exception e) {
-            System.out.println("table " + nomtable + " inexistante, première éxécution ?");
+        try (PreparedStatement pst = con.prepareStatement(
+                    """
+                    DROP TABLE IF EXISTS ?
+                    """)) {
+                con.setAutoCommit(false);
+                pst.setString(1,table);
+                pst.executeUpdate();
+                con.commit();
         }
     }
 
@@ -35,16 +58,16 @@ public class Commandes
                     INSERT INTO Etudiant (nom,prenom,adresse,mdp,dateNaissance,disponibilite,classe)
                     VALUES (?,?,?,?,?,?,?)
                     """)){
-        con.setAutoCommit(false);
-        pst.setString(1, nom);
-        pst.setString(2, prenom);
-        pst.setString(3, adresse);
-        pst.setString(4, mdp);
-        pst.setDate(5, java.sql.Date.valueOf(date));
-        pst.setString(6, dispo);
-        pst.setString(7, classe);
-        pst.executeUpdate();
-        con.commit();
+            con.setAutoCommit(false);
+            pst.setString(1, nom);
+            pst.setString(2, prenom);
+            pst.setString(3, adresse);
+            pst.setString(4, mdp);
+            pst.setDate(5, java.sql.Date.valueOf(date));
+            pst.setString(6, dispo);
+            pst.setString(7, classe);
+            pst.executeUpdate();
+            con.commit();
         } catch (SQLException ex) {
             con.rollback();
             System.out.println("ERROR : problem during AjoutEtudiant");
@@ -56,14 +79,14 @@ public class Commandes
                     INSERT INTO Admin (nom,prenom,adresse,mdp,dateNaissance)
                     VALUES (?,?,?,?,?)
                     """)){
-        con.setAutoCommit(false);
-        pst.setString(1, nom);
-        pst.setString(2, prenom);
-        pst.setString(3, adresse);
-        pst.setString(4, mdp);
-        pst.setDate(5, java.sql.Date.valueOf(date));
-        pst.executeUpdate();
-        con.commit();
+            con.setAutoCommit(false);
+            pst.setString(1, nom);
+            pst.setString(2, prenom);
+            pst.setString(3, adresse);
+            pst.setString(4, mdp);
+            pst.setDate(5, java.sql.Date.valueOf(date));
+            pst.executeUpdate();
+            con.commit();
         } catch (SQLException ex) {
             con.rollback();
             System.out.println("ERROR : problem during AjoutAdmin");
@@ -77,14 +100,14 @@ public class Commandes
                     INSERT INTO Module (intitule,description,nbPlaceMax,nbPlaceMin,classeacceptee)
                     VALUES (?,?,?,?,?)
                     """)){
-        con.setAutoCommit(false);
-        pst.setString(1, intitule);
-        pst.setString(2, description);
-        pst.setInt(3, Integer.parseInt(nbplacemax));
-        pst.setInt(4, Integer.parseInt(nbplacemin));
-        pst.setString(5, classeacceptee);
-        pst.executeUpdate();
-        con.commit();
+            con.setAutoCommit(false);
+            pst.setString(1, intitule);
+            pst.setString(2, description);
+            pst.setInt(3, Integer.parseInt(nbplacemax));
+            pst.setInt(4, Integer.parseInt(nbplacemin));
+            pst.setString(5, classeacceptee);
+            pst.executeUpdate();
+            con.commit();
         } catch (SQLException ex) {
             con.rollback();
             System.out.println("ERROR : problem during AjoutModule");
