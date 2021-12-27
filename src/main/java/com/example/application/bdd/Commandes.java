@@ -9,10 +9,81 @@
 
 package com.example.application.bdd;
 
+import static com.example.application.bdd.security.CreateHash;
 import java.sql.*;
 
 public class Commandes 
 {
+    public static void AjoutPersonne(Connection con, String nom, String prenom, String dateNaissance, String adresseMail, String mdp) throws SQLException {
+        //Ajout d'une personne dans la table "Personnes"
+        String mdpHash = CreateHash(mdp);
+        if(nom.length()>50 || prenom.length()>50 || adresseMail.length()>100 || mdpHash.length()>50){
+            try (PreparedStatement pst = con.prepareStatement(
+                    """
+                            INSERT INTO Personnes (nom,prenom,dateNaissance,adresse,mdp)
+                            VALUES (?,?,?,?,?)
+                            """)){
+                con.setAutoCommit(false);
+                pst.setString(1, nom);
+                pst.setString(2, prenom);
+                pst.setDate(3, java.sql.Date.valueOf(dateNaissance));
+                pst.setString(4, adresseMail);
+                pst.setString(5, mdpHash);
+                pst.executeUpdate();
+                con.commit();
+            }
+        }else{
+            if(nom.length()>50){System.out.println("ERROR: AjoutPersonne : nom trop long");}
+            if(prenom.length()>50){System.out.println("ERROR: AjoutPersonne : prenom trop long");}
+            if(adresseMail.length()>100){System.out.println("ERROR: AjoutPersonne : adresseMail trop long");}
+            if(mdpHash.length()>50){System.out.println("ERROR: AjoutPersonne : mdpHash trop long");}
+        }
+    }
+
+    public static void AjoutEtudiant(Connection con, String nom, String prenom, String adresse, String mdp, String date, String dispo, String classe) throws SQLException
+    {
+        //méthode permettant d'ajouter un étudiant à la table contenant tous les étudiants
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                        INSERT INTO Etudiant (nom,prenom,adresse,mdp,dateNaissance,disponibilite,classe)
+                        VALUES (?,?,?,?,?,?,?)
+                        """)){
+            con.setAutoCommit(false);
+            pst.setString(1, nom);
+            pst.setString(2, prenom);
+            pst.setString(3, adresse);
+            pst.setString(4, mdp);
+            pst.setDate(5, java.sql.Date.valueOf(date));
+            pst.setString(6, dispo);
+            pst.setString(7, classe);
+            pst.executeUpdate();
+            con.commit();
+        } catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutEtudiant");
+        }
+    }
+
+    public static void AjoutAdmin(Connection con,  String nom, String prenom, String adresse, String mdp, String date) throws SQLException{
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                        INSERT INTO Admin (nom,prenom,adresse,mdp,dateNaissance)
+                        VALUES (?,?,?,?,?)
+                        """)){
+            con.setAutoCommit(false);
+            pst.setString(1, nom);
+            pst.setString(2, prenom);
+            pst.setString(3, adresse);
+            pst.setString(4, mdp);
+            pst.setDate(5, java.sql.Date.valueOf(date));
+            pst.executeUpdate();
+            con.commit();
+        } catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutAdmin");
+        }
+    }
+
     public static int findPersonne(Connection con, String table, String nom, String prenom) throws SQLException {
         //Trouve la PREMIERE personne qui a ce nom et prénom et renvoie son identifiant
         int id = -1;
@@ -40,7 +111,7 @@ public class Commandes
     public static void tabledrop(Connection con, String table) throws SQLException {
         //méthode permettant d'effacer une table de la base de donnée
         try (PreparedStatement pst = con.prepareStatement(
-                    """
+                """
                     DROP TABLE IF EXISTS ?
                     """)) {
                 con.setAutoCommit(false);
@@ -50,48 +121,6 @@ public class Commandes
         }
     }
 
-    public static void AjoutEtudiant(Connection con, String nom, String prenom, String adresse, String mdp, String date, String dispo, String classe) throws SQLException
-    {
-       //méthode permettant d'ajouter un étudiant à la table contenant tous les étudiants
-        try (PreparedStatement pst = con.prepareStatement(
-            """
-                    INSERT INTO Etudiant (nom,prenom,adresse,mdp,dateNaissance,disponibilite,classe)
-                    VALUES (?,?,?,?,?,?,?)
-                    """)){
-            con.setAutoCommit(false);
-            pst.setString(1, nom);
-            pst.setString(2, prenom);
-            pst.setString(3, adresse);
-            pst.setString(4, mdp);
-            pst.setDate(5, java.sql.Date.valueOf(date));
-            pst.setString(6, dispo);
-            pst.setString(7, classe);
-            pst.executeUpdate();
-            con.commit();
-        } catch (SQLException ex) {
-            con.rollback();
-            System.out.println("ERROR : problem during AjoutEtudiant");
-        }
-    }
-    public static void AjoutAdmin(Connection con,  String nom, String prenom, String adresse, String mdp, String date) throws SQLException{
-        try (PreparedStatement pst = con.prepareStatement(
-            """
-                    INSERT INTO Admin (nom,prenom,adresse,mdp,dateNaissance)
-                    VALUES (?,?,?,?,?)
-                    """)){
-            con.setAutoCommit(false);
-            pst.setString(1, nom);
-            pst.setString(2, prenom);
-            pst.setString(3, adresse);
-            pst.setString(4, mdp);
-            pst.setDate(5, java.sql.Date.valueOf(date));
-            pst.executeUpdate();
-            con.commit();
-        } catch (SQLException ex) {
-            con.rollback();
-            System.out.println("ERROR : problem during AjoutAdmin");
-        }
-    }
     public static void AjoutModule(Connection con, String intitule, String description, String nbplacemax, String nbplacemin, String classeacceptee) throws SQLException
     {
         //méthode permettant d'ajouter un module à la base de donnée
