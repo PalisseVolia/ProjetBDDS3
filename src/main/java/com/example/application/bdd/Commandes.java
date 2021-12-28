@@ -313,9 +313,16 @@ public class Commandes
 
     }
 
-    public static void ModulesDuSemestre(Connection con){
+    public static void ModulesDuSemestre(Connection con, int annee, int numero) throws SQLException {
         //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
-
+        final String requete ="SELECT Modules.id FROM Semestres JOIN GrpModule ON GrpModule.idSemestre = Semestres.id Join Modules ON Modules.id = GrpModule.idGroupe WHERE Semestres.annee = '"+annee+"' and Semestres.numero = '"+numero+"'";
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet res = st.executeQuery(requete)) {
+                while (res.next()) {
+                    System.out.println(res.getString(1));
+                }
+            }
+        }
 
     }
 
