@@ -20,7 +20,7 @@ public class Ecriture {
             * NC
             *
             * */
-            final String requeteA ="SELECT ng,nc from Semestres WHERE id = 'idSemestre'";
+            final String requeteA ="SELECT ng,nc from Semestres WHERE id = '"+idSemestre+"'";
             try ( Statement st = con.createStatement()) {
                 try ( ResultSet res = st.executeQuery(requeteA)) {
                     sauv.write(res.getString(1));
