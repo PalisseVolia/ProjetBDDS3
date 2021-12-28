@@ -9,34 +9,43 @@
 
 package com.example.application.bdd;
 
-import static com.example.application.bdd.security.CreateHash;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Commandes 
 {
-    public static void AjoutPersonne(Connection con, String nom, String prenom, String dateNaissance, String adresseMail, String mdp) throws SQLException {
-        //Ajout d'une personne dans la table "Personnes"
-        String mdpHash = CreateHash(mdp);
-        if(nom.length()>50 || prenom.length()>50 || adresseMail.length()>100 || mdpHash.length()>50){
-            try (PreparedStatement pst = con.prepareStatement(
-                    """
-                            INSERT INTO Personnes (nom,prenom,dateNaissance,adresse,mdp)
-                            VALUES (?,?,?,?,?)
-                            """)){
-                con.setAutoCommit(false);
-                pst.setString(1, nom);
-                pst.setString(2, prenom);
-                pst.setDate(3, java.sql.Date.valueOf(dateNaissance));
-                pst.setString(4, adresseMail);
-                pst.setString(5, mdpHash);
-                pst.executeUpdate();
-                con.commit();
+
+    public static Connection connect(String host, int port, String database, String user, String pass) throws ClassNotFoundException, SQLException {
+        // teste la présence du driver postgresql
+        Class.forName("org.postgresql.Driver");
+        Connection con = DriverManager.getConnection("jdbc:postgresql://" + host + ":" + port + "/" + database,database, pass);
+        // fixe le plus haut degré d'isolation entre transactions
+        con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        return con;
+    }
+
+    public static void tabledrop(Connection con, String nomtable) throws SQLException {
+        //méthode permettant d'effacer une table de la base de donnée
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                    DROP TABLE IF EXISTS ?
+                    """)) {
+            con.setAutoCommit(false);
+            pst.setString(1,nomtable);
+            pst.executeUpdate();
+            con.commit();
+        }
+    }
+
+    public static void SupprimeContrainte(Connection con, String nomtable, String contrainte) throws SQLException {
+        //méthode permettant d'effacer les contraintes sur une table
+        try {
+            try (Statement st = con.createStatement()) {
+                st.executeUpdate("alter table " + nomtable + "drop constraint " + contrainte);
             }
-        }else{
-            if(nom.length()>50){System.out.println("ERROR: AjoutPersonne : nom trop long");}
-            if(prenom.length()>50){System.out.println("ERROR: AjoutPersonne : prenom trop long");}
-            if(adresseMail.length()>100){System.out.println("ERROR: AjoutPersonne : adresseMail trop long");}
-            if(mdpHash.length()>50){System.out.println("ERROR: AjoutPersonne : mdpHash trop long");}
+        } catch (Exception e) {
+            System.out.println("Erreur dans la suppression de la contrainte "+ contrainte);
         }
     }
 
@@ -64,7 +73,9 @@ public class Commandes
         }
     }
 
-    public static void AjoutAdmin(Connection con,  String nom, String prenom, String adresse, String mdp, String date) throws SQLException{
+    public static void AjoutAdmin(Connection con,  String nom, String prenom, String adresse, String mdp, String date) throws SQLException
+    {
+        //méthode permettant d'ajouter un administrateur à la base de donnée
         try (PreparedStatement pst = con.prepareStatement(
                 """
                         INSERT INTO Admin (nom,prenom,adresse,mdp,dateNaissance)
@@ -84,6 +95,289 @@ public class Commandes
         }
     }
 
+    public static void AjoutModule(Connection con, String intitule, String description, String nbplacemax, String nbplacemin, String classeacceptee) throws SQLException
+    {
+        //méthode permettant d'ajouter un module à la base de donnée
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                        INSERT INTO Module (intitule,description,nbPlaceMax,nbPlaceMin,classeacceptee)
+                        VALUES (?,?,?,?,?)
+                        """)){
+            con.setAutoCommit(false);
+            pst.setString(1, intitule);
+            pst.setString(2, description);
+            pst.setInt(3, Integer.parseInt(nbplacemax));
+            pst.setInt(4, Integer.parseInt(nbplacemin));
+            pst.setString(5, classeacceptee);
+            pst.executeUpdate();
+            con.commit();
+        } catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutModule");
+        }
+    }
+
+    public static void AjoutSemestre(Connection con, String annee, String numero, String ng, String nc) throws SQLException
+    {
+        //méthode permettant d'ajouter un module à la base de donnée
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                        INSERT INTO Semestre (annee,numero, ng, nc)
+                        VALUES (?,?,?,?)
+                        """)){
+            con.setAutoCommit(false);
+            pst.setInt(1, Integer.parseInt(annee));
+            pst.setInt(2, Integer.parseInt(numero));
+            pst.setInt(3, Integer.parseInt(ng));
+            pst.setInt(4, Integer.parseInt(nc));
+            pst.executeUpdate();
+            con.commit();
+        } catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutSemestre");
+        }
+    }
+
+    public static void AjoutGrpModule(Connection con, String idsemestre, String idGrp, String module) throws SQLException {
+        //méthode permettant d'ajouter un groupe de module
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                insert into GrpModule (idSemestre,idGroupe,idModule) 
+                values (?,?,?)
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, Integer.parseInt(idsemestre));
+            pst.setInt(2, Integer.parseInt(idGrp));
+            pst.setInt(3, Integer.parseInt(module));
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutGrpModule");
+        }
+    }
+
+    public static void AjoutVoeux(Connection con, String idsemestre, String idetudiant, String idmodule) throws SQLException {
+        //méthode permettant d'ajouter un groupe de module
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                insert into Voeux (idSemestre,idEtudiant,idModule) 
+                values (?,?,?)
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, Integer.parseInt(idsemestre));
+            pst.setInt(2, Integer.parseInt(idetudiant));
+            pst.setInt(3, Integer.parseInt(idmodule));
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutVoeux");
+        }
+    }
+
+    //TODO méthodes à faire
+
+    public static void deleteEtudiant(Connection con, int id) throws SQLException{
+        //méthode qui permet de supprimer un étudiant grace a son id
+
+
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                delete from Etudiant where id = ? 
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during deleteEtudiant");
+        }
+    }
+
+    public static void deleteModule(Connection con, int id) throws SQLException{
+        //méthode qui permet de supprimer un module
+        //méthode qui permet de supprimer un étudiant grace a son id
+
+
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                delete from Module where id = ? 
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during deleteModule");
+        }
+
+
+    }
+
+    public static void deleteGroupe(Connection con, int id) throws SQLException{
+        //méthode qui permet de supprimer un groupe de module
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                delete from GrpModule where idGroupe = ? 
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during deleteGroupe");
+        }
+
+
+    }
+
+    public static void ModificationGrp(Connection con){
+        //méthode qui permet de à un admin de modifier les groupes de modules
+
+
+    }
+
+    public static void ModificationVoeux(Connection con){
+        //méthode qui permet de à un étudiant de modifier ses voeux si il change d'avis
+        //ne fonctionne que pour le semestre actuel (on ne modifie pas l'historique)
+
+
+    }
+
+
+
+
+
+
+
+    //-----------------------------------------------------------------
+    //          METHODES DE RECUPERATION D'ELEMENTS DE LA BDD
+    //-----------------------------------------------------------------
+
+    public static List<String> getColonne(Connection con, String table, String c) throws SQLException {
+        //méthode permettant de recuperer une colonne c de la table "table"
+        try (Statement st = con.createStatement();
+             ResultSet rres = st.executeQuery(
+                     "select "+ c + " from " + table)) {
+            List<String> res = new ArrayList<>();
+            while (rres.next()) {
+                res.add(rres.getString(c));
+            }
+            return res;
+        }
+    }
+
+    public static void afficheModTest(Connection con) throws SQLException {
+        //méthode test : affiche dans la console tous les modules du grp 1 du s2 de 2019
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tla = st.executeQuery(
+                    """
+                    select intitule from Module join grpModule on grpModule.idmodule = module.id
+                    join Semestre on grpModule.idsemestre = Semestre.id 
+                    where Semestre.id=2 and grpmodule.idgroupe=1
+                     """)) {
+                System.out.println("liste des modules :");
+                System.out.println("------------------");
+                while (tla.next()) {
+                    System.out.println(tla.getString(1));
+                }
+            }
+        }
+
+    }
+
+    //TODO les méthodes a partir d'ici sont à faire j'ai mis void pour chacune mais faudra changer
+
+
+    public static void login(Connection con, String adresse, String mdp) throws SQLException {
+        //permet de verifier si une adresse mail et un mdp appartiennent a la bdd
+        // String mdphash = security.CreateHash(mdp);
+        final String requete ="SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'";
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet tla = st.executeQuery(
+                    requete)) {
+
+                System.out.println("liste des Etudiant :");
+                System.out.println("------------------");
+                while (tla.next()) {
+                    System.out.println(tla.getString(1));
+                    System.out.println(tla.getString(2));
+                    System.out.println(tla.getString(3));
+                }
+            }
+        }
+
+    }
+
+    public static void ModulesDuSemestre(Connection con){
+        //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
+
+
+    }
+
+    public static void ModulesPossible(Connection con){
+        //méthode qui permet à un étudiant de voir la liste des modules auxquels il peut s'inscrire
+
+
+    }
+
+    public static void EtudiantDispo(Connection con){
+        //méthode qui permet d'avoir la liste des étudiants pouvant s'inscrire à un semestre
+        //pour ca, finir la disponibilite
+
+
+    }
+
+
+    public static void historique(Connection con, int idEtud){
+        //méthode pour recuperer l'historique des modules d'un etudiant
+
+
+    }
+
+    public static void main(String[] args) {
+        //pour faire des tests
+        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+            Commandes.afficheModTest(con);
+            System.out.println("Méthode sans preparedstatement :");
+            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
+            Commandes.deleteEtudiant(con, 2);
+        } catch (Exception err) {
+            System.out.println(err);
+        }
+
+    }
+
+    public static void AjoutPersonne(Connection con, String nom, String prenom, String dateNaissance, String adresseMail, String mdp) throws SQLException {
+        //Ajout d'une personne dans la table "Personnes"
+        String mdpHash = security.CreateHash(mdp);
+        if(nom.length()<200 || prenom.length()<200 || adresseMail.length()<200 || mdpHash.length()<200){
+            try (PreparedStatement pst = con.prepareStatement(
+                    """
+                            INSERT INTO Personnes (nom,prenom,dateNaissance,adresse,mdp)
+                            VALUES (?,?,?,?,?)
+                            """)){
+                con.setAutoCommit(false);
+                pst.setString(1, nom);
+                pst.setString(2, prenom);
+                pst.setDate(3, java.sql.Date.valueOf(dateNaissance));
+                pst.setString(4, adresseMail);
+                pst.setString(5, mdpHash);
+                pst.executeUpdate();
+                con.commit();
+            }
+        }else{
+            if(nom.length()>=200){System.out.println("ERROR: AjoutPersonne : nom trop long");}
+            if(prenom.length()>=200){System.out.println("ERROR: AjoutPersonne : prenom trop long");}
+            if(adresseMail.length()>=200){System.out.println("ERROR: AjoutPersonne : adresseMail trop long");}
+            if(mdpHash.length()>=200){System.out.println("ERROR: AjoutPersonne : mdpHash trop long");}
+        }
+    }
+
     public static int findPersonne(Connection con, String table, String nom, String prenom) throws SQLException {
         //Trouve la PREMIERE personne qui a ce nom et prénom et renvoie son identifiant
         int id = -1;
@@ -99,97 +393,5 @@ public class Commandes
         return id;
     }
 
-    public static Connection connect(String host, int port, String database, String user, String pass) throws ClassNotFoundException, SQLException {
-        // teste la présence du driver postgresql
-        Class.forName("org.postgresql.Driver");
-        Connection con = DriverManager.getConnection("jdbc:postgresql://" + host + ":" + port + "/" + database,database, pass);
-        // fixe le plus haut degré d'isolation entre transactions
-        con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-        return con;
-    }
-
-    public static void tabledrop(Connection con, String table) throws SQLException {
-        //méthode permettant d'effacer une table de la base de donnée
-        try (PreparedStatement pst = con.prepareStatement(
-                """
-                    DROP TABLE IF EXISTS ?
-                    """)) {
-                con.setAutoCommit(false);
-                pst.setString(1,table);
-                pst.executeUpdate();
-                con.commit();
-        }
-    }
-
-    public static void AjoutModule(Connection con, String intitule, String description, String nbplacemax, String nbplacemin, String classeacceptee) throws SQLException
-    {
-        //méthode permettant d'ajouter un module à la base de donnée
-        try (PreparedStatement pst = con.prepareStatement(
-            """
-                    INSERT INTO Module (intitule,description,nbPlaceMax,nbPlaceMin,classeacceptee)
-                    VALUES (?,?,?,?,?)
-                    """)){
-            con.setAutoCommit(false);
-            pst.setString(1, intitule);
-            pst.setString(2, description);
-            pst.setInt(3, Integer.parseInt(nbplacemax));
-            pst.setInt(4, Integer.parseInt(nbplacemin));
-            pst.setString(5, classeacceptee);
-            pst.executeUpdate();
-            con.commit();
-        } catch (SQLException ex) {
-            con.rollback();
-            System.out.println("ERROR : problem during AjoutModule");
-        }
-    }
-        
- 
 }
-    // exemple drop table
-    // public static void tabledrop(Connection con) throws SQLException {
-    //     try {
-    //         try (Statement st = con.createStatement()) {
-    //             st.executeUpdate("drop table person");
-    //         }
-    //     } catch (Exception e) {
-    //         System.out.println("table person inexistante");
-    //     }
-    // }
-    // exemple creation table
-    // public static void table(Connection con) throws SQLException {
-    //     try (Statement st = con.createStatement()) {
-    //         st.executeUpdate("""
-    //                 create table Person(
-    //                 id integer primary key generated always as identity,
-    //                 nom varchar(50) not null,
-    //                 dateNaissance date
-    //                 )
-    //                 """);
-    //     }
-    // }
-    // exemple création d'entrée
-    // public static void createPerson(Connection con, String nom, java.sql.Date dateNaiss) throws SQLException {
-    //     try (PreparedStatement pst = con.prepareStatement("""
-    //             insert into Person (nom,dateNaissance)
-    //               values (?,?)
-    //             """)) {
-    //         pst.setString(1, nom);
-    //         pst.setDate(2, dateNaiss);
-    //         pst.executeUpdate();
-    //     }
-    // }
-    // exemple affichage
-    // public static void afficheToutesPersonnes(Connection con) throws SQLException {
-    //     try (Statement st = con.createStatement()) {
-    //         ResultSet res = st.executeQuery("select * from person");
-    //         while (res.next()) {
-    //             // on peut accéder à une colonne par son nom
-    //             int id = res.getInt("id");
-    //             String nom = res.getString("nom");
-    //             // on peut aussi y accéder par son numéro
-    //             // !! numéro 1 pour la première
-    //             java.sql.Date dn = res.getDate(3);
-    //             System.out.println(id + " : " + nom + " né le " + dn);
-    //         }
-    //     }
-    // }
+

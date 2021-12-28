@@ -24,7 +24,7 @@ public class Initialisation {
             Commandes.tabledrop(con, "Semestre");
 
 
-            System.out.println("Supression des tables terminée");
+            System.out.println("Suppression des tables terminée");
 
             //création des tables
             tableEtudiant(con);
