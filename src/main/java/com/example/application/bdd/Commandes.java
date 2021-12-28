@@ -25,6 +25,7 @@ public class Commandes
         return con;
     }
 
+
     public static void tabledrop(Connection con, String nomtable) throws SQLException {
         //méthode permettant d'effacer une table de la base de donnée
         try (PreparedStatement pst = con.prepareStatement(
@@ -49,6 +50,10 @@ public class Commandes
         }
     }
 
+    //-----------------------------------------------------------------
+    //           METHODES DE MODIFICATION DE TABLE 
+    //-----------------------------------------------------------------
+
     public static void AjoutEtudiant(Connection con, String nom, String prenom, String adresse, String mdp, String date, String dispo, String classe) throws SQLException
     {
         //méthode permettant d'ajouter un étudiant à la table contenant tous les étudiants
@@ -72,7 +77,7 @@ public class Commandes
             System.out.println("ERROR : problem during AjoutEtudiant");
         }
     }
-
+    
     public static void AjoutAdmin(Connection con,  String nom, String prenom, String adresse, String mdp, String date) throws SQLException
     {
         //méthode permettant d'ajouter un administrateur à la base de donnée
@@ -121,17 +126,17 @@ public class Commandes
     {
         //méthode permettant d'ajouter un module à la base de donnée
         try (PreparedStatement pst = con.prepareStatement(
-                """
-                        INSERT INTO Semestre (annee,numero, ng, nc)
-                        VALUES (?,?,?,?)
-                        """)){
-            con.setAutoCommit(false);
-            pst.setInt(1, Integer.parseInt(annee));
-            pst.setInt(2, Integer.parseInt(numero));
-            pst.setInt(3, Integer.parseInt(ng));
-            pst.setInt(4, Integer.parseInt(nc));
-            pst.executeUpdate();
-            con.commit();
+            """
+                    INSERT INTO Semestre (annee,numero, ng, nc)
+                    VALUES (?,?,?,?)
+                    """)){
+        con.setAutoCommit(false);
+        pst.setInt(1, Integer.parseInt(annee));
+        pst.setInt(2, Integer.parseInt(numero));
+        pst.setInt(3, Integer.parseInt(ng));
+        pst.setInt(4, Integer.parseInt(nc));
+        pst.executeUpdate();
+        con.commit();
         } catch (SQLException ex) {
             con.rollback();
             System.out.println("ERROR : problem during AjoutSemestre");
@@ -248,21 +253,21 @@ public class Commandes
 
     }
 
-
+    
 
 
 
 
 
     //-----------------------------------------------------------------
-    //          METHODES DE RECUPERATION D'ELEMENTS DE LA BDD
+    //          METHODES DE RECUPERATION D'ELEMENTS DE LA BDD 
     //-----------------------------------------------------------------
 
     public static List<String> getColonne(Connection con, String table, String c) throws SQLException {
         //méthode permettant de recuperer une colonne c de la table "table"
         try (Statement st = con.createStatement();
-             ResultSet rres = st.executeQuery(
-                     "select "+ c + " from " + table)) {
+                ResultSet rres = st.executeQuery(
+                        "select "+ c + " from " + table)) {
             List<String> res = new ArrayList<>();
             while (rres.next()) {
                 res.add(rres.getString(c));
@@ -329,13 +334,11 @@ public class Commandes
     public static void ModulesPossible(Connection con){
         //méthode qui permet à un étudiant de voir la liste des modules auxquels il peut s'inscrire
 
-
     }
 
     public static void EtudiantDispo(Connection con){
         //méthode qui permet d'avoir la liste des étudiants pouvant s'inscrire à un semestre
         //pour ca, finir la disponibilite
-
 
     }
 
@@ -402,3 +405,38 @@ public class Commandes
 
 }
 
+    // exemple drop table
+    // public static void tabledrop(Connection con) throws SQLException {
+    //     try {
+    //         try (Statement st = con.createStatement()) {
+    //             st.executeUpdate("drop table person");
+    //         }
+    //     } catch (Exception e) {
+    //         System.out.println("table person inexistante");
+    //     }
+    // }
+    // exemple creation table
+    // public static void table(Connection con) throws SQLException {
+    //     try (Statement st = con.createStatement()) {
+    //         st.executeUpdate("""
+    //                 create table Person(
+    //                 id integer primary key generated always as identity,
+    //                 nom varchar(50) not null,
+    //                 dateNaissance date
+    //                 )
+    //                 """);
+    //     }
+    // }
+    // exemple création d'entrée
+    // public static void createPerson(Connection con, String nom, java.sql.Date dateNaiss) throws SQLException {
+    //     try (PreparedStatement pst = con.prepareStatement("""
+    //             insert into Person (nom,dateNaissance)
+    //               values (?,?)
+    //             """)) {
+    //         pst.setString(1, nom);
+    //         pst.setDate(2, dateNaiss);
+    //         pst.executeUpdate();
+    //     }
+    // }
+    // exemple affichage
+   
