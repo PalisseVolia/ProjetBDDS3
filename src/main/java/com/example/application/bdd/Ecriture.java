@@ -70,6 +70,7 @@ public class Ecriture {
             * FINCHOIX
             *
             * */
+            sauv.close();
         }
         catch (IOException err) {System.out.println("ERROR : ecricreFichier : impossible de créer le fichier d'écriture");}
     }
