@@ -4,12 +4,16 @@ import java.sql.Date;
 
 public class Etudiant extends Personne {
 
+    //attributs
     Date dateNaiss; // date de naissance
+    String classe; //définit la classe de l'étudiant
     boolean disponibilite; // permet de définir si un éttudiant peut s'inscire ou non à un electif. Exemple
                            // : si il part en mobilité
+    
 
-    public Etudiant(Date dateNaiss, boolean disponibilite, String nom, String prenom, String adresse, String mdp) {
+    public Etudiant(Date dateNaiss, boolean disponibilite, String nom, String prenom, String adresse, String mdp, String classe) {
         super(nom, prenom, adresse, mdp);
+        this.classe=classe;
         this.dateNaiss = dateNaiss;
         this.disponibilite = disponibilite;
     }
@@ -44,7 +48,11 @@ public class Etudiant extends Personne {
     }
 
     public Date getDateNaiss() {
-        return dateNaiss;
+        return this.dateNaiss;
+    }
+
+    public String getClasse() {
+        return this.classe;
     }
 
     public boolean isDisponibilite() {

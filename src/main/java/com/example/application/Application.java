@@ -1,7 +1,9 @@
 package com.example.application;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.vaadin.artur.helpers.LaunchUtil;
 
 import com.example.application.bdd.Initialisation;
 import com.vaadin.flow.component.dependency.NpmPackage;
@@ -21,8 +23,10 @@ public class Application extends SpringBootServletInitializer {
         // } catch (Exception e) {
         //     System.out.println(e);
         // }
-        // LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
         Initialisation.init();
+        Initialisation.testrequete();
+        //LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
+
     }
 
 }
