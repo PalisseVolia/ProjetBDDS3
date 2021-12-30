@@ -227,6 +227,26 @@ public class Commandes
         }
     }
 
+    public static void deleteAdmin(Connection con, int id) throws SQLException{
+        //méthode qui permet de supprimer un étudiant grâce a son id
+        if(TrueAdminID(con,id)){
+            try ( PreparedStatement pst = con.prepareStatement(
+                    """
+                    delete from Admin where id = ?
+                    """)) {
+                con.setAutoCommit(false);
+                pst.setInt(1, id);
+                pst.executeUpdate();
+                con.commit();
+            }catch (SQLException ex) {
+                con.rollback();
+                System.out.println("ERROR : problem during deleteAdmin");
+            }
+        } else {
+            System.out.println("L'admin n'existait pas");
+        }
+    }
+
     public static void deleteModule(Connection con, int id) throws SQLException{
         //méthode qui permet de supprimer un module grâce à son id
         try ( PreparedStatement pst = con.prepareStatement(
@@ -243,7 +263,7 @@ public class Commandes
         }
     }
 
-    public static void deleteGroupe(Connection con, int id) throws SQLException{
+    public static void deleteGrpModule(Connection con, int id) throws SQLException{
         //méthode qui permet de supprimer un groupe de module
         try ( PreparedStatement pst = con.prepareStatement(
                 """
@@ -351,6 +371,25 @@ public class Commandes
             res = Integer.parseInt(String.valueOf(pst.executeQuery()));
         } catch (SQLException e) {
             System.out.println("Error : Commandes.java TrueEtudiantID(con,id) "+e);
+        }
+        if (res >= 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean TrueAdminID(Connection con, int id){
+        //Vérifier qu'un étudiant existe
+        int res = 0;
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                SELECT COUNT(*) FROM Admin WHERE id = '?'
+                """)) {
+            pst.setInt(1,id);
+            res = Integer.parseInt(String.valueOf(pst.executeQuery()));
+        } catch (SQLException e) {
+            System.out.println("Error : Commandes.java TrueAdminID(con,id) "+e);
         }
         if (res >= 1){
             return true;
