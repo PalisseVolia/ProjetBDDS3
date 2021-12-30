@@ -1,7 +1,6 @@
 package project;
 
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -15,68 +14,30 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 // =======================================================================================
 
 public class LoginPageContent extends VerticalLayout{
-    private VuePrincipale main;
-
     private EmailField email;
     private PasswordField mdp;
-    private Button valider;
     private Span passwordStrengthText;
     private Icon checkIcon;
 
-    public LoginPageContent(VuePrincipale mainvue) {
-        main = mainvue;
-
+    public LoginPageContent() {
         //creation du field d'email
-        email = new EmailField();
-        email.setLabel("Adresse mail");
-        email.setPlaceholder("nom@insa-strasbourg.com");
-        email.setErrorMessage("adresse invalide");
-        email.setClearButtonVisible(true);
-        add(email);
+        this.email = new EmailField();
+        this.email.setLabel("Adresse mail");
+        this.email.setPlaceholder("nom@insa-strasbourg.com");
+        this.email.setErrorMessage("adresse invalide");
+        this.email.setClearButtonVisible(true);
+        this.add(email);
 
         //creation du field de mdp
-        mdp = new PasswordField();
-        mdp.setLabel("Mot de passe");
-        mdp.setPlaceholder("••••••••");
-        mdp.setClearButtonVisible(true);
-        add(mdp);
-
-        //bouton de validation
-        valider = new Button();
-        valider.setText("Valider");
-        add(valider);
+        this.mdp = new PasswordField();
+        this.mdp.setLabel("Mot de passe");
+        this.mdp.setClearButtonVisible(true);
+        this.add(mdp);
 
         //style settings
         email.setWidth("20em");
         mdp.setWidth("20em");
-        valider.setWidth("10em");
         setAlignItems(Alignment.CENTER);
-
-        //listener du bouton de validation, détermine si l'accès est donné à la partie admin ou étudiant
-        valider.addClickListener((t) -> {
-            String txtemail = email.getValue();
-            String txtmdp = mdp.getValue();
-
-            // TODO: variables temporaires de test, modifier avec la verification dans la bdd
-            String tmptestemailadmin = "admin@test.com";
-            String tmptestmdpadmin = "admin";
-            String nomadmin = "Palisse";
-            String prenomadmin = "Volia";
-            String tmptestemailetudiant = "etudiant@test.com";
-            String tmptestmdpetudiant = "etudiant";
-            String nometudiant = "Waechter";
-            String prenometudiant = "Thibaut";
-
-            if (txtemail.equals(tmptestemailadmin) && txtmdp.equals(tmptestmdpadmin)) {
-                System.out.println("admin");
-                main.setEntete(new AdminPageEntete(nomadmin, prenomadmin));
-                main.setAlignment(0);
-            } else if (txtemail.equals(tmptestemailetudiant) && txtmdp.equals(tmptestmdpetudiant)) {
-                System.out.println("etudiant");
-            } else {
-                System.out.println("non reconnu");
-            }
-        });
 
         //indication force du mdp
         checkIcon = VaadinIcon.CHECK.create();
@@ -92,7 +53,7 @@ public class LoginPageContent extends VerticalLayout{
             String password = e.getValue();
             updateHelper(password);
         });
-        updateHelper("");
+    updateHelper("");
     }
 
     //check de la force du mdp
