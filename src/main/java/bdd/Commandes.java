@@ -212,7 +212,7 @@ public class Commandes
     }
 
     public static void deleteAdmin(Connection con, int id) throws SQLException{
-        //méthode qui permet de supprimer un étudiant grâce a son id
+        //méthode qui permet de supprimer un admin grâce a son id
         if(TrueAdminID(con,id)){
             try ( PreparedStatement pst = con.prepareStatement(
                     """
@@ -312,7 +312,7 @@ public class Commandes
     }
 
     public static void afficheModTest(Connection con) throws SQLException {
-        //méthode test : affiche dans la console tous les modules du grp 1 du s2 de 2019
+        // TODO:méthode test : affiche dans la console tous les modules du grp 1 du s2 de 2019
         try ( Statement st = con.createStatement()) {
             try ( ResultSet tla = st.executeQuery(
                     """

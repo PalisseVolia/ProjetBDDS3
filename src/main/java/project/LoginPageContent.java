@@ -41,6 +41,10 @@ public class LoginPageContent extends VerticalLayout{
         mdp.setClearButtonVisible(true);
         add(mdp);
 
+        // TODO: temporaire remplissage de test
+        email.setValue("admin@test.com");
+        mdp.setValue("admin");
+
         //bouton de validation
         valider = new Button();
         valider.setText("Valider");
@@ -64,12 +68,17 @@ public class LoginPageContent extends VerticalLayout{
             String prenomadmin = "Volia";
             String tmptestemailetudiant = "etudiant@test.com";
             String tmptestmdpetudiant = "etudiant";
-            String nometudiant = "Waechter";
-            String prenometudiant = "Thibaut";
+            // String nometudiant = "Waechter";
+            // String prenometudiant = "Thibaut";
 
             if (txtemail.equals(tmptestemailadmin) && txtmdp.equals(tmptestmdpadmin)) {
                 System.out.println("admin");
-                main.setEntete(new AdminPageEntete(nomadmin, prenomadmin));
+                main.setEntete(new AdminPageEntete(nomadmin, prenomadmin, main));
+                try {
+                    main.setMainContent(new AdminPageContent());
+                } catch (Exception e) {
+                    System.out.println("problème lors de la création du Maincontent Admin");
+                }
                 main.setAlignment(0);
             } else if (txtemail.equals(tmptestemailetudiant) && txtmdp.equals(tmptestmdpetudiant)) {
                 System.out.println("etudiant");

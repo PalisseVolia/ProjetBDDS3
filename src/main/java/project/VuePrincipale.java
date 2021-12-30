@@ -22,6 +22,7 @@ public class VuePrincipale extends VerticalLayout{
     
     private MyHorizontalLayout entete;
     private MyVerticalLayout mainContent;
+    private MyHorizontalLayout footer;
 
     public VuePrincipale() {
 
@@ -30,6 +31,8 @@ public class VuePrincipale extends VerticalLayout{
         this.add(this.entete);
         this.mainContent = new MyVerticalLayout();
         this.add(this.mainContent);
+        this.footer = new MyHorizontalLayout();
+        this.add(this.footer);
 
         //remplacement par les layouts de la page de Login
         this.setEntete(new LoginPageEntete());
@@ -48,6 +51,10 @@ public class VuePrincipale extends VerticalLayout{
     public void setMainContent(Component c) {
         this.mainContent.removeAll();
         this.mainContent.add(c);
+    }
+    public void setFooter(Component c) {
+        this.footer.removeAll();
+        this.footer.add(c);
     }
     public void setAlignment(int value) {
         switch (value) {
