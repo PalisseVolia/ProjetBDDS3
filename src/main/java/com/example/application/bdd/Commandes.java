@@ -183,6 +183,8 @@ public class Commandes
             con.rollback();
             System.out.println("ERROR : problem during AjoutGrpModule");
         }
+    } else {
+        System.out.println("Ce groupe de module existe déjà");
     }
 }
 
@@ -270,16 +272,17 @@ public class Commandes
         return idSemestre; // Gérer les cas où l'on a rien trouvé
     }
 
-    //TODO méthodes à faire
-
-    public static void ModificationGrp(Connection con){
-        //méthode qui permet de à un admin de modifier les groupes de modules
-
-
-    }
-
-    public static void ModificationVoeux(Connection con, int idEtudiant, int idSemestre){
+    public static void ModificationVoeux(Connection con, int idModule, int idEtudiant, int idSemestre, int numeroVoeux) throws SQLException {
         //méthode qui permet à un étudiant de modifier ses voeux s'il change d'avis, ne fonctionne que pour le semestre actuel (on ne modifie pas l'historique)
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                UPDATE Voeux SET idModule = ? WHERE idSemestre = ? AND idEtudiant = ? AND numeroVoeux = ?
+                """)) {
+            pst.setInt(1,idModule);
+            pst.setInt(2,idSemestre);
+            pst.setInt(3,idEtudiant);
+            pst.setInt(4,numeroVoeux);
+        }
     }
 
     //-----------------------------------------------------------------
@@ -391,7 +394,6 @@ public class Commandes
                 return res;
             }
         }
-
     }
 
     public static List<Integer> EtudiantDispo(Connection con, String semestre) throws SQLException {
@@ -421,11 +423,27 @@ public class Commandes
         }
     }
 
-    //TODO méthodes à faire
-
-    public static void ModulesPossible(Connection con){
+    public static List<Integer> ModulesPossible(Connection con, int idEtudiant, int idSemestre) throws SQLException {
         //méthode qui permet à un étudiant de voir la liste des modules auxquels il peut s'inscrire
-
+        String classeEtudiant = null;
+        List<Integer> res = new ArrayList<>();
+        final String requeteA ="SELECT classe FROM Etudiants WHERE id = "+idEtudiant; // pas besoin de passer par "?" car idEtudiant est de type int
+        try (Statement st = con.createStatement()) {
+            try (ResultSet rset = st.executeQuery(requeteA)) {
+                classeEtudiant = rset.getString(1);
+            }
+        }
+        final String requeteB ="SELECT Modules.idModule,Modules.classeacceptee FROM Modules JOIN GrpModule ON GrpModule.idGroupe = Modules.id WHERE GrpModule.idSemestre = "+idSemestre; // pas besoin de passer par "?" car idSemestre est de type int
+        try (Statement st = con.createStatement()) {
+            try (ResultSet rset = st.executeQuery(requeteB)) {
+                while (rset.next()) {
+                    if(rset.getString(2).indexOf(classeEtudiant) != -1){
+                        res.add(rset.getInt(1));
+                    }
+                }
+            }
+        }
+        return res;
     }
 
 }
