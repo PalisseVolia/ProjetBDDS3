@@ -1,5 +1,7 @@
 package project;
 
+import java.sql.Connection;
+
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -9,6 +11,9 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.data.value.ValueChangeMode;
+
+import bdd.Commandes;
+import classes.Personne;
 
 // =======================================================================================
 // Contenu de la page de login
@@ -57,25 +62,34 @@ public class LoginPageContent extends VerticalLayout{
             String txtemail = email.getValue();
             String txtmdp = mdp.getValue();
 
-            // TODO: variables temporaires de test, modifier avec la verification dans la bdd
-            String tmptestemailadmin = "admin@test.com";
-            String tmptestmdpadmin = "admin";
-            String nomadmin = "Palisse";
-            String prenomadmin = "Volia";
-            String tmptestemailetudiant = "etudiant@test.com";
-            String tmptestmdpetudiant = "etudiant";
-            String nometudiant = "Waechter";
-            String prenometudiant = "Thibaut";
 
-            if (txtemail.equals(tmptestemailadmin) && txtmdp.equals(tmptestmdpadmin)) {
-                System.out.println("admin");
-                main.setEntete(new AdminPageEntete(nomadmin, prenomadmin));
-                main.setAlignment(0);
-            } else if (txtemail.equals(tmptestemailetudiant) && txtmdp.equals(tmptestmdpetudiant)) {
-                System.out.println("etudiant");
-            } else {
-                System.out.println("non reconnu");
+            try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+
+                Personne p = Commandes.login(con, txtemail, txtmdp);
+
+                if (p==null){
+
+                    System.out.println("non reconnu");
+
+                }else{
+                    String s = p.testClasse();
+
+                    if(s.equals("etudiant")){
+
+                        System.out.println("etudiant");
+
+                    }else if(s.equals("admin")){
+
+                        System.out.println("admin");
+                        main.setEntete(new AdminPageEntete(p.getPrenom(), p.getNom()));
+                        main.setAlignment(0);
+                    }
+                }
+
+            } catch (Exception err) {
+                System.out.println("Error : Commandes.java main() "+err);
             }
+        
         });
 
         //indication force du mdp

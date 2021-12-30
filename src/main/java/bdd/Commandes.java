@@ -8,6 +8,7 @@ import classes.Admin;
 import classes.Etudiant;
 import classes.Personne;
 
+
 public class Commandes 
 {
     public static void main(String[] args) {
@@ -16,7 +17,12 @@ public class Commandes
             Commandes.afficheModTest(con);
             System.out.println("Méthode sans preparedstatement :");
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
-            Commandes.deleteEtudiant(con, 2);
+            List<Etudiant> etud = new ArrayList<Etudiant>();
+            etud= getEtudiant(con);
+            for (int i=0; i<etud.size();i++){
+                System.out.println(etud.get(i).toString());
+            }
+           
         } catch (Exception err) {
             System.out.println("Error : Commandes.java main() "+err);
         }
@@ -38,12 +44,23 @@ public class Commandes
 
     public static void tabledrop(Connection con, String nomtable) throws SQLException {
         //méthode permettant d'effacer une table de la base de donnée
+        try {
+            try (Statement st = con.createStatement()) {
+                st.executeUpdate("drop table " + nomtable);
+            }
+        } catch (Exception e) {
+            System.out.println("table " + nomtable + " inexistante, première éxécution ?");
+        }
+    }
+
+    public static void dataBaseDrop(Connection con, String nomDataBase) throws SQLException {
+        //méthode permettant d'effacer une table de la base de donnée
         try (PreparedStatement pst = con.prepareStatement(
                 """
                     DROP TABLE IF EXISTS ?
                     """)) {
             con.setAutoCommit(false);
-            pst.setString(1,nomtable);
+            pst.setString(1,nomDataBase);
             pst.executeUpdate();
             con.commit();
         }
@@ -51,12 +68,21 @@ public class Commandes
 
     public static void SupprimeContrainte(Connection con, String nomtable, String contrainte) throws SQLException {
         //méthode permettant d'effacer les contraintes sur une table
-        try {
-            try (Statement st = con.createStatement()) {
-                st.executeUpdate("alter table " + nomtable + "drop constraint " + contrainte);
-            }
-        } catch (Exception e) {
-            System.out.println("Erreur dans la suppression de la contrainte "+ contrainte);
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                        IF EXISTS (SELECT * FROM ? WHERE CONNECTION_NAME = '?') BEGIN (alter table ? DROP CONSTRAINT '?') END
+                    """)){
+            //ALTER TABLE ? DROP CONSTRAINT '?' WHERE EXISTS (SELECT * FROM ? WHERE CONNECTION_NAME = '?')
+            con.setAutoCommit(false);
+            pst.setString(1, nomtable);
+            pst.setString(2, contrainte);
+            pst.setString(3, nomtable);
+            pst.setString(4, contrainte);
+            pst.executeUpdate();
+            con.commit();
+        } catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutEtudiant");
         }
     }
 
@@ -75,7 +101,7 @@ public class Commandes
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, adresse);
-            pst.setString(4, mdp);
+            pst.setString(4,(mdp));
             pst.setDate(5, java.sql.Date.valueOf(date));
             pst.setString(6, dispo);
             pst.setString(7, classe);
@@ -151,7 +177,7 @@ public class Commandes
 
     public static void AjoutGrpModule(Connection con, int idSemestre,int idGrpModule, int idModule) throws SQLException {
     //méthode permettant d'ajouter un groupe de module
-    if (!TrueGrpModule(con,idSemestre,idGrpModule,idModule)){
+   
         try ( PreparedStatement pst = con.prepareStatement(
                 """
                 insert into GrpModule (idSemestre,idGrpModule,idModule)
@@ -167,10 +193,27 @@ public class Commandes
             con.rollback();
             System.out.println("ERROR : problem during AjoutGrpModule");
         }
-    } else {
-        System.out.println("Ce groupe de module existe déjà");
+    
+}
+    public static void AjoutGrpModule(Connection con, String idsemestre, String idGrp, String module) throws SQLException {
+        //méthode permettant d'ajouter un groupe de module
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                insert into GrpModule (idSemestre,idGroupe,idModule) 
+                values (?,?,?)
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, Integer.parseInt(idsemestre));
+            pst.setInt(2, Integer.parseInt(idGrp));
+            pst.setInt(3, Integer.parseInt(module));
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutGrpModule");
     }
 }
+
 
     public static void AjoutVoeux(Connection con, String idsemestre, String idetudiant, String idmodule) throws SQLException {
         //méthode permettant d'ajouter un groupe de module
@@ -311,6 +354,33 @@ public class Commandes
     }
     }
 
+    public static List<Etudiant> getEtudiant(Connection con) throws SQLException {
+        //méthode permettant de recuperer une colonne c de la table "table"
+        ArrayList<Etudiant> res = new ArrayList<Etudiant>();
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet rres = st.executeQuery(
+                    """
+                    select * from Etudiant
+                     """)) {
+            while (rres.next()) {
+                Etudiant etudiant = new Etudiant();
+                etudiant.setid(rres.getInt(1));
+                etudiant.setNom(rres.getString(2));
+                etudiant.setPrenom(rres.getString(3));
+                etudiant.setAdresse(rres.getString(4));
+                etudiant.setMdp(rres.getString(5));
+                etudiant.setDateNaiss(rres.getDate(6));
+                etudiant.setDisponibilite(rres.getString(7));
+                etudiant.setClasse(rres.getString(8));
+                res.add(etudiant);
+                
+            }
+        
+            return res;
+        }
+     }
+    }
+
     public static void afficheModTest(Connection con) throws SQLException {
         //méthode test : affiche dans la console tous les modules du grp 1 du s2 de 2019
         try ( Statement st = con.createStatement()) {
@@ -344,9 +414,8 @@ public class Commandes
         }
         return id;
     }
+    
 
-
-    // TODO: les méthodes a partir d'ici sont à faire j'ai mis void pour chacune mais faudra changer
 
 
     public static Personne login(Connection con, String adresse, String mdp) throws SQLException {
@@ -421,7 +490,7 @@ public class Commandes
         int res = 0;
         try (PreparedStatement pst = con.prepareStatement(
                 """
-                SELECT COUNT(*) FROM Etudiant WHERE id = '?'
+                SELECT COUNT(*) FROM Etudiant WHERE id = ?
                 """)) {
             pst.setInt(1,id);
             res = Integer.parseInt(String.valueOf(pst.executeQuery()));
@@ -449,14 +518,15 @@ public class Commandes
     }
 
     public static boolean TrueAdminID(Connection con, int id){
-        //Vérifier qu'un étudiant existe
+        //Vérifier qu'un admin existe
         int res = 0;
         try (PreparedStatement pst = con.prepareStatement(
                 """
-                SELECT COUNT(*) FROM Admin WHERE id = '?'
+                SELECT COUNT(*) FROM Admin WHERE id = ?
                 """)) {
             pst.setInt(1,id);
             res = Integer.parseInt(String.valueOf(pst.executeQuery()));
+            System.out.println("trueadmin res = "+ res);
         } catch (SQLException e) {
             System.out.println("Error : Commandes.java TrueAdminID(con,id) "+e);
         }
@@ -468,18 +538,21 @@ public class Commandes
     }
 
     public static boolean TrueGrpModule(Connection con, int idSemestre, int idGrpModule, int idModule){
-        //Vérifier qu'un étudiant existe
+        //Vérifier qu'un grpmod existe
         int res = 0;
+        System.out.println("ici");
         try (PreparedStatement pst = con.prepareStatement(
                 """
-                SELECT COUNT(*) FROM GrpModule WHERE GrpModule.idSemestre = ? and GrpModule.idGrpModule = ? and GrpModule.idModule = ?
+                SELECT COUNT(*) FROM GrpModule WHERE GrpModule.idSemestre = ? and GrpModule.idGroupe= ? and GrpModule.idModule = ?
                 """)) {
             pst.setInt(1,idSemestre);
             pst.setInt(2,idGrpModule);
             pst.setInt(3,idModule);
+            System.out.println(pst);
             res = Integer.parseInt(String.valueOf(pst.executeQuery()));
+            System.out.println(res);
         } catch (SQLException e) {
-            System.out.println("Error : Commandes.java TrueEtudiantID(con,id) "+e);
+            System.out.println("Error : Commandes.java TrueGrpModule(con,id) "+e);
         }
         if (res >= 1){
             return true;
