@@ -552,10 +552,8 @@ public class Initialisation {
         List<String> mod = Initialisation.module();
 
         for(int i=0;i<GRPMODULE.length;i++){
-            Commandes.AjoutGrpModule(con,semestre.get(i),grp.get(i),mod.get(i));
+            Commandes.AjoutGrpModule(con,Integer.parseInt(semestre.get(i)),Integer.parseInt(grp.get(i)),Integer.parseInt(mod.get(i)));
         }
-
-
     }
 
     public static final String[][] GRPMODULE = new String[][]{
