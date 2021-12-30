@@ -80,32 +80,6 @@ public class Commandes
     //           METHODES DE MODIFICATION DE TABLE
     //-----------------------------------------------------------------
 
-    public static void AjoutPersonne(Connection con, String nom, String prenom, String dateNaissance, String adresseMail, String mdp) throws SQLException {
-        //Ajout d'une personne dans la table "Personnes"
-        String mdpHash = security.CreateHash(mdp);
-        if(nom.length()<200 || prenom.length()<200 || adresseMail.length()<200 || mdpHash.length()<200){
-            try (PreparedStatement pst = con.prepareStatement(
-                    """
-                            INSERT INTO Personnes (nom,prenom,dateNaissance,adresse,mdp)
-                            VALUES (?,?,?,?,?)
-                            """)){
-                con.setAutoCommit(false);
-                pst.setString(1, nom);
-                pst.setString(2, prenom);
-                pst.setDate(3, java.sql.Date.valueOf(dateNaissance));
-                pst.setString(4, adresseMail);
-                pst.setString(5, mdpHash);
-                pst.executeUpdate();
-                con.commit();
-            }
-        }else{
-            if(nom.length()>=200){System.out.println("ERROR: AjoutPersonne : nom trop long");}
-            if(prenom.length()>=200){System.out.println("ERROR: AjoutPersonne : prenom trop long");}
-            if(adresseMail.length()>=200){System.out.println("ERROR: AjoutPersonne : adresseMail trop long");}
-            if(mdpHash.length()>=200){System.out.println("ERROR: AjoutPersonne : mdpHash trop long");}
-        }
-    }
-
     public static void AjoutEtudiant(Connection con, String nom, String prenom, String adresse, String mdp, String date, String dispo, String classe) throws SQLException {
         //méthode permettant d'ajouter un étudiant à la table contenant tous les étudiants
         try (PreparedStatement pst = con.prepareStatement(
@@ -230,20 +204,22 @@ public class Commandes
     }
 
     public static void deleteEtudiant(Connection con, int id) throws SQLException{
-        //méthode qui permet de supprimer un étudiant grace a son id
-
-
-        try ( PreparedStatement pst = con.prepareStatement(
-                """
-                delete from Etudiant where id = ?
-                """)) {
-            con.setAutoCommit(false);
-            pst.setInt(1, id);
-            pst.executeUpdate();
-            con.commit();
-        }catch (SQLException ex) {
-            con.rollback();
-            System.out.println("ERROR : problem during deleteEtudiant");
+        //méthode qui permet de supprimer un étudiant grâce a son id
+        if(TrueEtudiantID(con,id)){
+            try ( PreparedStatement pst = con.prepareStatement(
+                    """
+                    delete from Etudiant where id = ?
+                    """)) {
+                con.setAutoCommit(false);
+                pst.setInt(1, id);
+                pst.executeUpdate();
+                con.commit();
+            }catch (SQLException ex) {
+                con.rollback();
+                System.out.println("ERROR : problem during deleteEtudiant");
+            }
+        } else {
+            System.out.println("L'étudiant n'existait pas");
         }
     }
 
@@ -261,8 +237,6 @@ public class Commandes
             con.rollback();
             System.out.println("ERROR : problem during deleteModule");
         }
-
-
     }
 
     public static void deleteGroupe(Connection con, int id) throws SQLException{
@@ -279,8 +253,6 @@ public class Commandes
             con.rollback();
             System.out.println("ERROR : problem during deleteGroupe");
         }
-
-
     }
 
     public static int findSemestre(Connection con, int annee, int numero) throws SQLException {
@@ -363,6 +335,25 @@ public class Commandes
         return id;
     }
 
+    public static boolean TrueEtudiantID(Connection con, int id){
+        //Vérifier qu'un étudiant existe
+        int res = 0;
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                SELECT COUNT(*) FROM Etudiant WHERE id = '?'
+                """)) {
+            pst.setInt(1,id);
+            res = Integer.parseInt(String.valueOf(pst.executeQuery()));
+        } catch (SQLException e) {
+            System.out.println("Error : Commandes.java TrueEtudiantID(con,id) "+e);
+        }
+        if (res >= 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static List<String> ModulesDuSemestre(Connection con, int idSemestre) throws SQLException {
         //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
         final String requete ="SELECT Modules.id FROM Semestres JOIN GrpModule ON GrpModule.idSemestre = Semestres.id Join Modules ON Modules.id = GrpModule.idGroupe WHERE Semestres.id '"+idSemestre+"'";
@@ -387,8 +378,20 @@ public class Commandes
 
     }
 
-    public static void EtudiantDispo(Connection con){
+    public static List<Integer> EtudiantDispo(Connection con, String semestre) throws SQLException {
         //méthode qui permet d'avoir la liste des étudiants pouvant s'inscrire à un semestre. Pour ça, finir la disponibilité
+        final String requete ="SELECT Etudiant.id,Etudiant.disponibile FROM Etudiant";
+        try (Statement st = con.createStatement()) {
+            try (ResultSet rset = st.executeQuery(requete)) {
+                List<Integer> res = new ArrayList<>();
+                while (rset.next()) {
+                    if (rset.getString(2).indexOf(semestre) != -1) {
+                        res.add(rset.getInt(1));
+                    }
+                }
+                return res;
+            }
+        }
     }
 
     public static void historique(Connection con, int idEtud){
