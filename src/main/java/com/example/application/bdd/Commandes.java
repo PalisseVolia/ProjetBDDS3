@@ -165,17 +165,18 @@ public class Commandes
         }
     }
 
-    public static void AjoutGrpModule(Connection con, String idsemestre, String idGrp, String module) throws SQLException {
-        //méthode permettant d'ajouter un groupe de module
+    public static void AjoutGrpModule(Connection con, int idSemestre,int idGrpModule, int idModule) throws SQLException {
+    //méthode permettant d'ajouter un groupe de module
+    if (!TrueGrpModule(con,idSemestre,idGrpModule,idModule)){
         try ( PreparedStatement pst = con.prepareStatement(
                 """
-                insert into GrpModule (idSemestre,idGroupe,idModule)
+                insert into GrpModule (idSemestre,idGrpModule,idModule)
                 values (?,?,?)
                 """)) {
             con.setAutoCommit(false);
-            pst.setInt(1, Integer.parseInt(idsemestre));
-            pst.setInt(2, Integer.parseInt(idGrp));
-            pst.setInt(3, Integer.parseInt(module));
+            pst.setInt(1, idSemestre);
+            pst.setInt(2, idGrpModule);
+            pst.setInt(3, idModule);
             pst.executeUpdate();
             con.commit();
         }catch (SQLException ex) {
@@ -183,6 +184,7 @@ public class Commandes
             System.out.println("ERROR : problem during AjoutGrpModule");
         }
     }
+}
 
     public static void AjoutVoeux(Connection con, String idsemestre, String idetudiant, String idmodule) throws SQLException {
         //méthode permettant d'ajouter un groupe de module
@@ -354,6 +356,27 @@ public class Commandes
         }
     }
 
+    public static boolean TrueGrpModule(Connection con, int idSemestre, int idGrpModule, int idModule){
+        //Vérifier qu'un étudiant existe
+        int res = 0;
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                SELECT COUNT(*) FROM GrpModule WHERE GrpModule.idSemestre = ? and GrpModule.idGrpModule = ? and GrpModule.idModule = ?
+                """)) {
+            pst.setInt(1,idSemestre);
+            pst.setInt(2,idGrpModule);
+            pst.setInt(3,idModule);
+            res = Integer.parseInt(String.valueOf(pst.executeQuery()));
+        } catch (SQLException e) {
+            System.out.println("Error : Commandes.java TrueEtudiantID(con,id) "+e);
+        }
+        if (res >= 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static List<String> ModulesDuSemestre(Connection con, int idSemestre) throws SQLException {
         //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
         final String requete ="SELECT Modules.id FROM Semestres JOIN GrpModule ON GrpModule.idSemestre = Semestres.id Join Modules ON Modules.id = GrpModule.idGroupe WHERE Semestres.id '"+idSemestre+"'";
@@ -368,13 +391,6 @@ public class Commandes
                 return res;
             }
         }
-
-    }
-
-    //TODO méthodes à faire
-
-    public static void ModulesPossible(Connection con){
-        //méthode qui permet à un étudiant de voir la liste des modules auxquels il peut s'inscrire
 
     }
 
@@ -394,8 +410,22 @@ public class Commandes
         }
     }
 
-    public static void historique(Connection con, int idEtud){
+    public static ResultSet historique(Connection con, int idEtud) throws SQLException {
         //méthode pour récuperer l'historique des voeux de modules d'un étudiant
+        try (PreparedStatement pst = con.prepareStatement(
+                """
+                SELECT Voeux.idSemestre,Voeux.idModule,Voeux.numeroVoeux FROM Voeux JOIN Etudiants ON Etudiants.id = Voeux.idEtudiant WHERE Etudiant.id = ?
+                """)) {
+            pst.setInt(1,idEtud);
+            return pst.executeQuery();
+        }
+    }
+
+    //TODO méthodes à faire
+
+    public static void ModulesPossible(Connection con){
+        //méthode qui permet à un étudiant de voir la liste des modules auxquels il peut s'inscrire
+
     }
 
 }
