@@ -4,6 +4,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.application.classes.Admin;
+import com.example.application.classes.Etudiant;
+import com.example.application.classes.Personne;
+
+import net.bytebuddy.dynamic.scaffold.MethodRegistry.Prepared;
+
 public class Commandes 
 {
     public static void main(String[] args) {
@@ -54,26 +60,6 @@ public class Commandes
         } catch (Exception e) {
             System.out.println("Erreur dans la suppression de la contrainte "+ contrainte);
         }
-    }
-
-    public static void login(Connection con, String adresse, String mdp) throws SQLException {
-        //permet de verifier si une adresse mail et un mdp appartiennent a la bdd
-        // String mdphash = security.CreateHash(mdp);
-        final String requete ="SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'";
-        try ( Statement st = con.createStatement()) {
-            try ( ResultSet tla = st.executeQuery(
-                    requete)) {
-
-                System.out.println("liste des Etudiant :");
-                System.out.println("------------------");
-                while (tla.next()) {
-                    System.out.println(tla.getString(1));
-                    System.out.println(tla.getString(2));
-                    System.out.println(tla.getString(3));
-                }
-            }
-        }
-
     }
 
     //-----------------------------------------------------------------
@@ -310,20 +296,21 @@ public class Commandes
     //-----------------------------------------------------------------
 
     public static List<String> getColonne(Connection con, String table, String c) throws SQLException {
-        //méthode permettant de récuperer une colonne c de la table "table"
-        try (PreparedStatement pst = con.prepareStatement(
-                """
-                SELECT ? FROM ?
-                """)) {
-            pst.setString(1,c);
-            pst.setString(2,table);
-            ResultSet rres = pst.executeQuery();
+        //méthode permettant de recuperer une colonne c de la table "table"
+        String r = "select ? from ?";
+        try (PreparedStatement st = con.prepareStatement(r)){
+            st.setString(1, table);
+            st.setString(2, c);
+                ResultSet rres = st.executeQuery(
+                        ); {
             List<String> res = new ArrayList<>();
             while (rres.next()) {
                 res.add(rres.getString(c));
             }
+        
             return res;
         }
+    }
     }
 
     public static void afficheModTest(Connection con) throws SQLException {
@@ -360,6 +347,77 @@ public class Commandes
         return id;
     }
 
+
+    // TODO: les méthodes a partir d'ici sont à faire j'ai mis void pour chacune mais faudra changer
+
+
+    public static Personne login(Connection con, String adresse, String mdp) throws SQLException {
+        //permet de verifier si une adresse mail et un mdp appartiennent a la bdd
+        //mdp = security.CreateHash(mdp);
+        String r = "SELECT * from etudiant WHERE adresse = ? and mdp = ?";
+        int test= 3; 
+        Etudiant etudiant = new Etudiant();
+        Admin admin = new Admin();
+        try (PreparedStatement p = con.prepareStatement(r)) {
+            p.setString(1, adresse);
+            p.setString(2, mdp);
+            try ( ResultSet tla = p.executeQuery(
+                )) {
+                while (tla.next()) {
+                    etudiant.setid(tla.getInt(1));
+                    etudiant.setNom(tla.getString(2));
+                    etudiant.setPrenom(tla.getString(3));
+                    etudiant.setAdresse(tla.getString(4));
+                    etudiant.setMdp(tla.getString(5));
+                    etudiant.setDateNaiss(tla.getDate(6));
+                    etudiant.setDisponibilite(tla.getString(7));
+                    etudiant.setClasse(tla.getString(8));
+                    
+                    test=1;
+                    System.out.println("test etudiant"+test);
+                }
+                if(test==3){
+                    //si aucune adresse et mdp ne correspond a ceux d'un etudiant on regarde alors chez les admin
+                    String r2 = "SELECT * from admin WHERE adresse = ? and mdp = ?"; 
+                    try (PreparedStatement p2 = con.prepareStatement(r2)) {
+                        p2.setString(1, adresse);
+                        p2.setString(2, mdp);
+                        try ( ResultSet ta = p2.executeQuery(
+                            )) {
+                            while (ta.next()) {
+                                admin.setid(ta.getInt(1));
+                                admin.setNom(ta.getString(2));
+                                System.out.println(admin.getNom());
+                                admin.setPrenom(ta.getString(3));
+                                admin.setAdresse(ta.getString(4));
+                                admin.setMdp(ta.getString(5));
+                                
+                                test=2;
+                                System.out.println("test admin"+test);
+                            }
+                        }
+                    }
+                }   
+            }
+            switch(test){
+            case 1:
+                System.out.println("Un étudiant se connecte");
+                System.out.println(test);
+            return etudiant;
+             
+            case 2:
+                System.out.println("Un admin se connecte");
+                System.out.println(test);
+            return admin;
+        
+            case 3:
+            break;
+            }
+        return admin;  
+        }  
+    }
+
+
     public static boolean TrueEtudiantID(Connection con, int id){
         //Vérifier qu'un étudiant existe
         int res = 0;
@@ -376,6 +434,19 @@ public class Commandes
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static void ModulesDuSemestre(Connection con, int annee, int numero) throws SQLException {
+        //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
+        final String requete ="SELECT Modules.id FROM Semestres JOIN GrpModule ON GrpModule.idSemestre = Semestres.id Join Modules ON Modules.id = GrpModule.idGroupe WHERE Semestres.annee = '"+annee+"' and Semestres.numero = '"+numero+"'";
+        
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet res = st.executeQuery(requete)) {
+                while (res.next()) {
+                    System.out.println(res.getString(1));
+                }
+            }
         }
     }
 
@@ -447,6 +518,27 @@ public class Commandes
                     }
                 }
                 return res;
+            }
+        }
+    }
+
+    public static void AjoutPersonne(Connection con, String nom, String prenom, String dateNaissance, String adresseMail, String mdp) throws SQLException {
+        //Ajout d'une personne dans la table "Personnes"
+        String mdpHash = security.CreateHash(mdp);
+        if(nom.length()<200 || prenom.length()<200 || adresseMail.length()<200 || mdpHash.length()<200){
+            try (PreparedStatement pst = con.prepareStatement(
+                    """
+                            INSERT INTO Personnes (nom,prenom,dateNaissance,adresse,mdp)
+                            VALUES (?,?,?,?,?)
+                            """)){
+                con.setAutoCommit(false);
+                pst.setString(1, nom);
+                pst.setString(2, prenom);
+                pst.setDate(3, java.sql.Date.valueOf(dateNaissance));
+                pst.setString(4, adresseMail);
+                pst.setString(5, mdpHash);
+                pst.executeUpdate();
+                con.commit();
             }
         }
     }

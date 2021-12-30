@@ -5,13 +5,15 @@ public abstract class Personne {
 //Ces deux classes ont des attributs en commun mais doivent être différenciés
 
     //définition des attributs
+    private int id;
     private String nom;
     private String prenom;
     private String adresse;
     private String mdp;
 
     //Constructeur
-    public Personne(String nom, String prenom, String adresse, String mdp) {
+    public Personne(int id,String nom, String prenom, String adresse, String mdp) {
+        this.id=id;
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
@@ -25,6 +27,10 @@ public abstract class Personne {
     //méthodes get
     public String getNom() {
         return nom;
+    }
+
+    public int getid() {
+        return id;
     }
 
     public String getPrenom() {
@@ -44,6 +50,10 @@ public abstract class Personne {
         this.nom = nom;
     }
 
+    public void setid(int id) {
+        this.id = id;
+    }
+
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }
@@ -55,5 +65,24 @@ public abstract class Personne {
     public void setMdp(String mdp) {
         this.mdp = mdp;
     }
+
+    public String toString(){
+        String s = this.getNom() + ";" + this.getPrenom() + ";" + this.getAdresse() + ";" + this.getMdp();
+        return s;
+
+    }
+
+    public String testClasse(){
+        String s="";
+        if (this instanceof Etudiant ){
+            s ="etudiant";
+
+        }else if (this instanceof Admin ){
+            s="admin";
+        }
+
+        return s;
+    }
+
 
 }
