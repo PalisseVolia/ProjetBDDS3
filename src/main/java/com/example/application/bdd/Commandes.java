@@ -13,6 +13,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.application.classes.Admin;
+import com.example.application.classes.Etudiant;
+import com.example.application.classes.Personne;
+
+import net.bytebuddy.dynamic.scaffold.MethodRegistry.Prepared;
+
 public class Commandes 
 {
 
@@ -203,7 +209,6 @@ public class Commandes
 
     public static void deleteModule(Connection con, int id) throws SQLException{
         //méthode qui permet de supprimer un module
-        //méthode qui permet de supprimer un étudiant grace a son id
 
 
         try ( PreparedStatement pst = con.prepareStatement(
@@ -265,15 +270,20 @@ public class Commandes
 
     public static List<String> getColonne(Connection con, String table, String c) throws SQLException {
         //méthode permettant de recuperer une colonne c de la table "table"
-        try (Statement st = con.createStatement();
+        String r = "select ? from ?";
+        try (PreparedStatement st = con.prepareStatement(r)){
+            st.setString(1, table);
+            st.setString(2, c);
                 ResultSet rres = st.executeQuery(
-                        "select "+ c + " from " + table)) {
+                        ); {
             List<String> res = new ArrayList<>();
             while (rres.next()) {
                 res.add(rres.getString(c));
             }
+        
             return res;
         }
+    }
     }
 
     public static void afficheModTest(Connection con) throws SQLException {
@@ -298,29 +308,91 @@ public class Commandes
     //TODO les méthodes a partir d'ici sont à faire j'ai mis void pour chacune mais faudra changer
 
 
-    public static void login(Connection con, String adresse, String mdp) throws SQLException {
+    public static Personne login(Connection con, String adresse, String mdp) throws SQLException {
         //permet de verifier si une adresse mail et un mdp appartiennent a la bdd
-        // String mdphash = security.CreateHash(mdp);
-        final String requete ="SELECT * from etudiant WHERE adresse = '"+adresse+"' and mdp = '"+mdp+"'";
-        try ( Statement st = con.createStatement()) {
-            try ( ResultSet tla = st.executeQuery(
-                    requete)) {
+        //mdp = security.CreateHash(mdp);
+        String r = "SELECT * from etudiant WHERE adresse = ? and mdp = ?";
+        int test= 3; 
+        Etudiant etudiant = new Etudiant();
+        Admin admin = new Admin();
+        try (PreparedStatement p = con.prepareStatement(r)) {
+            p.setString(1, adresse);
+            p.setString(2, mdp);
+            try ( ResultSet tla = p.executeQuery(
+                )) {
 
-                System.out.println("liste des Etudiant :");
-                System.out.println("------------------");
+                
                 while (tla.next()) {
-                    System.out.println(tla.getString(1));
-                    System.out.println(tla.getString(2));
-                    System.out.println(tla.getString(3));
+                    etudiant.setid(tla.getInt(1));
+                    etudiant.setNom(tla.getString(2));
+                    etudiant.setPrenom(tla.getString(3));
+                    etudiant.setAdresse(tla.getString(4));
+                    etudiant.setMdp(tla.getString(5));
+                    etudiant.setDateNaiss(tla.getDate(6));
+                    etudiant.setDisponibilite(tla.getString(7));
+                    etudiant.setClasse(tla.getString(8));
+                    
+                    test=1;
+                    System.out.println("test etudiant"+test);
+                    
                 }
-            }
-        }
+                if(test==3){
+                    //si aucune adresse et mdp ne correspond a ceux d'un etudiant on regarde alors chez les admin
+                    String r2 = "SELECT * from admin WHERE adresse = ? and mdp = ?"; 
+                    try (PreparedStatement p2 = con.prepareStatement(r2)) {
+                        p2.setString(1, adresse);
+                        p2.setString(2, mdp);
+                        try ( ResultSet ta = p2.executeQuery(
+                            )) {
+                                
+                                while (ta.next()) {
+                                    admin.setid(ta.getInt(1));
+                                    admin.setNom(ta.getString(2));
+                                    System.out.println(admin.getNom());
+                                    admin.setPrenom(ta.getString(3));
+                                    admin.setAdresse(ta.getString(4));
+                                    admin.setMdp(ta.getString(5));
+                                   
+                                    test=2;
+                                    System.out.println("test admin"+test);
+                                    
+                                }
 
+
+                    }
+                }
+            }   
+          }
+          switch(test){
+            case 1:
+            System.out.println("Un étudiant se connecte");
+            System.out.println(test);
+            return etudiant;
+            
+        
+            case 2:
+            System.out.println("Un admin se connecte");
+            System.out.println(test);
+            return admin;
+        
+
+            case 3:
+            break;
+        
+        }
+        
+        return admin;
+        
     }
+        
+        
+    }
+
 
     public static void ModulesDuSemestre(Connection con, int annee, int numero) throws SQLException {
         //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
         final String requete ="SELECT Modules.id FROM Semestres JOIN GrpModule ON GrpModule.idSemestre = Semestres.id Join Modules ON Modules.id = GrpModule.idGroupe WHERE Semestres.annee = '"+annee+"' and Semestres.numero = '"+numero+"'";
+        
         try ( Statement st = con.createStatement()) {
             try ( ResultSet res = st.executeQuery(requete)) {
                 while (res.next()) {
@@ -346,19 +418,6 @@ public class Commandes
     public static void historique(Connection con, int idEtud){
         //méthode pour recuperer l'historique des modules d'un etudiant
 
-
-    }
-
-    public static void main(String[] args) {
-        //pour faire des tests
-        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
-            Commandes.afficheModTest(con);
-            System.out.println("Méthode sans preparedstatement :");
-            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
-            Commandes.deleteEtudiant(con, 2);
-        } catch (Exception err) {
-            System.out.println(err);
-        }
 
     }
 
@@ -402,6 +461,24 @@ public class Commandes
         }
         return id;
     }
+
+
+    public static void main(String[] args) {
+        //pour faire des tests
+        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+            Personne etudiant = Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
+            System.out.println(etudiant.testClasse() +" "+etudiant.toString());
+            Personne admin= Commandes.login(con, "ThibautWaechter@insa-strasbourg.fr", "mdp1");
+            System.out.println(admin.testClasse() +" "+admin.toString());
+            Personne per= Commandes.login(con, "adresseexistepas", "uu");
+            System.out.println("personne qui existe pas" + per.toString());
+        } catch (Exception err) {
+            System.out.println(err);
+        }
+
+    }
+
+    
 
 }
 
