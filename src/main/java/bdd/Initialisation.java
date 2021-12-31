@@ -8,28 +8,51 @@ import java.sql.*;
 //classe contenant tout les éléments permettant d'initialiser la base de donnée
 public class Initialisation {
 
+    public static void main(String[] args) {
+        //pour faire des tests
+        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+            init();
+        } catch (Exception err) {
+            System.out.println("Error : Commandes.java main() "+err);
+        }
+
+    }
+
     // méthode à appeler pour initialiser la base de donnée
     public static void init() {
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             //suppression des tables
-            Commandes.SupprimeContrainte(con, "GrpModule", "moduleAppartient" );
-            Commandes.SupprimeContrainte(con, "GrpModule", "moduleSemestre" );
-            Commandes.tabledrop(con, "GrpModule");
-            Commandes.tabledrop(con, "Voeux");
-            Commandes.tabledrop(con, "Etudiant");
-            Commandes.tabledrop(con, "Admin");
-            Commandes.tabledrop(con, "Module");
-            Commandes.tabledrop(con, "Semestre");
+           
+            
+            Commandes.tabledrop(con, "etudiant");
+            System.out.println("etudiant supprimee");
+            Commandes.tabledrop(con, "admin");
+            System.out.println("adm supprimee");
+            Commandes.tabledrop(con, "module");
+            System.out.println("mod supprimee");
+            Commandes.tabledrop(con, "semestre");
+            System.out.println("semsupprimee");
+            Commandes.tabledrop(con, "grpmodule");
+            System.out.println("grpmod supprimee");
+            Commandes.tabledrop(con, "voeux");
+            System.out.println("voeu supprimee");
+            //Commandes.dataBaseDrop(con, "postgres");
 
             System.out.println("Suppression des tables terminée");
 
             //création des tables
             tableEtudiant(con);
+            System.out.println("etudiant cree");
             tableAdmin(con);
+            System.out.println("admin cree");
             tableModule(con);
+            System.out.println("module cree");
             tableSemestre(con);
+            System.out.println("semestre cree");
             tableGrpModule(con);
+            System.out.println("grpmod cree");
             tableVoeux(con);
+            System.out.println("voeux cree");
 
             System.out.println("Création des tables terminée");
 
@@ -64,7 +87,7 @@ public class Initialisation {
                         nom varchar(200) not null,
                         prenom varchar(200) not null,
                         adresse varchar(200) not null,
-                        mdp varchar(200) not null,
+                        mdp varchar(300) not null,
                         dateNaissance date not null
                         )
                         """);
@@ -131,7 +154,7 @@ public class Initialisation {
                         nom varchar(200) not null,
                         prenom varchar(200) not null,
                         adresse varchar(200) not null,
-                        mdp varchar(200) not null,
+                        mdp varchar(300) not null,
                         dateNaissance date not null,
                         disponibilite varchar(200) not null,
                         classe varchar(200) not null
@@ -143,14 +166,10 @@ public class Initialisation {
         List<String> adresses = Initialisation.adresse();
         List<String> mdps = Initialisation.mdp();
         //on hash le mot de passe
-        ArrayList<String> mdpshash = new ArrayList<String>();
-        for(int i=0;i<mdps.size();i++){
-            mdpshash.add(security.CreateHash(mdps.get(i)));
-        }
         List<String> dates = Initialisation.datenaiss();
         List<String> classe = Initialisation.classe();
         for (int i = 0; i < ETUDIANT.length; i++) {
-            Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i), mdpshash.get(i), dates.get(i), "dispo", classe.get(i));
+            Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i), dates.get(i), "dispo", classe.get(i));
         }
     }
 
@@ -552,7 +571,8 @@ public class Initialisation {
         List<String> mod = Initialisation.module();
 
         for(int i=0;i<GRPMODULE.length;i++){
-            Commandes.AjoutGrpModule(con,Integer.parseInt(semestre.get(i)),Integer.parseInt(grp.get(i)),Integer.parseInt(mod.get(i)));
+            //Commandes.AjoutGrpModule(con,Integer.parseInt(semestre.get(i)),Integer.parseInt(grp.get(i)),Integer.parseInt(mod.get(i)));
+            Commandes.AjoutGrpModule(con,semestre.get(i),grp.get(i),mod.get(i));
         }
     }
 
