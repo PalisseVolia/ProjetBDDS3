@@ -3,17 +3,31 @@ package classes;
 public class Semestre {
 
     //définition des attributs
+    int id;
     int annee ;
     int numero; //correspond au numéro du semestre, à savoir 1 ou 2
     int Ng; //nombre de groupe de module du semestre
     int Nc; //nombre de choix de module
     
     //Constructeurs
-    public Semestre(int annee, int numero, int ng, int nc) {
+    public Semestre(int id, int annee, int numero, int ng, int nc) {
+        this.id=id;
         this.annee = annee;
         this.numero = numero;
         this.Ng = ng;
         this.Nc = nc;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Semestre(int id) {
+        this.id = id;
     }
 
     public Semestre() {
@@ -53,8 +67,17 @@ public class Semestre {
         Nc = nc;
     }
 
+    public Semestre(int annee, int numero) {
+        this.annee = annee;
+        this.numero = numero;
+    }
+
     public String toString() {
-        return "Semestre [Nc=" + Nc + ", Ng=" + Ng + ", annee=" + annee + ", numero=" + numero + "]";
+        return "Semestre [Nc=" + Nc + ", Ng=" + Ng + ", annee=" + annee + ", id=" + id + ", numero=" + numero + "]";
+    }
+
+    public String toStringSimple() {
+        return "Semestre [annee=" + annee + ", id=" + id + ", numero=" + numero + "]";
     }
 
     
