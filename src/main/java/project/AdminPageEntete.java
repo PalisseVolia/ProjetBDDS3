@@ -23,7 +23,7 @@ public class AdminPageEntete extends HorizontalLayout{
         this.add(welcome);
 
         //bouton de déconnexion
-        disconnect = new Button("left");
+        disconnect = new Button();
         disconnect.setText("Déconnexion");
         add(disconnect);
         

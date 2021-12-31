@@ -56,6 +56,8 @@ public class VuePrincipale extends VerticalLayout{
         this.footer.removeAll();
         this.footer.add(c);
     }
+
+    //méthodes permettant de changer l'alignement des layouts sur la vue principale
     public void setAlignment(int value) {
         switch (value) {
             case 0:

@@ -79,7 +79,8 @@ public class LoginPageContent extends VerticalLayout{
                 } catch (Exception e) {
                     System.out.println("problème lors de la création du Maincontent Admin");
                 }
-                main.setAlignment(0);
+                main.setFooter(new AdminPageFooter(main));
+                main.setAlignment(1);
             } else if (txtemail.equals(tmptestemailetudiant) && txtmdp.equals(tmptestmdpetudiant)) {
                 System.out.println("etudiant");
             } else {
