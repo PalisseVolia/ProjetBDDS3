@@ -48,6 +48,18 @@ public class AdminPageContent extends VerticalLayout {
             if (etuselec.isPresent()) {
                 delete.addClickListener(t -> {
                     // TODO: suppression de l'étudiant sélectionné + sans doute un système de reload
+                    Etudiant et = etuselec.get();
+                    try {
+                        //TODO System.out.println a enlever si joublie
+                        System.out.println(et.getAdresse());
+                        Commandes.deleteEtudiant(con, et.getAdresse());
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    ;
+
+                
                 });
             }
         });

@@ -23,6 +23,8 @@ public class Commandes
             System.out.println("validite "+ adresseValide("ffff")+"adresse existe "+ adresseExiste(con, "ffff"));
             Semestre s =NouvSemestre(con);
             System.out.println(s.toStringSimple());
+            deleteEtudiant(con, "PaulineGiroux@insa-strasbourg.fr");
+            deleteEtudiant(con, "Lounes@insa-strasbourg.fr");
         } catch (Exception err) {
             System.out.println("Error : Commandes.java main() "+err);
         }
@@ -254,6 +256,26 @@ public class Commandes
         }
     }
 
+    public static void deleteEtudiant(Connection con, String adresse) throws SQLException{
+        //méthode qui permet de supprimer un étudiant grâce a son adresse email qui est unique
+        if(TrueEtudiantAdresse(con,adresse)){
+            try ( PreparedStatement pst = con.prepareStatement(
+                    """
+                    delete from Etudiant where adresse = ?
+                    """)) {
+                con.setAutoCommit(false);
+                pst.setString(1, adresse);
+                pst.executeUpdate();
+                con.commit();
+            }catch (SQLException ex) {
+                con.rollback();
+                System.out.println("ERROR : problem during deleteEtudiant");
+            }
+        } else {
+            System.out.println("L'étudiant n'existait pas");
+        }
+    }
+
     public static void deleteAdmin(Connection con, int id) throws SQLException{
         //méthode qui permet de supprimer un admin grâce a son id
         if(TrueAdminID(con,id)){
@@ -263,6 +285,26 @@ public class Commandes
                     """)) {
                 con.setAutoCommit(false);
                 pst.setInt(1, id);
+                pst.executeUpdate();
+                con.commit();
+            }catch (SQLException ex) {
+                con.rollback();
+                System.out.println("ERROR : problem during deleteAdmin");
+            }
+        } else {
+            System.out.println("L'admin n'existait pas");
+        }
+    }
+
+    public static void deleteAdmin(Connection con, String adresse) throws SQLException{
+        //méthode qui permet de supprimer un étudiant grâce a son adresse email qui est unique
+        if(TrueAdminAdresse(con,adresse)){
+            try ( PreparedStatement pst = con.prepareStatement(
+                    """
+                    delete from Admin where adresse = ?
+                    """)) {
+                con.setAutoCommit(false);
+                pst.setString(1, adresse);
                 pst.executeUpdate();
                 con.commit();
             }catch (SQLException ex) {
@@ -497,12 +539,15 @@ public class Commandes
 
     }
 
+   
+   
+
     public static int findPersonne(Connection con, String table, String nom, String prenom) throws SQLException {
         //Trouve la PREMIERE personne qui a ce nom et prénom et renvoie son identifiant
         int id = -1;
         try (PreparedStatement pst = con.prepareStatement(
                 """
-                SELECT id FROM ? WHERE nom = '?' and prenom = '?'
+                SELECT id FROM ? WHERE nom = ? and prenom = ?
                 """)) {
             pst.setString(1,table);
             pst.setString(2,nom);
@@ -612,6 +657,35 @@ public class Commandes
     return test;
     }
 
+    public static boolean TrueEtudiantAdresse(Connection con, String adresse){
+        //Vérifier qu'un étudiant existe
+        int count = 0;
+        boolean test=false;
+        String r="SELECT COUNT(*) FROM etudiant WHERE adresse = ?";
+        try (PreparedStatement st = con.prepareStatement(r)){
+            st.setString(1, adresse);
+                ResultSet rres = st.executeQuery(
+                        ); {
+            while (rres.next()) {
+                count = rres.getInt(1);
+            }
+
+            if (count >= 1){
+                //si il y a une fois ou plus l'adresse 
+                test = true;
+            }else{
+                test=false;
+            }
+        
+        
+                        }
+    }catch (SQLException e) {
+
+        System.out.println("Error : Commandes.java Trueetudiant(con,id) "+e);
+    }
+    return test;
+    }
+
     public static void ModulesDuSemestre(Connection con, int annee, int numero) throws SQLException {
         //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
         final String requete ="SELECT Modules.id FROM Semestres JOIN GrpModule ON GrpModule.idSemestre = Semestres.id Join Modules ON Modules.id = GrpModule.idGroupe WHERE Semestres.annee = '"+annee+"' and Semestres.numero = '"+numero+"'";
@@ -632,6 +706,34 @@ public class Commandes
         String r="SELECT COUNT(*) FROM Admin WHERE id = ?";
         try (PreparedStatement st = con.prepareStatement(r)){
             st.setInt(1, id);
+                ResultSet rres = st.executeQuery(
+                        ); {
+            while (rres.next()) {
+                count = rres.getInt(1);
+            }
+
+            if (count >= 1){
+                //si il y a une fois ou plus l'adresse 
+                test = true;
+            }else{
+                test=false;
+            }
+        
+        
+                        }
+    }catch (SQLException e) {
+
+        System.out.println("Error : Commandes.java TrueAdmin(con,id) "+e);
+    }
+    return test;
+    }
+    public static boolean TrueAdminAdresse(Connection con, String adresse) throws SQLException{
+        //Vérifier qu'un admin existe
+        int count = 0;
+        boolean test=false;
+        String r="SELECT COUNT(*) FROM Admin WHERE adresse = ?";
+        try (PreparedStatement st = con.prepareStatement(r)){
+            st.setString(1, adresse);
                 ResultSet rres = st.executeQuery(
                         ); {
             while (rres.next()) {

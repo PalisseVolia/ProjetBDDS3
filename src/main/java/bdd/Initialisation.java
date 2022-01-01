@@ -255,7 +255,7 @@ public class Initialisation {
         {"Pascaline", "DuLin", "PascalineDuLin@insa-strasbourg.fr","marchedenoel", "2000-10-19","true","GE4"},
         {"Galatee", "Bordeaux", "GalateeBordeaux@insa-strasbourg.fr", "yeeeepnji", "2000-01-22","true","GE4"},
         {"Pomeroy", "Fournier", "PomeroyFournier@insa-strasbourg.fr", "donda15","2002-04-12","true","GE4"},
-        {"Artus", "Thibodeau", "ArtusThibodeau@insa-strasbourg.fre", "Efgkoe", "2000-02-25","true","GE4"},
+        {"Artus", "Thibodeau", "ArtusThibodeau@insa-strasbourg.fr", "Efgkoe", "2000-02-25","true","GE4"},
         {"Arianne", "CinqMars", "ArianneCinqMars@insa-strasbourg.fr","VFeiovne", "2001-06-06","true","GE4"},
         {"Curtis", "Mainville", "CurtisMainville@insa-strasbourg.fr","claviersouris", "2001-10-02","true","GE4"},
         {"Viollette", "Bélanger", "ViolletteBelanger@ginsa-strasbourg.fr","manettedejeu",  "2001-10-06","true","GE4"},

@@ -95,7 +95,25 @@ public class AdminPageContentEtudiant extends VerticalLayout{
             LocalDate tmp = date.getValue();
             String dispo = "true";
             try {
-                Commandes.AjoutEtudiant(con, nom.getValue(), prenom.getValue(), email.getValue(), mdp.getValue(), tmp.toString(), dispo, classe.getValue());
+            
+                if(Commandes.adresseValide(email.getValue()) ==true) {
+                    //si l'adresse contient "@insa-strasbourg.fr"
+                    
+                    
+                    if(Commandes.adresseExiste(con, email.getValue())==false){
+                        //si l'adresse n'existe pas encore dans la bdd
+                        Commandes.AjoutEtudiant(con, nom.getValue(), prenom.getValue(), email.getValue(), mdp.getValue(), tmp.toString(), dispo, classe.getValue());
+                }       
+                    else{
+                        System.out.println("Erreur lors de l'ajout d'étudiant depuis l'interface graphique : l'adresse email existe deja");
+                    }
+
+                }else{
+                    System.out.println("Erreur lors de l'ajout d'étudiant depuis l'interface graphique : adresse email invalide");
+                    
+                }
+               
+            
             } catch (Exception e) {
                 System.out.println("Erreur lors de l'ajout d'étudiant depuis l'interface graphique");
             }
