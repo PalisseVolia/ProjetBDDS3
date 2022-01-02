@@ -185,7 +185,7 @@ public class Commandes
    
         try ( PreparedStatement pst = con.prepareStatement(
                 """
-                insert into GrpModule (idSemestre,idGrpModule,idModule)
+                insert into GrpModule (idSemestre,idGroupe,idModule)
                 values (?,?,?)
                 """)) {
             con.setAutoCommit(false);
@@ -887,5 +887,20 @@ public class Commandes
         }
         return res;
     }
+
+    public static int getidsem(Connection con) throws SQLException, ClassNotFoundException {
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet rres = st.executeQuery(
+                """
+                SELECT MAX(id) FROM semestre
+                """)) {
+                while (rres.next()) {
+                    return rres.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
 
 }
