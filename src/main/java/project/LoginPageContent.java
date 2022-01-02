@@ -64,7 +64,6 @@ public class LoginPageContent extends VerticalLayout{
         setAlignItems(Alignment.CENTER);
 
         //listener du bouton de validation, détermine si l'accès est donné à la partie admin ou étudiant
-        //TODO: par défaut le login donne accès à l'interface admin
         valider.addClickListener((t) -> {
             String txtemail = email.getValue();
             String txtmdp = mdp.getValue();
@@ -76,7 +75,6 @@ public class LoginPageContent extends VerticalLayout{
                     notif.setPosition(Position.BOTTOM_CENTER);
                 }else{
                     String s = p.testClasse();
-
                     if(s.equals("etudiant")){
                         System.out.println("etudiant");
                     }else if(s.equals("admin")){
