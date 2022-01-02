@@ -19,6 +19,9 @@ public class Application extends SpringBootServletInitializer {
         LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
         //TODO: lors des ajouts, vider les sélections RESTANT:  future etudiant
         //TODO: Obliger à remplir les champs avant de pourvoir cliquer sur ajouter RESTANT: future etudiant
+        //TODO: ajout de semstre
+        //TODO: Entete etudiant
+        //TODO: Content etudiant
+        //TODO: Footer etudiant
     }
-
 }
