@@ -17,9 +17,8 @@ public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
-        //TODO: lors des ajouts, vider les sélections RESTANT: bibliotheque + semestre
-        //TODO: Obliger à remplir les champs avant de pourvoir cliquer sur ajouter RESTANT: bibliotheque + semestre
-        //TODO: corriger pb de supression dans modules (mm methode que poru l'accueil)
+        //TODO: lors des ajouts, vider les sélections RESTANT:  future etudiant
+        //TODO: Obliger à remplir les champs avant de pourvoir cliquer sur ajouter RESTANT: future etudiant
     }
 
 }

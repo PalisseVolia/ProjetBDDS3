@@ -16,7 +16,6 @@ public class Commandes
     public static void main(String[] args) {
         //pour faire des tests
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
-            Commandes.afficheModTest(con);
             System.out.println("Méthode sans preparedstatement :");
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
             Semestre s =NouvSemestre(con);
@@ -536,27 +535,6 @@ public class Commandes
      }
     }
 
-    public static void afficheModTest(Connection con) throws SQLException {
-        // TODO:méthode test : affiche dans la console tous les modules du grp 1 du s2 de 2019
-        try ( Statement st = con.createStatement()) {
-            try ( ResultSet tla = st.executeQuery(
-                    """
-                    select intitule from Module join grpModule on grpModule.idmodule = module.id
-                    join Semestre on grpModule.idsemestre = Semestre.id
-                    where Semestre.id=2 and grpmodule.idgroupe=1
-                     """)) {
-                System.out.println("liste des modules :");
-                System.out.println("------------------");
-                while (tla.next()) {
-                    System.out.println(tla.getString(1));
-                }
-            }
-        }
-
-    }
-
-   
-   
 
     public static int findPersonne(Connection con, String table, String nom, String prenom) throws SQLException {
         //Trouve la PREMIERE personne qui a ce nom et prénom et renvoie son identifiant

@@ -64,7 +64,6 @@ public class Initialisation {
         //méthode a utiliser pour tester les requetes : la bdd doit deja etre initialisée
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             
-            Commandes.afficheModTest(con);
             System.out.println("Méthode sans preparedstatement :");
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
 
