@@ -3,11 +3,12 @@ package project;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.selection.SingleSelect;
 
 import classes.Etudiant;
 import bdd.Commandes;
@@ -19,10 +20,12 @@ import bdd.Commandes;
 public class AdminPageContent extends VerticalLayout {
     private Grid<Etudiant> grid;
     private Button delete;
+    private Etudiant et;
     
     public AdminPageContent() throws SQLException,ClassNotFoundException {
         //tableau contenant les étudiants
         grid = new Grid<>(Etudiant.class, false);
+        grid.setSelectionMode(SelectionMode.SINGLE);
         setthegride();
         add(grid);
 
@@ -37,25 +40,28 @@ public class AdminPageContent extends VerticalLayout {
         //style settings
         setAlignItems(Alignment.CENTER);
 
-        //récupération de la ligne du tableau sélectionnée et suppression au clic
-        grid.addSelectionListener(selection -> {
-            Optional<Etudiant> etuselec = selection.getFirstSelectedItem();
-            delete.setEnabled(true);
-            if (etuselec.isPresent()) {
-                delete.addClickListener(t -> {
-                    Etudiant et = etuselec.get();
-                    try {
-                        //TODO: problème de double supression a regler si ya le temps
-                        Commandes.deleteEtudiant(con, et.getAdresse());
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        setthegride();
-                    } catch (Exception e) {
-                        System.out.println("Problème lors de l'actualsiation du tableau d'accueil admin");
-                    }
-                });
+        //lorsqu'une ligne du tableau sélectionnée on crée un Etudiant
+        SingleSelect<Grid<Etudiant>, Etudiant> etuselect = grid.asSingleSelect();
+        etuselect.addValueChangeListener(selection -> {
+            et = selection.getValue();
+            delete.setEnabled(false);
+            if (selection != null) {
+                delete.setEnabled(true);
+            }
+        });
+
+        //suppression de l'etudiant selectionné au clic du bouton
+        delete.addClickListener(t -> {
+            try {
+                Commandes.deleteEtudiant(con, et.getAdresse());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                setthegride();
+                delete.setEnabled(false);
+            } catch (Exception e) {
+                System.out.println("Problème lors de l'actualsiation du tableau d'accueil admin");
             }
         });
     }
