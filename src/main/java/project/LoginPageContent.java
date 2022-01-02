@@ -69,7 +69,7 @@ public class LoginPageContent extends VerticalLayout{
 
             try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
                 Personne p = Commandes.login(con, txtemail, txtmdp);
-                if (p==null){
+                if (p.getNom()==null && p.getPrenom()==null){
                     System.out.println("non reconnu");
                 }else{
                     String s = p.testClasse();
