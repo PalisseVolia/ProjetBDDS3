@@ -44,8 +44,6 @@ public class AdminPageContent extends VerticalLayout {
                     Etudiant et = etuselec.get();
                     try {
                         //TODO: problème de double supression a regler si ya le temps
-                        //TODO: System.out.println a enlever si joublie
-                        System.out.println(et.getAdresse());
                         Commandes.deleteEtudiant(con, et.getAdresse());
                     } catch (SQLException e) {
                         e.printStackTrace();

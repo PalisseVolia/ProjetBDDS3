@@ -145,7 +145,7 @@ public class Initialisation {
     //-----------------------------------------------------------------
 
     public static void tableEtudiant(Connection con) throws SQLException {
-        //TODO finir la disponibilté
+        //TODO: finir la disponibilté
         try (Statement st = con.createStatement()) {
             st.executeUpdate("""
                         create table Etudiant(
@@ -698,8 +698,6 @@ public class Initialisation {
 
     }
     public static final String[][] VOEUX = new String[][]{
-            //TODO continuer la liste si vous êtes motivés pour
-
             //Etudiant 1, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
             {"4", "1", "13"},
