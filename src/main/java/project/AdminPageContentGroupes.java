@@ -1,9 +1,7 @@
 package project;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,7 +79,7 @@ public class AdminPageContentGroupes extends VerticalLayout{
                     }
                     try {
                         //suppression du module selectionne
-                        Commandes.removeModule(con, mod.getId(), idgrp, getidsem(con));
+                        Commandes.removeModule(con, mod.getId(), idgrp, Commandes.getidsem(con));
                         setthegridmg();
                     } catch (Exception e) {
                         System.out.println("erreur lors de la suppression de module");
@@ -91,26 +89,10 @@ public class AdminPageContentGroupes extends VerticalLayout{
         });
     }
 
-    //TODO: utiliser la version dans commandes
-    //methode permettant de récupérer l'id du dernier semestre ajouté afin de le modifier
-    public int getidsem(Connection con) throws SQLException, ClassNotFoundException {
-        try ( Statement st = con.createStatement()) {
-            try ( ResultSet rres = st.executeQuery(
-                """
-                SELECT MAX(id) FROM semestre
-                """)) {
-                while (rres.next()) {
-                    return rres.getInt(1);
-                }
-            }
-        }
-        return 0;
-    }
-
     //méthode permettant de recuperer les modules correspondants au groupe selectionné
     public List<Module> getModulegrp(Connection con) throws SQLException, ClassNotFoundException {
         int idsem = 0;
-        idsem = getidsem(con);
+        idsem = Commandes.getidsem(con);
         //recuperation du groupe selectionne
         String value = grpselect.getValue().toString();
         int idgrp = 0;
