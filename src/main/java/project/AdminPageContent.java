@@ -21,8 +21,9 @@ public class AdminPageContent extends VerticalLayout {
     private Button delete;
     
     public AdminPageContent() throws SQLException,ClassNotFoundException {
+        //tableau contenant les étudiants
         grid = new Grid<>(Etudiant.class, false);
-        setthegrid();
+        setthegride();
         add(grid);
 
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
@@ -50,7 +51,7 @@ public class AdminPageContent extends VerticalLayout {
                         e.printStackTrace();
                     }
                     try {
-                        setthegrid();
+                        setthegride();
                     } catch (Exception e) {
                         System.out.println("Problème lors de l'actualsiation du tableau d'accueil admin");
                     }
@@ -59,7 +60,7 @@ public class AdminPageContent extends VerticalLayout {
         });
     }
     
-    //méthode permettant de recuperer le étudiants présents dans la base de donnée
+    //méthode permettant de recuperer les étudiants présents dans la base de donnée
     public static List<Etudiant> getEtudiant(Connection con) throws SQLException {
         ArrayList<Etudiant> res = new ArrayList<Etudiant>();
         try ( Statement st = con.createStatement()) {
@@ -84,7 +85,8 @@ public class AdminPageContent extends VerticalLayout {
         }
     }
 
-    public void setthegrid() throws SQLException, ClassNotFoundException {
+    //methode mettant à jour le tableau
+    public void setthegride() throws SQLException, ClassNotFoundException {
         grid.removeAllColumns();
         //tableau contenant tous les étudiants
         grid.addColumn(Etudiant::getNom).setHeader("nom").setSortable(true);

@@ -31,6 +31,7 @@ public class AdminPageEntete extends HorizontalLayout{
         setVerticalComponentAlignment(Alignment.CENTER, welcome);
         disconnect.getElement().getStyle().set("margin-top", "2em");
         setVerticalComponentAlignment(Alignment.CENTER, disconnect);
+        this.getElement().getStyle().set("margin-top", "5em");
 
         //lors de la déconnexion, remet à l'écran d'acceuil
         disconnect.addClickListener((t) -> {

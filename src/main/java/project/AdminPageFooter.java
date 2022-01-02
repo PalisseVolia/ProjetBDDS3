@@ -13,8 +13,8 @@ public class AdminPageFooter extends HorizontalLayout{
     private Button bEtudiant;
     private Button bModule;
     private Button bSemestre;
-    private Button bgroupeajoutmodule;
-    private Button bgroupesuppmodule;
+    private Button bbibliotheque;
+    private Button bgroupes;
     
     public AdminPageFooter(VuePrincipale mainvue) {
         main = mainvue;
@@ -36,14 +36,14 @@ public class AdminPageFooter extends HorizontalLayout{
         add(bModule);
 
         //bouton de d'accès à la page d'ajout de moduels au groupes, la "bibliothèque" de modules
-        bgroupeajoutmodule = new Button();
-        bgroupeajoutmodule.setText("Bibliothèque");
-        add(bgroupeajoutmodule);
+        bbibliotheque = new Button();
+        bbibliotheque.setText("Bibliothèque");
+        add(bbibliotheque);
 
         //bouton de d'accès à la page de suppression de modules/consultation du contenu des groupes
-        bgroupesuppmodule = new Button();
-        bgroupesuppmodule.setText("Groupes");
-        add(bgroupesuppmodule);
+        bgroupes = new Button();
+        bgroupes.setText("Groupes");
+        add(bgroupes);
 
         //bouton de d'accès à la page d'ajout de semestre
         bSemestre = new Button();
@@ -55,8 +55,8 @@ public class AdminPageFooter extends HorizontalLayout{
             baccueil.setVisible(false);
             bEtudiant.setVisible(true);
             bModule.setVisible(true);
-            bgroupeajoutmodule.setVisible(true);
-            bgroupesuppmodule.setVisible(true);
+            bbibliotheque.setVisible(true);
+            bgroupes.setVisible(true);
             bSemestre.setVisible(true);
             try {
                 main.setMainContent(new AdminPageContent()); 
@@ -68,8 +68,8 @@ public class AdminPageFooter extends HorizontalLayout{
             baccueil.setVisible(true);
             bEtudiant.setVisible(false);
             bModule.setVisible(true);
-            bgroupeajoutmodule.setVisible(true);
-            bgroupesuppmodule.setVisible(true);
+            bbibliotheque.setVisible(true);
+            bgroupes.setVisible(true);
             bSemestre.setVisible(true);
 
             try {
@@ -82,8 +82,8 @@ public class AdminPageFooter extends HorizontalLayout{
             baccueil.setVisible(true);
             bEtudiant.setVisible(true);
             bModule.setVisible(false);
-            bgroupeajoutmodule.setVisible(true);
-            bgroupesuppmodule.setVisible(true);
+            bbibliotheque.setVisible(true);
+            bgroupes.setVisible(true);
             bSemestre.setVisible(true);
 
             try {
@@ -92,28 +92,35 @@ public class AdminPageFooter extends HorizontalLayout{
                 System.out.println("problème durant la création de la page d'ajout de Module Admin");
             }
         });
-        bgroupeajoutmodule.addClickListener(t -> {
+        bbibliotheque.addClickListener(t -> {
             baccueil.setVisible(true);
             bEtudiant.setVisible(true);
             bModule.setVisible(true);
-            bgroupeajoutmodule.setVisible(false);
-            bgroupesuppmodule.setVisible(true);
+            bbibliotheque.setVisible(false);
+            bgroupes.setVisible(true);
             bSemestre.setVisible(true);
+            
+            try {
+                main.setMainContent(new AdminPageContentBibliotheqe());
+            } catch (Exception e) {
+                System.out.println("problème durant la création de la page de bibliotheque");
+            }
         });
-        bgroupesuppmodule.addClickListener(t -> {
+        bgroupes.addClickListener(t -> {
             baccueil.setVisible(true);
             bEtudiant.setVisible(true);
             bModule.setVisible(true);
-            bgroupeajoutmodule.setVisible(true);
-            bgroupesuppmodule.setVisible(false);
+            bbibliotheque.setVisible(true);
+            bgroupes.setVisible(false);
             bSemestre.setVisible(true);
+
         });
         bSemestre.addClickListener(t -> {
             baccueil.setVisible(true);
             bEtudiant.setVisible(true);
             bModule.setVisible(true);
-            bgroupeajoutmodule.setVisible(true);
-            bgroupesuppmodule.setVisible(true);
+            bbibliotheque.setVisible(true);
+            bgroupes.setVisible(true);
             bSemestre.setVisible(false);
             try {
                 main.setMainContent(new AdminPageContentSemestre());
