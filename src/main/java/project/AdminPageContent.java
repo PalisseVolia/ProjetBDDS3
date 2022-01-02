@@ -21,18 +21,11 @@ public class AdminPageContent extends VerticalLayout {
     private Button delete;
     
     public AdminPageContent() throws SQLException,ClassNotFoundException {
-        //tableau contenant tous les étudiants
         grid = new Grid<>(Etudiant.class, false);
-        grid.addColumn(Etudiant::getNom).setHeader("nom").setSortable(true);
-        grid.addColumn(Etudiant::getPrenom).setHeader("prenom").setSortable(true);
-        grid.addColumn(Etudiant::getAdresse).setHeader("email");
-        grid.addColumn(Etudiant::getDateNaiss).setHeader("Date").setSortable(true);
-        grid.addColumn(Etudiant::getClasse).setHeader("Classe").setSortable(true);
-        //connexion à la base de donnée
-        Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
-        List<Etudiant> etudiant = getEtudiant(con);
-        grid.setItems(etudiant);
+        setthegrid();
         add(grid);
+
+        Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
 
         //bouton permettant la supression de l'étudiant sélectionné
         delete = new Button();
@@ -47,19 +40,20 @@ public class AdminPageContent extends VerticalLayout {
             Optional<Etudiant> etuselec = selection.getFirstSelectedItem();
             if (etuselec.isPresent()) {
                 delete.addClickListener(t -> {
-                    // TODO: suppression de l'étudiant sélectionné + sans doute un système de reload
                     Etudiant et = etuselec.get();
                     try {
-                        //TODO System.out.println a enlever si joublie
+                        //TODO: problème de double supression a regler si ya le temps
+                        //TODO: System.out.println a enlever si joublie
                         System.out.println(et.getAdresse());
                         Commandes.deleteEtudiant(con, et.getAdresse());
                     } catch (SQLException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    ;
-
-                
+                    try {
+                        setthegrid();
+                    } catch (Exception e) {
+                        System.out.println("Problème lors de l'actualsiation du tableau d'accueil admin");
+                    }
                 });
             }
         });
@@ -88,5 +82,19 @@ public class AdminPageContent extends VerticalLayout {
             return res;
             }
         }
+    }
+
+    public void setthegrid() throws SQLException, ClassNotFoundException {
+        grid.removeAllColumns();
+        //tableau contenant tous les étudiants
+        grid.addColumn(Etudiant::getNom).setHeader("nom").setSortable(true);
+        grid.addColumn(Etudiant::getPrenom).setHeader("prenom").setSortable(true);
+        grid.addColumn(Etudiant::getAdresse).setHeader("email");
+        grid.addColumn(Etudiant::getDateNaiss).setHeader("Date").setSortable(true);
+        grid.addColumn(Etudiant::getClasse).setHeader("Classe").setSortable(true);
+        //connexion à la base de donnée
+        Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
+        List<Etudiant> etudiant = getEtudiant(con);
+        grid.setItems(etudiant);
     }
 }

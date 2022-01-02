@@ -13,6 +13,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -51,6 +53,7 @@ public class AdminPageContentEtudiant extends VerticalLayout{
         email = new EmailField();
         email.setPlaceholder("Email");
         email.setErrorMessage("adresse invalide");
+        email.setPattern("^.+@insa-strasbourg\\.fr$");
         email.setClearButtonVisible(true);
         add(email);
 
@@ -95,25 +98,15 @@ public class AdminPageContentEtudiant extends VerticalLayout{
             LocalDate tmp = date.getValue();
             String dispo = "true";
             try {
-            
-                if(Commandes.adresseValide(email.getValue()) ==true) {
-                    //si l'adresse contient "@insa-strasbourg.fr"
-                    
-                    
-                    if(Commandes.adresseExiste(con, email.getValue())==false){
-                        //si l'adresse n'existe pas encore dans la bdd
-                        Commandes.AjoutEtudiant(con, nom.getValue(), prenom.getValue(), email.getValue(), mdp.getValue(), tmp.toString(), dispo, classe.getValue());
-                }       
-                    else{
-                        System.out.println("Erreur lors de l'ajout d'étudiant depuis l'interface graphique : l'adresse email existe deja");
-                    }
-
-                }else{
-                    System.out.println("Erreur lors de l'ajout d'étudiant depuis l'interface graphique : adresse email invalide");
-                    
+                if(Commandes.adresseExiste(con, email.getValue()) == false){
+                    //si l'adresse n'existe pas encore dans la bdd
+                    Commandes.AjoutEtudiant(con, nom.getValue(), prenom.getValue(), email.getValue(), mdp.getValue(), tmp.toString(), dispo, classe.getValue());
                 }
-               
-            
+                else{
+                    Notification notif = Notification.show("L'adresse Email existe déjà :(");
+                    notif.setPosition(Position.BOTTOM_CENTER);
+                    System.out.println("Erreur lors de l'ajout d'étudiant depuis l'interface graphique : l'adresse email existe deja");
+                }
             } catch (Exception e) {
                 System.out.println("Erreur lors de l'ajout d'étudiant depuis l'interface graphique");
             }

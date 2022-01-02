@@ -18,9 +18,6 @@ public class Commandes
             Commandes.afficheModTest(con);
             System.out.println("Méthode sans preparedstatement :");
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
-            System.out.println("validite "+ adresseValide("PaulineGiroux@insa-strasbourg.fr")+"adresse existe "+ adresseExiste(con, "PaulineGiroux@insa-strasbourg.fr"));
-            //return true car l'adresse existe
-            System.out.println("validite "+ adresseValide("ffff")+"adresse existe "+ adresseExiste(con, "ffff"));
             Semestre s =NouvSemestre(con);
             System.out.println(s.toStringSimple());
             deleteEtudiant(con, "PaulineGiroux@insa-strasbourg.fr");
@@ -416,23 +413,6 @@ public class Commandes
             return res;
         }
     }
-    }
-
-    public static boolean adresseValide(String adresse){
-        //methode qui permet de verifier qu'une adresse est bien valide : il faut qu'elle contienne @insa-strasbourg.fr
-        boolean test = false;
-        final String separateur = "@";
-        String mot[]= adresse.split(separateur);
-        System.out.println(mot.length);
-        if(mot.length<2){
-            test=false;
-        }
-        else{
-            if(mot[1].equals("insa-strasbourg.fr")){
-            test=true;
-            }
-        }
-        return test;
     }
 
     public static boolean adresseExiste(Connection con, String adresse) throws SQLException{

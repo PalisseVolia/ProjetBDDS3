@@ -34,7 +34,7 @@ public class LoginPageContent extends VerticalLayout{
         //creation du field d'email
         email = new EmailField();
         email.setLabel("Adresse mail");
-        email.setPlaceholder("nom@insa-strasbourg.com");
+        email.setPlaceholder("nom@insa-strasbourg.fr");
         email.setErrorMessage("adresse invalide");
         email.setClearButtonVisible(true);
         add(email);
