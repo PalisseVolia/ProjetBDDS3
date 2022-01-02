@@ -29,17 +29,19 @@ public class AdminPageContent extends VerticalLayout {
         setthegride();
         add(grid);
 
-        Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
-
+        
         //bouton permettant la supression de l'étudiant sélectionné
         delete = new Button();
         delete.setText("Supprimer");
         delete.setEnabled(false);
         add(delete);
-
+        
         //style settings
         setAlignItems(Alignment.CENTER);
-
+        
+        //connexion à la bdd
+        Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
+        
         //lorsqu'une ligne du tableau sélectionnée on crée un Etudiant
         SingleSelect<Grid<Etudiant>, Etudiant> etuselect = grid.asSingleSelect();
         etuselect.addValueChangeListener(selection -> {
