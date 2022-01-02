@@ -3,12 +3,12 @@ package project;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.data.selection.SingleSelect;
 
 import classes.Module;
 import bdd.Commandes;
@@ -21,6 +21,7 @@ public class AdminPageContentGroupes extends VerticalLayout{
     private Grid<Module> grid;
     private Button del;
     private RadioButtonGroup<String> grpselect;
+    private Module mod;
 
     public AdminPageContentGroupes() throws SQLException, ClassNotFoundException {
         //creation des boutons de choix de groupe à afficher
@@ -58,33 +59,37 @@ public class AdminPageContentGroupes extends VerticalLayout{
             del.setEnabled(false);
         });
 
-        //récupération de la ligne du tableau selectionnée et suppression au clic
-        grid.addSelectionListener(selection -> {
-            Optional<Module> moduselec = selection.getFirstSelectedItem();
-            del.setEnabled(true);
-            if (moduselec.isPresent()) {
-                del.addClickListener(t -> {
-                    Module mod = moduselec.get();
-                    //recuperation du groupe selectionne
-                    String value = grpselect.getValue().toString();
-                    int idgrp = 0;
-                    if (value.contains("Groupe 1")) {
-                        idgrp = 1;
-                    }
-                    if (value.contains("Groupe 2")) {
-                        idgrp = 2;
-                    }
-                    if (value.contains("Groupe 3")) {
-                        idgrp = 3;
-                    }
-                    try {
-                        //suppression du module selectionne
-                        Commandes.removeModule(con, mod.getId(), idgrp, Commandes.getidsem(con));
-                        setthegridmg();
-                    } catch (Exception e) {
-                        System.out.println("erreur lors de la suppression de module");
-                    }
-                });
+        //lorsqu'une ligne du tableau sélectionnée on crée un module
+        SingleSelect<Grid<Module>, Module> moduselec = grid.asSingleSelect();
+        moduselec.addValueChangeListener(selection -> {
+            mod = selection.getValue();
+            del.setEnabled(false);
+            if (selection != null) {
+                del.setEnabled(true);
+            }
+        });
+        
+        //suppression du module selectionné au clic du bouton
+        del.addClickListener(t -> {
+            //recuperation du groupe selectionne
+            String value = grpselect.getValue().toString();
+            int idgrp = 0;
+            if (value.contains("Groupe 1")) {
+                idgrp = 1;
+            }
+            if (value.contains("Groupe 2")) {
+                idgrp = 2;
+            }
+            if (value.contains("Groupe 3")) {
+                idgrp = 3;
+            }
+            try {
+                //suppression du module selectionne
+                Commandes.removeModule(con, mod.getId(), idgrp, Commandes.getidsem(con));
+                setthegridmg();
+                del.setEnabled(false);
+            } catch (Exception e) {
+                System.out.println("erreur lors de la suppression de module");
             }
         });
     }

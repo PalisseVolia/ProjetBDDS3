@@ -69,12 +69,10 @@ public class AdminPageContentBibliotheqe extends VerticalLayout{
                     //on ajoute au groupe 1
             }
                 if (value.contains("Groupe 2")) {
-                    System.out.println("Groupe 2");
                     Commandes.AjoutGrpModule(con, idSem, 2, mod.getId());
                     //on ajoute au groupe 2
             }
                 if (value.contains("Groupe 3")) {
-                        System.out.println("Groupe 3");
                     Commandes.AjoutGrpModule(con, idSem, 3, mod.getId());
                     //on ajoute au groupe 3
             }   else {
