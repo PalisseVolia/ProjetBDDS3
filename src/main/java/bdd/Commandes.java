@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Admin;
+import classes.Module;
 import classes.Etudiant;
 import classes.Personne;
 import classes.Semestre;
@@ -20,8 +21,13 @@ public class Commandes
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
             Semestre s =NouvSemestre(con);
             System.out.println(s.toStringSimple());
-            deleteEtudiant(con, "PaulineGiroux@insa-strasbourg.fr");
-            deleteEtudiant(con, "Lounes@insa-strasbourg.fr");
+            List<Module> res = new ArrayList<Module>();
+            res= getModule(con, 1, 1);
+            for(int i=0;i<res.size();i++){
+                System.out.println(res.get(i).toString());
+            }
+
+            
         } catch (Exception err) {
             System.out.println("Error : Commandes.java main() "+err);
         }
@@ -500,6 +506,36 @@ public class Commandes
      }
     }
 
+    public static List<Module> getModule(Connection con, int idSemestre, int idGroupe) throws SQLException {
+        //méthode permettant de recuperer les modules d'un groupe
+        ArrayList<Module> res = new ArrayList<Module>();
+        try (PreparedStatement st = con.prepareStatement(
+            """
+            select * from Module join grpModule on grpModule.idmodule = module.id
+            join Semestre on grpModule.idsemestre = Semestre.id
+            where Semestre.id=? and grpmodule.idgroupe=?
+             """    
+        )){
+            st.setInt(1, idSemestre);
+            st.setInt(2, idGroupe);
+                ResultSet rres = st.executeQuery(
+                        ); {
+            while (rres.next()) {
+                Module mod = new Module();
+                mod.setId(rres.getInt(1));
+                mod.setIntitule(rres.getString(2));
+                mod.setDescription(rres.getString(3));
+                mod.setNbPlaceMax(rres.getInt(4));
+                mod.setNbPlaceMin(rres.getInt(5));
+                mod.setClasseacceptee(rres.getString(6));
+                res.add(mod);
+            }
+        
+            return res;
+        }
+     }
+    }
+
     public static void afficheModTest(Connection con) throws SQLException {
         // TODO:méthode test : affiche dans la console tous les modules du grp 1 du s2 de 2019
         try ( Statement st = con.createStatement()) {
@@ -678,6 +714,7 @@ public class Commandes
             }
         }
     }
+    
 
     public static boolean TrueAdminID(Connection con, int id) throws SQLException{
         //Vérifier qu'un admin existe
