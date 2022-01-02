@@ -31,6 +31,7 @@ public class AdminPageContent extends VerticalLayout {
         //bouton permettant la supression de l'étudiant sélectionné
         delete = new Button();
         delete.setText("Supprimer");
+        delete.setEnabled(false);
         add(delete);
 
         //style settings
@@ -39,6 +40,7 @@ public class AdminPageContent extends VerticalLayout {
         //récupération de la ligne du tableau sélectionnée et suppression au clic
         grid.addSelectionListener(selection -> {
             Optional<Etudiant> etuselec = selection.getFirstSelectedItem();
+            delete.setEnabled(true);
             if (etuselec.isPresent()) {
                 delete.addClickListener(t -> {
                     Etudiant et = etuselec.get();

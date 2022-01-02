@@ -60,6 +60,7 @@ public class AdminPageContentModule extends VerticalLayout{
         //bouton de d'ajout
         add = new Button();
         add.setText("Ajouter");
+        add.setEnabled(false);
         add(add);
 
         //style settings
@@ -71,7 +72,47 @@ public class AdminPageContentModule extends VerticalLayout{
         min.setWidth("17em");
         max.setWidth("17em");
         add.setWidth("13em");
+        
+        //connexion à la bdd
+        Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
 
+        //verifie que les champs soient remplis avant d'activer le bouton de validation
+        intitule.addValueChangeListener(t -> {
+            if ((intitule.getValue() != "")&&(desc.getValue() != "")&&(desc.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        desc.addValueChangeListener(t -> {
+            if ((intitule.getValue() != "")&&(desc.getValue() != "")&&(desc.getValue() != null)&&(min.getValue() != null)&&(max.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        dispo.addValueChangeListener(t -> {
+            if ((intitule.getValue() != "")&&(desc.getValue() != "")&&(desc.getValue() != null)&&(min.getValue() != null)&&(max.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        min.addValueChangeListener(t -> {
+            if ((intitule.getValue() != "")&&(desc.getValue() != "")&&(desc.getValue() != null)&&(min.getValue() != null)&&(max.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        max.addValueChangeListener(t -> {
+            if ((intitule.getValue() != "")&&(desc.getValue() != "")&&(desc.getValue() != null)&&(min.getValue() != null)&&(max.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        
         //en fontction de la valeur du minimum augmente la valeur min du champ max
         //si le min est plus grand que le max, le max est modifié pour etre égal au min
         min.addValueChangeListener(t -> {
@@ -80,10 +121,7 @@ public class AdminPageContentModule extends VerticalLayout{
                 max.setValue(min.getValue());
             }
         });
-
-        //connexion à la bdd
-        Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
-
+        
         //ajout d'un module lors de la pression du bouton d'ajout
         add.addClickListener(t -> {
             int tmp1 = min.getValue();
@@ -95,6 +133,12 @@ public class AdminPageContentModule extends VerticalLayout{
             } catch (Exception e) {
                 System.out.println("Erreur lors de l'ajout d'un module depuis l'interface graphique");
             }
+            //vide les champs
+            intitule.setValue("");
+            desc.setValue("");
+            min.setValue(0);
+            max.setValue(10);
+            dispo.setValue("TOUTE");
         });
     }
 }

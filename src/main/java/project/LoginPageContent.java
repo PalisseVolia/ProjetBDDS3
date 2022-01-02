@@ -47,15 +47,17 @@ public class LoginPageContent extends VerticalLayout{
         mdp.setPlaceholder("••••••••");
         mdp.setClearButtonVisible(true);
         add(mdp);
-
-        // TODO: temporaire remplissage de test
-        email.setValue("ThibautWaechter@insa-strasbourg.fr");
-        mdp.setValue("mdp1");
-
+        
         //bouton de validation
         valider = new Button();
         valider.setText("Valider");
+        valider.setEnabled(false);
         add(valider);
+        
+        // TODO: temporaire remplissage de test
+        email.setValue("ThibautWaechter@insa-strasbourg.fr");
+        mdp.setValue("mdp1");
+        valider.setEnabled(true);
 
         //style settings
         email.setWidth("20em");
@@ -63,11 +65,27 @@ public class LoginPageContent extends VerticalLayout{
         valider.setWidth("10em");
         setAlignItems(Alignment.CENTER);
 
+        //verifie que les champs soient remplsi avant d'activer le bouton de validation
+        email.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")) {
+                valider.setEnabled(true);
+            } else {
+                valider.setEnabled(false);
+            }
+        });
+        mdp.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")) {
+                valider.setEnabled(true);
+            } else {
+                valider.setEnabled(false);
+            }
+        });
+        
         //listener du bouton de validation, détermine si l'accès est donné à la partie admin ou étudiant
         valider.addClickListener((t) -> {
             String txtemail = email.getValue();
             String txtmdp = mdp.getValue();
-
+            
             try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
                 Personne p = Commandes.login(con, txtemail, txtmdp);
                 if (p.getNom()==null && p.getPrenom()==null){
@@ -89,7 +107,7 @@ public class LoginPageContent extends VerticalLayout{
                 System.out.println("problème lors de la connexion");
             }
         });
-
+        
         //indication force du mdp
         checkIcon = VaadinIcon.CHECK.create();
         checkIcon.setVisible(false);

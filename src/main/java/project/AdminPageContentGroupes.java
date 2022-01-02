@@ -40,6 +40,7 @@ public class AdminPageContentGroupes extends VerticalLayout{
         //creation du bouton permettant la suppression de modules
         del = new Button();
         del.setText("Supprimer");
+        del.setEnabled(false);
         add(del);
 
         //style settings
@@ -55,11 +56,14 @@ public class AdminPageContentGroupes extends VerticalLayout{
             } catch (Exception e) {
                 System.out.println("erreur lors de l'actualisation du tableau de modules");
             }
+            //desactive le bouton de suppression au changement de tableau
+            del.setEnabled(false);
         });
 
         //récupération de la ligne du tableau selectionnée et suppression au clic
         grid.addSelectionListener(selection -> {
             Optional<Module> moduselec = selection.getFirstSelectedItem();
+            del.setEnabled(true);
             if (moduselec.isPresent()) {
                 del.addClickListener(t -> {
                     Module mod = moduselec.get();
@@ -87,6 +91,7 @@ public class AdminPageContentGroupes extends VerticalLayout{
         });
     }
 
+    //TODO: utiliser la version dans commandes
     //methode permettant de récupérer l'id du dernier semestre ajouté afin de le modifier
     public int getidsem(Connection con) throws SQLException, ClassNotFoundException {
         try ( Statement st = con.createStatement()) {

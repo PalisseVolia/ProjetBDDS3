@@ -78,6 +78,7 @@ public class AdminPageContentEtudiant extends VerticalLayout{
         //bouton de d'ajout
         add = new Button();
         add.setText("Ajouter");
+        add.setEnabled(false);
         add(add);
 
         //style settings
@@ -93,6 +94,50 @@ public class AdminPageContentEtudiant extends VerticalLayout{
         //connexion à la bdd
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
         
+        //verifie que les champs soient remplis avant d'activer le bouton d'ajout
+        nom.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")&&(nom.getValue() != "")&&(prenom.getValue() != "")&&(date.getValue() != null)&&(classe.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        prenom.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")&&(nom.getValue() != "")&&(prenom.getValue() != "")&&(date.getValue() != null)&&(classe.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        email.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")&&(nom.getValue() != "")&&(prenom.getValue() != "")&&(date.getValue() != null)&&(classe.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        date.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")&&(nom.getValue() != "")&&(prenom.getValue() != "")&&(date.getValue() != null)&&(classe.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        classe.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")&&(nom.getValue() != "")&&(prenom.getValue() != "")&&(date.getValue() != null)&&(classe.getValue() != null)) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+        mdp.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")&&(nom.getValue() != "")&&(prenom.getValue() != "")&&(date.getValue() != null)&&(classe.getValue() != "")) {
+                add.setEnabled(true);
+            } else {
+                add.setEnabled(false);
+            }
+        });
+
         //ajout d'un étudiant lors de la pression du bouton d'ajout
         add.addClickListener(t -> {
             LocalDate tmp = date.getValue();
@@ -110,8 +155,15 @@ public class AdminPageContentEtudiant extends VerticalLayout{
             } catch (Exception e) {
                 System.out.println("Erreur lors de l'ajout d'étudiant depuis l'interface graphique");
             }
+            //vide les champs
+            nom.setValue("");
+            prenom.setValue("");
+            email.setValue("");
+            mdp.setValue("");
+            date.setValue(null);
+            classe.setValue(null);
         });
-
+        
         //indication force du mdp
         checkIcon = VaadinIcon.CHECK.create();
         checkIcon.setVisible(false);
