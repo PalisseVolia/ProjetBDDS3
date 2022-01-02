@@ -8,6 +8,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -70,7 +72,8 @@ public class LoginPageContent extends VerticalLayout{
             try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
                 Personne p = Commandes.login(con, txtemail, txtmdp);
                 if (p.getNom()==null && p.getPrenom()==null){
-                    System.out.println("non reconnu");
+                    Notification notif = Notification.show("Identifiant ou mot de passe invalide.");
+                    notif.setPosition(Position.BOTTOM_CENTER);
                 }else{
                     String s = p.testClasse();
 

@@ -1,8 +1,9 @@
 package project;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,10 +12,12 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 
-import org.atmosphere.container.TomcatWebSocketUtil.Delegate;
-
 import classes.Module;
 import bdd.Commandes;
+
+// =======================================================================================
+// Contenu de la page de gestion de groupes Administrateur
+// =======================================================================================
 
 public class AdminPageContentGroupes extends VerticalLayout{
     private Grid<Module> grid;
@@ -22,62 +25,105 @@ public class AdminPageContentGroupes extends VerticalLayout{
     private RadioButtonGroup<String> grpselect;
 
     public AdminPageContentGroupes() throws SQLException, ClassNotFoundException {
+        //creation des boutons de choix de groupe à afficher
+        grpselect = new RadioButtonGroup<>();
+        grpselect.setItems("Groupe 1", "Groupe 2", "Groupe 3");
+        grpselect.setLabel("Selectionner le groupe à afficher");
+        grpselect.setValue("Groupe 1");
+        add(grpselect);
+
+        //creation du tableau affichant les modules
         grid = new Grid<>(Module.class, false);
         setthegridmg();
         add(grid);
 
-        grpselect = new RadioButtonGroup<>();
-        grpselect.setItems("Groupe 1", "Groupe 2", "Groupe 3");
-        grpselect.setLabel("Selectionner le groupe à afficher");
-        add(grpselect);
-
+        //creation du bouton permettant la suppression de modules
         del = new Button();
         del.setText("Supprimer");
         add(del);
 
+        //style settings
         setAlignItems(Alignment.CENTER);
 
+        //connexion à la bdd
+        Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
+        
+        //lorsqu'on selectionne un autre groupe on actualise le tableau
+        grpselect.addValueChangeListener(t -> {
+            try {
+                setthegridmg();
+            } catch (Exception e) {
+                System.out.println("erreur lors de l'actualisation du tableau de modules");
+            }
+        });
+
+        //récupération de la ligne du tableau selectionnée et suppression au clic
         grid.addSelectionListener(selection -> {
             Optional<Module> moduselec = selection.getFirstSelectedItem();
-            if (moduselec.isPresent()) { 
+            if (moduselec.isPresent()) {
                 del.addClickListener(t -> {
                     Module mod = moduselec.get();
+                    //recuperation du groupe selectionne
                     String value = grpselect.getValue().toString();
-                    System.out.println(value);
-                    boolean ajoutgrp1 = false;
-                    boolean ajoutgrp2 = false;
-                    boolean ajoutgrp3 = false;
+                    int idgrp = 0;
+                    if (value.contains("Groupe 1")) {
+                        idgrp = 1;
+                    }
+                    if (value.contains("Groupe 2")) {
+                        idgrp = 2;
+                    }
+                    if (value.contains("Groupe 3")) {
+                        idgrp = 3;
+                    }
+                    try {
+                        //suppression du module selectionne
+                        Commandes.removeModule(con, mod.getId(), idgrp, getidsem(con));
+                        setthegridmg();
+                    } catch (Exception e) {
+                        System.out.println("erreur lors de la suppression de module");
+                    }
                 });
             }
         });
     }
 
-    //méthode permettant de recuperer les modules correspondants au groupe selectionné
-    public static List<Module> getModule(Connection con) throws SQLException {
-        ArrayList<Module> res = new ArrayList<Module>();
-        
-        //TODO: faire la selection de modules du groupe selectionné, doit retourner une liste de modules
-        // try ( Statement st = con.createStatement()) {
-        //     try ( ResultSet rres = st.executeQuery(
-        //             """
-        //             select * from module
-        //              """)) {
-        //     while (rres.next()) {
-        //         Module module = new Module();
-        //         module.setIntitule(rres.getString(2));
-        //         module.setDescription(rres.getString(3));
-        //         module.setNbPlaceMax(rres.getInt(4));
-        //         module.setNbPlaceMin(rres.getInt(5));
-        //         module.setClasseacceptee(rres.getString(6));
-        //         res.add(module);
-        //     }
-        //     return res;
-        //     }
-        // }
+    //methode permettant de récupérer l'id du dernier semestre ajouté afin de le modifier
+    public int getidsem(Connection con) throws SQLException, ClassNotFoundException {
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet rres = st.executeQuery(
+                """
+                SELECT MAX(id) FROM semestre
+                """)) {
+                while (rres.next()) {
+                    return rres.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
 
+    //méthode permettant de recuperer les modules correspondants au groupe selectionné
+    public List<Module> getModulegrp(Connection con) throws SQLException, ClassNotFoundException {
+        int idsem = 0;
+        idsem = getidsem(con);
+        //recuperation du groupe selectionne
+        String value = grpselect.getValue().toString();
+        int idgrp = 0;
+        if (value.contains("Groupe 1")) {
+            idgrp = 1;
+        }
+        if (value.contains("Groupe 2")) {
+            idgrp = 2;
+        }
+        if (value.contains("Groupe 3")) {
+            idgrp = 3;
+        }
+        //recuperation des modules correspondant au groupe et au semestre
+        List<Module> res = Commandes.getModule(con, idsem, idgrp);
         return res;
     }
 
+    //methode mettant a jour le tableau de modules
     public void setthegridmg() throws SQLException, ClassNotFoundException {
         grid.removeAllColumns();
         //tableau contenant tous les modules
@@ -88,7 +134,7 @@ public class AdminPageContentGroupes extends VerticalLayout{
         grid.addColumn(Module::getClasseacceptee).setHeader("Classes acceptées").setSortable(true).setAutoWidth(true).setFlexGrow(0);
         //connexion à la base de donnée
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
-        List<Module> module = getModule(con);
+        List<Module> module = getModulegrp(con);
         grid.setItems(module);
     }
 }
