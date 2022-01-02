@@ -45,28 +45,38 @@ public class AdminPageContentBibliotheqe extends VerticalLayout{
             if (moduselec.isPresent()) { 
                 add.addClickListener(t -> {
                     Module mod = moduselec.get();
+                    try( Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
                     //TODO: ajouter le module selectionné au groupe correspondant
-                    String value = groupes.getValue().toString();
-                    boolean ajoutgrp1 = false;
-                    boolean ajoutgrp2 = false;
-                    boolean ajoutgrp3 = false;
-                    if (value.contains("Groupe 1")) {
-                        ajoutgrp1 = true;
+                    String value = groupes.getValue().toString();               
+                    int idSem= Commandes.getidsem(con);
+
+                        if (value.contains("Groupe 1")) {
+                            Commandes.AjoutGrpModule(con, idSem, 1, mod.getId());
+                            //on ajoute au groupe 1
+
                     }
-                    if (value.contains("Groupe 2")) {
-                        ajoutgrp2 = true;
+                        if (value.contains("Groupe 2")) {
+                            System.out.println("Groupe 2");
+                            Commandes.AjoutGrpModule(con, idSem, 2, mod.getId());
+                            //on ajoute au groupe 2
                     }
-                    if (value.contains("Groupe 3")) {
-                        ajoutgrp3 = true;
-                    } else {
-                        Notification notif = Notification.show("Choisissez un group auquel ajouter le module.");
-                        notif.setPosition(Position.BOTTOM_CENTER);
+                        if (value.contains("Groupe 3")) {
+                             System.out.println("Groupe 3");
+                            Commandes.AjoutGrpModule(con, idSem, 3, mod.getId());
+                            //on ajoute au groupe 3
+                    }   else {
+                            Notification notif = Notification.show("Choisissez un group auquel ajouter le module.");
+                            notif.setPosition(Position.BOTTOM_CENTER);
                     }
+                }   catch (Exception err) {
+                        System.out.println("problème lors de la connexion");
+                }
                 });
             }
         });
     }
 
+    
     //méthode permettant de recuperer les modules présents dans la base de donnée
     public static List<Module> getModule(Connection con) throws SQLException {
         ArrayList<Module> res = new ArrayList<Module>();
@@ -77,6 +87,7 @@ public class AdminPageContentBibliotheqe extends VerticalLayout{
                      """)) {
             while (rres.next()) {
                 Module module = new Module();
+                module.setId(rres.getInt(1));
                 module.setIntitule(rres.getString(2));
                 module.setDescription(rres.getString(3));
                 module.setNbPlaceMax(rres.getInt(4));
