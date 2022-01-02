@@ -114,6 +114,11 @@ public class AdminPageFooter extends HorizontalLayout{
             bgroupes.setVisible(false);
             bSemestre.setVisible(true);
 
+            try {
+                main.setMainContent(new AdminPageContentGroupes());
+            } catch (Exception e) {
+                System.out.println("problème durant la création de la page de groupes");
+            }
         });
         bSemestre.addClickListener(t -> {
             baccueil.setVisible(true);
