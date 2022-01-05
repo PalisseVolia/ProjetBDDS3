@@ -41,7 +41,8 @@ public class AdminPageContentSemestre extends VerticalLayout{
         //ajout d'un semestre lors de la pression du bouton d'ajout
         add.addClickListener(t -> {
             try {
-                Commandes.NouvSemestre(con);
+                //TODO c faux
+                //Commandes.NouvSemestre(con);
             } catch (Exception e) {
                 System.out.println("erreur durant la connexion à la bdd : ajout de semestre IG");
             }

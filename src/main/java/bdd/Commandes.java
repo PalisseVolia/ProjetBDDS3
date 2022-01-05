@@ -23,6 +23,7 @@ public class Commandes
             for(int i=0;i<res.size();i++){
                 System.out.println(res.get(i).toString());
             }
+            NouvSemestre(con, true, false , false);
 
             
         } catch (Exception err) {
@@ -443,7 +444,7 @@ public class Commandes
     }
     }
 
-    public static void NouvSemestre(Connection con)throws SQLException{
+    public static void NouvSemestre(Connection con, boolean g1, boolean g2, boolean g3)throws SQLException{
         //méthode qui permet de savoir connaitre l'annee et le numero d'un nouveau semestre
         Semestre sem = new Semestre();
         ArrayList<Semestre> list =new ArrayList<Semestre>();
@@ -471,10 +472,70 @@ public class Commandes
                 }
                 sem.setNg(3);
                 sem.setNc(1);
+                sem.setId(s1.getId()+1);
+                
                 AjoutSemestre(con, String.valueOf(sem.getAnnee()) , String.valueOf(sem.getNumero()), String.valueOf(sem.getNg()), String.valueOf(sem.getNc()));
+                ArrayList<Integer> groupe = new ArrayList<Integer>();
+            System.out.println(sem.toString());
+                if(g1==true){
+                    groupe=getGrp(con, 1, s1.getId());
+                    System.out.println("groupe1");
+                    System.out.println(groupe.get(0)+";"+groupe.get(1)+";"+groupe.get(2));
+
+                    for(int i=0; i<3;i++){
+                        AjoutGrpModule(con, sem.getId(), 1, groupe.get(i));
+
+                    }
+                    groupe.clear();
+                        
+                }
+
+                if(g2==true){
+                    groupe=getGrp(con, 2, s1.getId());
+                    System.out.println("groupe2");
+                    System.out.println(groupe.get(0)+";"+groupe.get(1)+";"+groupe.get(2));
+                    for(int i=0; i<3;i++){
+                        AjoutGrpModule(con, sem.getId(), 2, groupe.get(i));
+
+                    }
+                    groupe.clear();   
+                }
+
+                if(g3==true){
+                    groupe=getGrp(con, 3, s1.getId());
+                    System.out.println("groupe3");
+                    System.out.println(groupe.get(0)+";"+groupe.get(1)+";"+groupe.get(2));
+                    for(int i=0; i<3;i++){
+                        AjoutGrpModule(con, sem.getId(), 3, groupe.get(i));
+
+                    }
+                    groupe.clear();    
+                }
             }
         }
     }
+
+    public static ArrayList<Integer> getGrp(Connection con, int idGrp, int idSemestre ) throws SQLException{
+        ArrayList<Integer> groupe = new ArrayList<Integer>();
+        try (PreparedStatement st = con.prepareStatement(
+            """
+            select * from GrpModule 
+            where idSemestre=? and idGroupe=?
+             """    
+        )){
+            st.setInt(1, idSemestre);
+            st.setInt(2, idGrp);
+                ResultSet rres = st.executeQuery(
+                        ); {
+            while (rres.next()) {
+                groupe.add(rres.getInt(3));    
+            }
+
+        return groupe;
+    }
+}
+}
+
     
     public static List<Etudiant> getEtudiant(Connection con) throws SQLException {
         //méthode permettant de recuperer une colonne c de la table "table"
