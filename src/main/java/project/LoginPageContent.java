@@ -57,8 +57,6 @@ public class LoginPageContent extends VerticalLayout{
         // TODO: temporaire remplissage de test
         email.setValue("ThibautWaechter@insa-strasbourg.fr");
         mdp.setValue("mdp1");
-        // email.setValue("JosephLaforge@insa-strasbourg.fr");
-        // mdp.setValue("GKbdb1qn");
         valider.setEnabled(true);
 
         //style settings
@@ -97,9 +95,6 @@ public class LoginPageContent extends VerticalLayout{
                     String s = p.testClasse();
                     if(s.equals("etudiant")){
                         System.out.println("etudiant");
-                        main.setEntete(new EtudiantPageEntete(p.getPrenom(), p.getNom(), mainvue));
-                        main.setMainContent(new EtudiantPageContent());
-                        main.setAlignment(1);
                     }else if(s.equals("admin")){
                         System.out.println("admin");
                         main.setEntete(new AdminPageEntete(p.getPrenom(), p.getNom(), main));
