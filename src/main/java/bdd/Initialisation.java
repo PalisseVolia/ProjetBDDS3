@@ -688,11 +688,11 @@ public class Initialisation {
         }
 
         List<String> semestre = Initialisation.idsemestreVoeux();
-        List<String> grp = Initialisation.etudiantVoeux();
-        List<String> mod = Initialisation.moduleVoeux();
+        List<String> etu = Initialisation.etudiantVoeux();
+        List<String> voeux = Initialisation.moduleVoeux();
 
-        for(int i=0;i<GRPMODULE.length;i++){
-            Commandes.AjoutVoeux(con,semestre.get(i),grp.get(i),mod.get(i));
+        for(int i=0;i<VOEUX.length;i++){
+            Commandes.AjoutVoeux(con,semestre.get(i),etu.get(i),voeux.get(i));
         }
 
     }
@@ -882,7 +882,6 @@ public class Initialisation {
             {"3", "120", "9"},
             {"3", "120", "8"},
             {"3", "120", "10"},
-            {"3", "120", "15"},
             //s2 2020
             {"4", "120", "14"},
             {"4", "120", "3"},
@@ -892,18 +891,18 @@ public class Initialisation {
     };
 
     public static List<String> idsemestreVoeux() {
-        return Arrays.stream(GRPMODULE).map((t) -> {
+        return Arrays.stream(VOEUX).map((t) -> {
             return t[0];
         }).toList();
     }
 
     public static List<String> etudiantVoeux() {
-        return Arrays.stream(GRPMODULE).map((t) -> {
+        return Arrays.stream(VOEUX).map((t) -> {
             return t[1];
         }).toList();
     }
     public static List<String> moduleVoeux() {
-        return Arrays.stream(GRPMODULE).map((t) -> {
+        return Arrays.stream(VOEUX).map((t) -> {
             return t[2];
         }).toList();
     }
