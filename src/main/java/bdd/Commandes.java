@@ -18,8 +18,6 @@ public class Commandes
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             System.out.println("Méthode sans preparedstatement :");
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
-            Semestre s =NouvSemestre(con);
-            System.out.println(s.toStringSimple());
             List<Module> res = new ArrayList<Module>();
             res= getModule(con, 1, 1);
             for(int i=0;i<res.size();i++){
@@ -445,7 +443,7 @@ public class Commandes
     }
     }
 
-    public static Semestre NouvSemestre(Connection con)throws SQLException{
+    public static void NouvSemestre(Connection con)throws SQLException{
         //méthode qui permet de savoir connaitre l'annee et le numero d'un nouveau semestre
         Semestre sem = new Semestre();
         ArrayList<Semestre> list =new ArrayList<Semestre>();
@@ -454,28 +452,28 @@ public class Commandes
                     """
                     select * from semestre order by annee desc, numero desc
                      """)) {
-                         //on classe les semestre par annee decroissante : seuls les deux derniers semestres nous interessent
-            while (rres.next()) {
-                Semestre s = new Semestre();
-                s.setId(rres.getInt(1));
-                s.setAnnee(rres.getInt(2));
-                s.setNumero(rres.getInt(3));
-                list.add(s);    
+                            //on classe les semestre par annee decroissante : seuls les deux derniers semestres nous interessent
+                while (rres.next()) {
+                    Semestre s = new Semestre();
+                    s.setId(rres.getInt(1));
+                    s.setAnnee(rres.getInt(2));
+                    s.setNumero(rres.getInt(3));
+                    list.add(s);    
+                }
+                Semestre s1 = list.get(0);
+                Semestre s2 = list.get(1);
+                if(s1.getAnnee()==s2.getAnnee()){
+                    sem.setAnnee(s1.getAnnee()+1);
+                    sem.setNumero(1);
+                }else{
+                    sem.setAnnee(s1.getAnnee());
+                    sem.setNumero(2);
+                }
+                sem.setNg(3);
+                sem.setNc(1);
+                AjoutSemestre(con, String.valueOf(sem.getAnnee()) , String.valueOf(sem.getNumero()), String.valueOf(sem.getNg()), String.valueOf(sem.getNc()));
             }
-        Semestre s1 = list.get(0);
-        Semestre s2 = list.get(1);
-
-        if(s1.getAnnee()==s2.getAnnee()){
-            sem.setAnnee(s1.getAnnee()+1);
-            sem.setNumero(1);
-        }else{
-            sem.setAnnee(s1.getAnnee());
-            sem.setNumero(2);
-
         }
-        return sem;
-    }
-}
     }
     
     public static List<Etudiant> getEtudiant(Connection con) throws SQLException {

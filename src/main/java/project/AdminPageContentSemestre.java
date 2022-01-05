@@ -1,14 +1,19 @@
 package project;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 
+import bdd.Commandes;
+
 // =======================================================================================
 // Contenu de la page permettant l'ajout de semestres de l'interface Administrateur
 // =======================================================================================
+import bdd.Commandes;
+import classes.Semestre;
 
 public class AdminPageContentSemestre extends VerticalLayout{
     private TextArea infos;
@@ -31,9 +36,15 @@ public class AdminPageContentSemestre extends VerticalLayout{
         add.setWidth("13em");
         infos.setWidth("30em");
 
+        Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
+
         //ajout d'un semestre lors de la pression du bouton d'ajout
         add.addClickListener(t -> {
-            // TODO: Ajouter le lien a la méthode d'ajout de semestre
+            try {
+                Commandes.NouvSemestre(con);
+            } catch (Exception e) {
+                System.out.println("erreur durant la connexion à la bdd : ajout de semestre IG");
+            }
         });
     }
 }
