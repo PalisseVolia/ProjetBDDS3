@@ -4,17 +4,13 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
-// =======================================================================================
-// Entete de la page d'accueil admin
-// =======================================================================================
-
-public class AdminPageEntete extends HorizontalLayout{
+public class EtudiantPageEntete extends HorizontalLayout {
     private VuePrincipale main;
     
     private H1 welcome;
     private Button disconnect;
     
-    public AdminPageEntete(String nom, String prenom, VuePrincipale mainvue) {
+    public EtudiantPageEntete(String nom, String prenom, VuePrincipale mainvue) {
         main = mainvue;
         
         //titre d'accueil

@@ -1,14 +1,21 @@
 package project;
 
+import java.sql.Connection;
+
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.data.value.ValueChangeMode;
+
+import bdd.Commandes;
+import classes.Personne;
 
 // =======================================================================================
 // Contenu de la page de login
@@ -29,7 +36,7 @@ public class LoginPageContent extends VerticalLayout{
         //creation du field d'email
         email = new EmailField();
         email.setLabel("Adresse mail");
-        email.setPlaceholder("nom@insa-strasbourg.com");
+        email.setPlaceholder("nom@insa-strasbourg.fr");
         email.setErrorMessage("adresse invalide");
         email.setClearButtonVisible(true);
         add(email);
@@ -40,11 +47,19 @@ public class LoginPageContent extends VerticalLayout{
         mdp.setPlaceholder("••••••••");
         mdp.setClearButtonVisible(true);
         add(mdp);
-
+        
         //bouton de validation
         valider = new Button();
         valider.setText("Valider");
+        valider.setEnabled(false);
         add(valider);
+        
+        // TODO: temporaire remplissage de test
+        email.setValue("ThibautWaechter@insa-strasbourg.fr");
+        mdp.setValue("mdp1");
+        // email.setValue("JosephLaforge@insa-strasbourg.fr");
+        // mdp.setValue("GKbdb1qn");
+        valider.setEnabled(true);
 
         //style settings
         email.setWidth("20em");
@@ -52,32 +67,52 @@ public class LoginPageContent extends VerticalLayout{
         valider.setWidth("10em");
         setAlignItems(Alignment.CENTER);
 
+        //verifie que les champs soient remplsi avant d'activer le bouton de validation
+        email.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")) {
+                valider.setEnabled(true);
+            } else {
+                valider.setEnabled(false);
+            }
+        });
+        mdp.addValueChangeListener(t -> {
+            if ((email.getValue() != "")&&(mdp.getValue() != "")) {
+                valider.setEnabled(true);
+            } else {
+                valider.setEnabled(false);
+            }
+        });
+        
         //listener du bouton de validation, détermine si l'accès est donné à la partie admin ou étudiant
         valider.addClickListener((t) -> {
             String txtemail = email.getValue();
             String txtmdp = mdp.getValue();
-
-            // TODO: variables temporaires de test, modifier avec la verification dans la bdd
-            String tmptestemailadmin = "admin@test.com";
-            String tmptestmdpadmin = "admin";
-            String nomadmin = "Palisse";
-            String prenomadmin = "Volia";
-            String tmptestemailetudiant = "etudiant@test.com";
-            String tmptestmdpetudiant = "etudiant";
-            String nometudiant = "Waechter";
-            String prenometudiant = "Thibaut";
-
-            if (txtemail.equals(tmptestemailadmin) && txtmdp.equals(tmptestmdpadmin)) {
-                System.out.println("admin");
-                main.setEntete(new AdminPageEntete(nomadmin, prenomadmin));
-                main.setAlignment(0);
-            } else if (txtemail.equals(tmptestemailetudiant) && txtmdp.equals(tmptestmdpetudiant)) {
-                System.out.println("etudiant");
-            } else {
-                System.out.println("non reconnu");
+            
+            try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+                Personne p = Commandes.login(con, txtemail, txtmdp);
+                if (p.getNom()==null && p.getPrenom()==null){
+                    Notification notif = Notification.show("Identifiant ou mot de passe invalide.");
+                    notif.setPosition(Position.BOTTOM_CENTER);
+                }else{
+                    String s = p.testClasse();
+                    if(s.equals("etudiant")){
+                        System.out.println("etudiant");
+                        main.setEntete(new EtudiantPageEntete(p.getPrenom(), p.getNom(), mainvue));
+                        main.setMainContent(new EtudiantPageContent());
+                        main.setAlignment(1);
+                    }else if(s.equals("admin")){
+                        System.out.println("admin");
+                        main.setEntete(new AdminPageEntete(p.getPrenom(), p.getNom(), main));
+                        main.setMainContent(new AdminPageContent());
+                        main.setFooter(new AdminPageFooter(main));
+                        main.setAlignment(1);
+                    }
+                }
+            } catch (Exception err) {
+                System.out.println("problème lors de la connexion");
             }
         });
-
+        
         //indication force du mdp
         checkIcon = VaadinIcon.CHECK.create();
         checkIcon.setVisible(false);

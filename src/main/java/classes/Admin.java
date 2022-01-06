@@ -70,12 +70,6 @@ public class Admin extends Personne {
         return super.equals(arg0);
     }
 
-    // TODO: supprimer is ça marche sans
-    // @Override
-    // protected void finalize() throws Throwable { 
-    //     super.finalize();
-    // }
-
     @Override
     public int hashCode() {
         return super.hashCode();

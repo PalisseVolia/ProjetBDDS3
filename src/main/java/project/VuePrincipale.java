@@ -22,6 +22,7 @@ public class VuePrincipale extends VerticalLayout{
     
     private MyHorizontalLayout entete;
     private MyVerticalLayout mainContent;
+    private MyHorizontalLayout footer;
 
     public VuePrincipale() {
 
@@ -30,6 +31,8 @@ public class VuePrincipale extends VerticalLayout{
         this.add(this.entete);
         this.mainContent = new MyVerticalLayout();
         this.add(this.mainContent);
+        this.footer = new MyHorizontalLayout();
+        this.add(this.footer);
 
         //remplacement par les layouts de la page de Login
         this.setEntete(new LoginPageEntete());
@@ -49,6 +52,12 @@ public class VuePrincipale extends VerticalLayout{
         this.mainContent.removeAll();
         this.mainContent.add(c);
     }
+    public void setFooter(Component c) {
+        this.footer.removeAll();
+        this.footer.add(c);
+    }
+
+    //méthodes permettant de changer l'alignement des layouts sur la vue principale
     public void setAlignment(int value) {
         switch (value) {
             case 0:
@@ -67,21 +76,3 @@ public class VuePrincipale extends VerticalLayout{
     }
         
 }
-
-// example button
-
-    // private Button vbCoucou;
-    // public VuePrincipale() {
-    //     this.vbCoucou = new Button("dis Coucou");
-    //     this.vbCoucou.addClickListener((t) -> {
-    //         Notification.show("Coucou");
-    //     });
-    //     this.add(this.vbCoucou);
-    // }
-
-// example text
-
-    // public BienvenueMainVue() {
-    //     this.add(new H1("bienvenu dans ce super programme"));
-    //     this.add(new Paragraph("merci de vous connecter"));
-    // }

@@ -1,7 +1,6 @@
 package project;
 
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.html.Paragraph;
 
 // =======================================================================================
 // Permet la création d'un Layout Horizontal
@@ -9,6 +8,7 @@ import com.vaadin.flow.component.html.Paragraph;
 
 public class MyHorizontalLayout extends HorizontalLayout {
     public MyHorizontalLayout() {
-        this.add(new Paragraph("HorizontalLayout"));
+        //activer pour voir les layouts invisibles
+        //this.add(new Paragraph("HorizontalLayout"));
     }
 }

@@ -1,6 +1,5 @@
 package project;
 
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 // =======================================================================================
@@ -9,6 +8,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class MyVerticalLayout extends VerticalLayout {
     public MyVerticalLayout() {
-        this.add(new Paragraph("VerticalLayout"));
+        //activer pour voir les layouts invisibles
+        //this.add(new Paragraph("VerticalLayout"));
     }
 }

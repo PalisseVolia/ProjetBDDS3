@@ -3,6 +3,7 @@ package classes;
 public class Module {
 
     //Attributs
+    int id; //id du module
     String intitule; // nom du module
     String description; // description du module
     int nbPlaceMax; // nombre de personne maximum pouvant s'inscire au module
@@ -10,7 +11,8 @@ public class Module {
     String classeacceptee; // exemple GE/GCE/MIQ
 
     //Constructeur
-    public Module(String intitule, String description, int nbPlaceMax, int nbPlaceMin, String classeacceptee) {
+    public Module(int id, String intitule, String description, int nbPlaceMax, int nbPlaceMin, String classeacceptee) {
+        this.id = id;
         this.intitule = intitule;
         this.description = description;
         this.nbPlaceMax = nbPlaceMax;
@@ -18,7 +20,15 @@ public class Module {
         this.classeacceptee = classeacceptee;
     }
 
-    public Module() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Module(){
 
     }
 
