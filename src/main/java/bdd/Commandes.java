@@ -498,8 +498,6 @@ public class Commandes
                 System.out.println(sem.toString());
                 if(g1==true){
                     groupe=getGrp(con, 1, s1.getId());
-                    System.out.println("groupe1");
-                    System.out.println(groupe.get(0)+";"+groupe.get(1)+";"+groupe.get(2));
 
                     for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 1, groupe.get(i));
@@ -511,8 +509,6 @@ public class Commandes
 
                 if(g2==true){
                     groupe=getGrp(con, 2, s1.getId());
-                    System.out.println("groupe2");
-                    System.out.println(groupe.get(0)+";"+groupe.get(1)+";"+groupe.get(2));
                     for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 2, groupe.get(i));
 
@@ -522,8 +518,6 @@ public class Commandes
 
                 if(g3==true){
                     groupe=getGrp(con, groupe.size(), s1.getId());
-                    System.out.println("groupe3");
-                    System.out.println(groupe.get(0)+";"+groupe.get(1)+";"+groupe.get(2));
                     for(int i=0; i<3;i++){
                         AjoutGrpModule(con, sem.getId(), 3, groupe.get(i));
 
