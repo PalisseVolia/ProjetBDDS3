@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -43,6 +44,7 @@ public class AdminPageContentGroupes extends VerticalLayout{
         add(del);
 
         //style settings
+        del.addThemeVariants(ButtonVariant.LUMO_ERROR);
         setAlignItems(Alignment.CENTER);
 
         //connexion à la bdd

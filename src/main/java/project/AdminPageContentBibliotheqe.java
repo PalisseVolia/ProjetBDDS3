@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.selection.SingleSelect;
 
@@ -47,6 +46,7 @@ public class AdminPageContentBibliotheqe extends VerticalLayout{
         add(add);
 
         //style settings
+        add.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
         setAlignItems(Alignment.CENTER);
         
         //lorsqu'une ligne du tableau sélectionnée on crée un module
@@ -54,31 +54,44 @@ public class AdminPageContentBibliotheqe extends VerticalLayout{
         moduselec.addValueChangeListener(selection -> {
             mod = selection.getValue();
             add.setEnabled(false);
+            String value = groupes.getValue().toString();
             if (selection != null) {
-                add.setEnabled(true);
+                if (value.contains("Groupe 1")||value.contains("Groupe 2")||value.contains("Groupe 3")) {
+                    add.setEnabled(true);
+                }
+            }
+        });
+
+        //lorsqu'un groupe est selectionné on vérifie qu'une ligne est aussi sélectionnée, au quel cas on active le bouton
+        groupes.addValueChangeListener(ch -> {
+            String value = groupes.getValue().toString();
+            if (value.contains("Groupe 1")||value.contains("Groupe 2")||value.contains("Groupe 3")) {
+                add.setEnabled(false);
+                if (moduselec.getValue() != null) {
+                    add.setEnabled(true);
+                }
+            } else {
+                add.setEnabled(false);
             }
         });
 
         //ajout du module selectionné au clic du bouton
         add.addClickListener(t -> {
             try( Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
-            String value = groupes.getValue().toString();               
+            String value = groupes.getValue().toString();
             int idSem= Commandes.getidsem(con);
                 if (value.contains("Groupe 1")) {
                     Commandes.AjoutGrpModule(con, idSem, 1, mod.getId());
                     //on ajoute au groupe 1
-            }
+                }
                 if (value.contains("Groupe 2")) {
                     Commandes.AjoutGrpModule(con, idSem, 2, mod.getId());
                     //on ajoute au groupe 2
-            }
+                }
                 if (value.contains("Groupe 3")) {
                     Commandes.AjoutGrpModule(con, idSem, 3, mod.getId());
                     //on ajoute au groupe 3
-            }   else {
-                    Notification notif = Notification.show("Choisissez un group auquel ajouter le module.");
-                    notif.setPosition(Position.BOTTOM_CENTER);
-            }
+                }
         }   catch (Exception err) {
                 System.out.println("problème lors de la connexion");
         }

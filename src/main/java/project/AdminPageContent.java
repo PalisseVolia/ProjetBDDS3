@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -37,6 +38,7 @@ public class AdminPageContent extends VerticalLayout {
         add(delete);
         
         //style settings
+        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         setAlignItems(Alignment.CENTER);
         
         //connexion à la bdd
