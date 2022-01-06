@@ -20,8 +20,7 @@ public class Commandes
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
             List<Module> res = new ArrayList<Module>();
             res= getModule(con, 1, 1);
-            NouvSemestre(con, true, true, false);
-            AjoutGrpModule(con, 5, 3, 1);
+            NouvSemestre(con, false, false, true);
 
 
             
@@ -217,17 +216,18 @@ public class Commandes
 }
 
 
-    public static void AjoutVoeux(Connection con, String idsemestre, String idetudiant, String idmodule) throws SQLException {
+    public static void AjoutVoeux(Connection con, String idsemestre, String idetudiant, String idmodule,String idgrp) throws SQLException {
         //méthode permettant d'ajouter un groupe de module
         try ( PreparedStatement pst = con.prepareStatement(
                 """
-                insert into Voeux (idSemestre,idEtudiant,idModule)
-                values (?,?,?)
+                insert into Voeux (idSemestre,idEtudiant,idModule,idGrpModule)
+                values (?,?,?,?)
                 """)) {
             con.setAutoCommit(false);
             pst.setInt(1, Integer.parseInt(idsemestre));
             pst.setInt(2, Integer.parseInt(idetudiant));
             pst.setInt(3, Integer.parseInt(idmodule));
+            pst.setInt(4, Integer.parseInt(idgrp));
             pst.executeUpdate();
             con.commit();
         }catch (SQLException ex) {
@@ -236,7 +236,7 @@ public class Commandes
         }
     }
 
-    public static void AjoutVoeux(Connection con, int idsemestre, int idetudiant, int idmodule, int numeroVoeux) throws SQLException {
+    public static void AjoutVoeux(Connection con, int idsemestre, int idetudiant, int idmodule, int idgrp, int numeroVoeux) throws SQLException {
         //méthode permettant d'ajouter un groupe de module
         try ( PreparedStatement pst = con.prepareStatement(
                 """
@@ -517,8 +517,8 @@ public class Commandes
                 }
 
                 if(g3==true){
-                    groupe=getGrp(con, groupe.size(), s1.getId());
-                    for(int i=0; i<3;i++){
+                    groupe=getGrp(con, 3, s1.getId());
+                    for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 3, groupe.get(i));
 
                     }
@@ -979,6 +979,8 @@ public class Commandes
         }
      }
     }
+
+    
 
     public static boolean VoeuxExiste(Connection con, int idSemestre, int idEtudiant, int idModule){
         //Vérifier qu'un voeux a été fait à un semestre donné

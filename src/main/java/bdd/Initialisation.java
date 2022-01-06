@@ -667,6 +667,7 @@ public class Initialisation {
                         idSemestre integer not null,
                         idEtudiant integer not null,
                         idModule integer not null,
+                        idGrpModule integer not null,
                         numeroVoeux integer
                         )
                         """);
@@ -684,208 +685,208 @@ public class Initialisation {
                     add constraint moduleOuvert
                     foreign key (idModule) references module(id) 
                     ON DELETE CASCADE
-                      """);
+                      """);          
         }
 
         List<String> semestre = Initialisation.idsemestreVoeux();
         List<String> etu = Initialisation.etudiantVoeux();
         List<String> voeux = Initialisation.moduleVoeux();
+        List<String> gvoeux = Initialisation.groupevoeux();
 
         for(int i=0;i<VOEUX.length;i++){
-            Commandes.AjoutVoeux(con,semestre.get(i),etu.get(i),voeux.get(i));
+            Commandes.AjoutVoeux(con,semestre.get(i),etu.get(i),voeux.get(i),gvoeux.get(i));
         }
 
     }
     public static final String[][] VOEUX = new String[][]{
             //Etudiant 1, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "1", "13"},
-            {"4", "1", "3"},
-            {"4", "1", "8"},
+            {"4", "1","13","1"},
+            {"4", "1", "3","2"},
+            {"4", "1", "8","3"},
 
             //Etudiant 2, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "2", "13"},
-            {"4", "2", "3"},
-            {"4", "2", "8"},
+            {"4", "2","13","1"},
+            {"4", "2", "3","2"},
+            {"4", "2", "8","3"},
 
             //Etudiant 3, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "3", "13"},
-            {"4", "3", "3"},
-            {"4", "3", "8"},
+            {"4", "3","13","1"},
+            {"4", "3", "3","2"},
+            {"4", "3", "8","3"},
 
             //Etudiant 4, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "4", "13"},
-            {"4", "4", "3"},
-            {"4", "4", "8"},
+            {"4", "4","13","1"},
+            {"4", "4", "3","2"},
+            {"4", "4", "8","3"},
 
             //Etudiant 5, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "5", "13"},
-            {"4", "5", "3"},
-            {"4", "5", "8"},
+            {"4", "5","13","1"},
+            {"4", "5", "3","2"},
+            {"4", "5", "8","3"},
 
             //Etudiant 6, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "6", "13"},
-            {"4", "6", "3"},
-            {"4", "6", "8"},
+            {"4", "6","13","1"},
+            {"4", "6", "3","2"},
+            {"4", "6", "8","3"},
 
             //Etudiant 7, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "7", "13"},
-            {"4", "7", "3"},
-            {"4", "7", "8"},
-
+            {"4", "7","13","1"},
+            {"4", "7", "3","2"},
+            {"4", "1", "8","3"},
             //Etudiant 8, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "8", "13"},
-            {"4", "8", "3"},
-            {"4", "8", "8"},
+            {"4", "8","13","1"},
+            {"4", "8", "3","2"},
+            {"4", "8", "8","3"},
 
             //Etudiant 9, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "9", "13"},
-            {"4", "9", "3"},
-            {"4", "9", "8"},
+            {"4", "9","13","1"},
+            {"4", "9", "3","2"},
+            {"4", "9", "8","3"},
 
             //Etudiant 10, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "10", "13"},
-            {"4", "10", "3"},
-            {"4", "10", "8"},
+            {"4", "10","13","1"},
+            {"4", "10", "3","2"},
+            {"4", "10", "8","3"},
 
             //Etudiant 11, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "11", "13"},
-            {"4", "11", "3"},
-            {"4", "11", "8"},
+            {"4", "11","13","1"},
+            {"4", "11", "3","2"},
+            {"4", "11", "8","3"},
 
             //Etudiant 12, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "12", "13"},
-            {"4", "12", "3"},
-            {"4", "12", "8"},
+            {"4", "12","13","1"},
+            {"4", "12", "3","2"},
+            {"4", "12", "8","3"},
 
             //Etudiant 13, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "13", "13"},
-            {"4", "13", "3"},
-            {"4", "13", "8"},
+            {"4", "13","13","1"},
+            {"4", "13", "3","2"},
+            {"4", "13", "8","3"},
 
             //Etudiant 14, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "14", "13"},
-            {"4", "14", "3"},
-            {"4", "14", "8"},
+            {"4", "14","13","1"},
+            {"4", "14", "3","2"},
+            {"4", "14", "8","3"},
 
             //Etudiant 15, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "15", "13"},
-            {"4", "15", "3"},
-            {"4", "15", "8"},
+            {"4", "15","13","1"},
+            {"4", "15", "3","2"},
+            {"4", "15", "8","3"},
 
             //Etudiant 16, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "16", "14"},
-            {"4", "16", "9"},
-            {"4", "16", "11"},
+            {"4", "16","13","1"},
+            {"4", "16", "3","2"},
+            {"4", "16", "8","3"},
 
             //Etudiant 17, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "17", "14"},
-            {"4", "17", "9"},
-            {"4", "17", "11"},
+            {"4", "17","13","1"},
+            {"4", "17", "3","2"},
+            {"4", "17", "8","3"},
 
             //Etudiant 18, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "18", "14"},
-            {"4", "18", "9"},
-            {"4", "18", "11"},
+            {"4", "18","13","1"},
+            {"4", "18", "3","2"},
+            {"4", "18", "8","3"},
 
             //Etudiant 16, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "19", "14"},
-            {"4", "19", "9"},
-            {"4", "19", "11"},
+            {"4", "19","13","1"},
+            {"4", "19", "3","2"},
+            {"4", "19", "8","3"},
 
             //Etudiant 20, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "20", "14"},
-            {"4", "20", "9"},
-            {"4", "20", "11"},
+            {"4", "20","13","1"},
+            {"4", "20", "3","2"},
+            {"4", "20", "8","3"},
 
             //Etudiant 21, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "21", "14"},
-            {"4", "21", "9"},
-            {"4", "21", "11"},
+            {"4", "21","13","1"},
+            {"4", "21", "3","2"},
+            {"4", "21", "8","3"},
 
             //Etudiant 22, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "22", "14"},
-            {"4", "22", "9"},
-            {"4", "22", "11"},
+            {"4", "22","13","1"},
+            {"4", "22", "3","2"},
+            {"4", "22", "8","3"},
 
             //Etudiant 23, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "23", "14"},
-            {"4", "23", "9"},
-            {"4", "23", "11"},
+            {"4", "23","13","1"},
+            {"4", "23", "3","2"},
+            {"4", "23", "8","3"},
 
             //Etudiant 24, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "24", "14"},
-            {"4", "24", "9"},
-            {"4", "24", "11"},
+            {"4", "24","13","1"},
+            {"4", "24", "3","2"},
+            {"4", "24", "8","3"},
 
             //Etudiant 25, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "25", "14"},
-            {"4", "25", "9"},
-            {"4", "25", "11"},
+            {"4", "25","13","1"},
+            {"4", "25", "3","2"},
+            {"4", "25", "8","3"},
 
             //Etudiant 26, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "26", "14"},
-            {"4", "26", "9"},
-            {"4", "26", "11"},
+            {"4", "26","13","1"},
+            {"4", "26", "3","2"},
+            {"4", "26", "8","3"},
 
             //Etudiant 27, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "27", "14"},
-            {"4", "27", "9"},
-            {"4", "27", "11"},
+            {"4", "27","13","1"},
+            {"4", "27", "3","2"},
+            {"4", "27", "8","3"},
 
             //Etudiant 28, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "28", "14"},
-            {"4", "28", "9"},
-            {"4", "28", "11"},
+            {"4", "28","13","1"},
+            {"4", "28", "3","2"},
+            {"4", "28", "8","3"},
 
             //Etudiant 29, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
             //idSemestre,idEtudiant,idModule
-            {"4", "29", "14"},
-            {"4", "29", "9"},
-            {"4", "29", "11"},
+            {"4", "29","13","1"},
+            {"4", "29", "3","2"},
+            {"4", "29", "8","3"},
 
 
             //Etudiant 120, GE4, a fait les modules au  s2 2019, et au s1 et s2 2020
 
             //s2 2019
-            {"2", "120", "5"},
-            {"2", "120", "6"},
-            {"2", "120", "13"},
+            {"2", "120", "5","1"},
+            {"2", "120", "6","2"},
+            {"2", "120", "13","3"},
             //s1 2020
-            {"3", "120", "9"},
-            {"3", "120", "8"},
-            {"3", "120", "10"},
+            {"3", "120", "9","1"},
+            {"3", "120", "8","2"},
+            {"3", "120", "10","3"},
             //s2 2020
-            {"4", "120", "14"},
-            {"4", "120", "3"},
-            {"4", "120", "8"},
+            {"4", "120", "14","1"},
+            {"4", "120", "3","2"},
+            {"4", "120", "8","3"},
 
 
     };
@@ -904,6 +905,11 @@ public class Initialisation {
     public static List<String> moduleVoeux() {
         return Arrays.stream(VOEUX).map((t) -> {
             return t[2];
+        }).toList();
+    }
+    public static List<String> groupevoeux() {
+        return Arrays.stream(VOEUX).map((t) -> {
+            return t[3];
         }).toList();
     }
 
