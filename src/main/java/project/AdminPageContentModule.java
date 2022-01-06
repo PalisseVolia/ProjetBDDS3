@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -64,6 +65,7 @@ public class AdminPageContentModule extends VerticalLayout{
         add(add);
 
         //style settings
+        add.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
         setAlignItems(Alignment.CENTER);
         intitule.setWidth("17em");
         desc.setWidth("40em");

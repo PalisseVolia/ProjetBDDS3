@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Div;
@@ -82,6 +83,7 @@ public class AdminPageContentEtudiant extends VerticalLayout{
         add(add);
 
         //style settings
+        add.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
         setAlignItems(Alignment.CENTER);
         nom.setWidth("17em");
         prenom.setWidth("17em");
