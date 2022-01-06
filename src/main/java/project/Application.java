@@ -20,8 +20,6 @@ public class Application extends SpringBootServletInitializer {
         //TODO: lors des ajouts, vider les sélections RESTANT:  futur etudiant
         //TODO: Obliger à remplir les champs avant de pourvoir cliquer sur ajouter RESTANT: futur etudiant
         //TODO: ajout de semstre
-        //TODO: Entete etudiant
         //TODO: Content etudiant
-        //TODO: Footer etudiant
     }
 }

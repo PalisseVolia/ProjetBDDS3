@@ -76,21 +76,3 @@ public class VuePrincipale extends VerticalLayout{
     }
         
 }
-
-// example button
-
-    // private Button vbCoucou;
-    // public VuePrincipale() {
-    //     this.vbCoucou = new Button("dis Coucou");
-    //     this.vbCoucou.addClickListener((t) -> {
-    //         Notification.show("Coucou");
-    //     });
-    //     this.add(this.vbCoucou);
-    // }
-
-// example text
-
-    // public BienvenueMainVue() {
-    //     this.add(new H1("bienvenu dans ce super programme"));
-    //     this.add(new Paragraph("merci de vous connecter"));
-    // }
