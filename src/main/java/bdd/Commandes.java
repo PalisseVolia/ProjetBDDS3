@@ -972,7 +972,8 @@ public class Commandes
             JOIN Voeux ON Module.id=Voeux.idModule
             JOIN Semestre ON Voeux.idSemestre=Semestre.id
             JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
-            WHERE Etudiant.id= ?
+            WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
+            and Semestre.numero=(SELECT MAX(numero) from Semestre)
             ORDER BY Semestre.annee desc, Semestre.numero desc
              """    
         )){
@@ -988,5 +989,34 @@ public class Commandes
             return voeux;
         }
      }
+    }
+
+    public static boolean VoeuxExiste(Connection con, int idSemestre, int idEtudiant, int idModule){
+        //Vérifier qu'un voeux a été fait à un semestre donné
+        int res = 0;
+        boolean test=false;
+        String r = "SELECT COUNT(*) FROM Voeux WHERE Voeux.idSemestre = ? and Voeux.idEtudiant= ? and Voeux.idModule = ?";
+        System.out.println("ici");
+        try (PreparedStatement pst = con.prepareStatement(r)){
+            pst.setInt(1,idSemestre);
+            pst.setInt(2,idEtudiant);
+            pst.setInt(3,idModule);
+                ResultSet rres = pst.executeQuery(
+                        ); {
+            while (rres.next()) {
+                res = rres.getInt(1);
+            }
+            if (res >= 1){
+                test=true;
+            } else {
+                test= false;
+            }
+        } 
+        }catch (SQLException e) {
+            
+            System.out.println("Error : Commandes.java VoeuxExiste(con,id) "+e);
+        
+    }
+        return test;
     }
 }
