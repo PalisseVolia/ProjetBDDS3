@@ -202,6 +202,11 @@ public class Ecriture {
             sauv.write("FINCHOIX");
             sauv.newLine();
 
+            // Nous ne gérons pas les couts, il reste donc
+            sauv.write("COUTS");
+            sauv.newLine();
+            sauv.write("FINCOUTS");
+
             // FIN
             sauv.close();
         }
