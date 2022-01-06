@@ -518,7 +518,7 @@ public class Commandes
 
                 if(g3==true){
                     groupe=getGrp(con, groupe.size(), s1.getId());
-                    for(int i=0; i<3;i++){
+                    for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 3, groupe.get(i));
 
                     }
