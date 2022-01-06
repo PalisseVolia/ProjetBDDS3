@@ -24,8 +24,8 @@ public class Ecriture {
         }
     }
 
-    private static void CreateLineEtudiant( String line , String idEtudiant , List<Integer> listeIdGroupeDistinct, List<Integer> listeIdGrpModule , List<Integer> listePositions , List<Integer> listeNumeroVoeux , List<Integer> listeIdModule , BufferedWriter sauv ) throws IOException {// Si on change d'étudiant, on va créer une nouvelle ligne
-        line = idEtudiant + ";";
+    private static void CreateLineEtudiant(String idEtudiant , List<Integer> listeIdGroupeDistinct, List<Integer> listeIdGrpModule , List<Integer> listePositions , List<Integer> listeNumeroVoeux , List<Integer> listeIdModule , BufferedWriter sauv ) throws IOException {// Si on change d'étudiant, on va créer une nouvelle ligne
+        String line = idEtudiant + ";";
         MakeListeidGroupeDistinct(listeIdGroupeDistinct,listeIdGrpModule);
 
         // Ajouter les voeux de module dans l'ordre pour chaque groupe de module
@@ -79,7 +79,6 @@ public class Ecriture {
         sauv.newLine();
 
         // Réinitialiser les variables
-        line = null;
         listeIdModule.clear();
         listeNumeroVoeux.clear();
         listeIdGrpModule.clear();
@@ -92,9 +91,7 @@ public class Ecriture {
             BufferedWriter sauv = new BufferedWriter(new FileWriter(chemin + "Choix_Voeux_idSemestre_"+idSemestre+".txt",false));
 
             //Initialisation des variables
-            String spst = null; // String PreparedSTatement = spst
-            String historique = null; // variable pour savoir l'état passé d'une autre variable
-            String line = null; //ligne à écrire dans le fichier txt
+            String spst; // String PreparedSTatement = spst
 
             /*Ecriture de NG et NC
             *
@@ -176,7 +173,7 @@ public class Ecriture {
                             listeNumeroVoeux.add(rset.getInt(3));
                             listeIdGrpModule.add(rset.getInt(4));
                         }
-                        else if(idEtudiant == rset.getString(1)){
+                        else if(idEtudiant.equals(rset.getString(1))){
                             // Si on a eu cet étudiant avant
                             listeIdModule.add(rset.getInt(2));
                             listeNumeroVoeux.add(rset.getInt(3));
@@ -186,7 +183,7 @@ public class Ecriture {
                             // Si on change d'étudiant
 
                             // Créer une nouvelle ligne
-                            CreateLineEtudiant( line , idEtudiant , listeIdGroupeDistinct, listeIdGrpModule , listePositions , listeNumeroVoeux , listeIdModule , sauv );
+                            CreateLineEtudiant( idEtudiant , listeIdGroupeDistinct, listeIdGrpModule , listePositions , listeNumeroVoeux , listeIdModule , sauv );
 
                             //Initialiser pour le nouvel étudiant
                             idEtudiant = rset.getString(1);
@@ -196,7 +193,7 @@ public class Ecriture {
                         }
                     }
                     //Ajouter le dernier étudiant
-                    CreateLineEtudiant( line , idEtudiant , listeIdGroupeDistinct, listeIdGrpModule , listePositions , listeNumeroVoeux , listeIdModule , sauv );
+                    CreateLineEtudiant( idEtudiant , listeIdGroupeDistinct, listeIdGrpModule , listePositions , listeNumeroVoeux , listeIdModule , sauv );
                 }
             }
             catch (IOException e) {
