@@ -502,7 +502,7 @@ public class Initialisation {
     public static final String[][] SEMESTRE = new String[][]{
             {"2019", "1", "3", "1"},//semestre 1 de l'année 2019, il y a 3 NG (Nombre de Groupes) et 1 NC (Nombre de Choix)
             {"2019", "2", "3", "1"},
-            {"2020", "1", "4", "2"},
+            {"2020", "1", "3", "1"},
             {"2020", "2", "3", "1"},
     };
 

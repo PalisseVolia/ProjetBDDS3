@@ -20,13 +20,8 @@ public class Commandes
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
             List<Module> res = new ArrayList<Module>();
             res= getModule(con, 1, 1);
-            for(int i=0;i<res.size();i++){
-                System.out.println(res.get(i).toString());
-            }
-            ArrayList<String> f= getVoeux(con,120);
-            for(int i=0;i<f.size();i++){
-                System.out.println(f.get(i));
-            }
+            NouvSemestre(con, true, true, false);
+            AjoutGrpModule(con, 5, 3, 1);
 
 
             
@@ -500,13 +495,13 @@ public class Commandes
                 
                 AjoutSemestre(con, String.valueOf(sem.getAnnee()) , String.valueOf(sem.getNumero()), String.valueOf(sem.getNg()), String.valueOf(sem.getNc()));
                 ArrayList<Integer> groupe = new ArrayList<Integer>();
-            System.out.println(sem.toString());
+                System.out.println(sem.toString());
                 if(g1==true){
                     groupe=getGrp(con, 1, s1.getId());
                     System.out.println("groupe1");
                     System.out.println(groupe.get(0)+";"+groupe.get(1)+";"+groupe.get(2));
 
-                    for(int i=0; i<3;i++){
+                    for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 1, groupe.get(i));
 
                     }
@@ -518,7 +513,7 @@ public class Commandes
                     groupe=getGrp(con, 2, s1.getId());
                     System.out.println("groupe2");
                     System.out.println(groupe.get(0)+";"+groupe.get(1)+";"+groupe.get(2));
-                    for(int i=0; i<3;i++){
+                    for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 2, groupe.get(i));
 
                     }
@@ -526,7 +521,7 @@ public class Commandes
                 }
 
                 if(g3==true){
-                    groupe=getGrp(con, 3, s1.getId());
+                    groupe=getGrp(con, groupe.size(), s1.getId());
                     System.out.println("groupe3");
                     System.out.println(groupe.get(0)+";"+groupe.get(1)+";"+groupe.get(2));
                     for(int i=0; i<3;i++){
