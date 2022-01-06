@@ -23,7 +23,11 @@ public class Commandes
             for(int i=0;i<res.size();i++){
                 System.out.println(res.get(i).toString());
             }
-            NouvSemestre(con, true, false , false);
+            ArrayList<String> f= getVoeux(con,120);
+            for(int i=0;i<f.size();i++){
+                System.out.println(f.get(i));
+            }
+
 
             
         } catch (Exception err) {
@@ -49,7 +53,7 @@ public class Commandes
         //méthode permettant d'effacer une table de la base de donnée
         try {
             try (Statement st = con.createStatement()) {
-                st.executeUpdate("drop table " + nomtable);
+                st.executeUpdate("drop table " + nomtable+" cascade");
             }
         } catch (Exception e) {
             System.out.println("table " + nomtable + " inexistante, première éxécution ?");
@@ -229,6 +233,26 @@ public class Commandes
             pst.setInt(1, Integer.parseInt(idsemestre));
             pst.setInt(2, Integer.parseInt(idetudiant));
             pst.setInt(3, Integer.parseInt(idmodule));
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutVoeux");
+        }
+    }
+
+    public static void AjoutVoeux(Connection con, int idsemestre, int idetudiant, int idmodule, int numeroVoeux) throws SQLException {
+        //méthode permettant d'ajouter un groupe de module
+        try ( PreparedStatement pst = con.prepareStatement(
+                """
+                insert into Voeux (idSemestre,idEtudiant,idModule,numeroVoeux)
+                values (?,?,?,?)
+                """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, (idsemestre));
+            pst.setInt(2, (idetudiant));
+            pst.setInt(3, (idmodule));
+            pst.setInt(4, (numeroVoeux));
             pst.executeUpdate();
             con.commit();
         }catch (SQLException ex) {
@@ -938,6 +962,61 @@ public class Commandes
         }
         return 0;
     }
+    
+    public static ArrayList<String> getVoeux(Connection con, int idEtudiant) throws SQLException{
+        //méthode permettant de récupérer les voeux de l'étudiant pour tout les semestres
+        ArrayList<String> voeux = new ArrayList<String>();
+        try (PreparedStatement st = con.prepareStatement(
+            """
+            SELECT Module.intitule from Module 
+            JOIN Voeux ON Module.id=Voeux.idModule
+            JOIN Semestre ON Voeux.idSemestre=Semestre.id
+            JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
+            WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
+            and Semestre.numero=(SELECT MAX(numero) from Semestre)
+            ORDER BY Semestre.annee desc, Semestre.numero desc
+             """    
+        )){
+            st.setInt(1, idEtudiant);
+            
+            ResultSet rres = st.executeQuery(
+                        ); {
+            while (rres.next()) {
+                voeux.add(rres.getString(1));
+                
+            }
+        
+            return voeux;
+        }
+     }
+    }
 
-
+    public static boolean VoeuxExiste(Connection con, int idSemestre, int idEtudiant, int idModule){
+        //Vérifier qu'un voeux a été fait à un semestre donné
+        int res = 0;
+        boolean test=false;
+        String r = "SELECT COUNT(*) FROM Voeux WHERE Voeux.idSemestre = ? and Voeux.idEtudiant= ? and Voeux.idModule = ?";
+        System.out.println("ici");
+        try (PreparedStatement pst = con.prepareStatement(r)){
+            pst.setInt(1,idSemestre);
+            pst.setInt(2,idEtudiant);
+            pst.setInt(3,idModule);
+                ResultSet rres = pst.executeQuery(
+                        ); {
+            while (rres.next()) {
+                res = rres.getInt(1);
+            }
+            if (res >= 1){
+                test=true;
+            } else {
+                test= false;
+            }
+        } 
+        }catch (SQLException e) {
+            
+            System.out.println("Error : Commandes.java VoeuxExiste(con,id) "+e);
+        
+    }
+        return test;
+    }
 }
