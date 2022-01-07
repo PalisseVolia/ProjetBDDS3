@@ -12,6 +12,7 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.selection.SingleSelect;
 
+import classes.Etudiant;
 import classes.Module;
 import bdd.Commandes;
 
@@ -151,16 +152,14 @@ public class EtudiantPageContent extends VerticalLayout{
                 idgrp = 3;
             }
             try {
-                //TODO: ajout du voeu à l'étudiant pour le groupe donné
                 Commandes.AjoutVoeux(con, Commandes.getidsem(con), id, mod.getId(), idgrp, 1);
                 listevoeux = Commandes.getVoeux(con, id);
                 valider.setVisible(false);
                 grid.setVisible(false);
                 choisi.setVisible(true);
                 choisi.setValue("Votre voeu pour le groupe " + idgrp + " est :\n" + listevoeux.get(idgrp-1));
-                //TODO: ajout d'une zone de texte indiquant le voeux choisi
             } catch (Exception e) {
-                //TODO: handle exception
+                System.out.println("Erreur lors de l'ajout de voeu à l'étudiant");
             }
         });
     }
@@ -198,6 +197,17 @@ public class EtudiantPageContent extends VerticalLayout{
         //connexion à la base de donnée
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
         List<Module> module = getModulegrp(con);
-        grid.setItems(module);
+        List<Module> finalmodule = new ArrayList<Module>();
+        Etudiant etu = new Etudiant();
+        
+        for (int i = 0; i < module.size(); i++) {
+            if (module.get(i).getClasseacceptee().equals("TOUTES")) {
+                finalmodule.add(module.get(i));
+            }
+            if (module.get(i).getClasseacceptee().equals(etu.getClasse())) {
+                finalmodule.add(module.get(i));
+            }
+        }
+        grid.setItems(finalmodule);
     }
 }
