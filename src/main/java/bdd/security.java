@@ -23,7 +23,7 @@ public class security {
             // Créer le mdpHash au format String
             mdpHash += byteMdp2[0];
             for (int i = 1 ; i < 32 ; i++){
-                mdpHash += ";"+String.valueOf(byteMdp2[i]);
+                mdpHash += ";"+byteMdp2[i];
             }
             if(mdpHash.length() > 250) { //Pour éviter la création de mdp trop long dans la bdd on coupe les mdp > 250 caractères
                 mdpHash = mdpHash.substring(0,249);
