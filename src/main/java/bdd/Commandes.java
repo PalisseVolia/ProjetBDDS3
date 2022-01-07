@@ -17,7 +17,8 @@ public class Commandes
         //pour faire des tests
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             System.out.println("Méthode sans preparedstatement :");
-            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");           
+            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55"); 
+            System.out.println(getEtudiant(con,120).toString());          
         } catch (Exception err) {
             System.out.println("Error : Commandes.java main() "+err);
         }
@@ -568,6 +569,35 @@ public class Commandes
             }
         
             return res;
+        }
+     }
+    }
+    
+    public static Etudiant getEtudiant(Connection con, int idEtu) throws SQLException {
+        //méthode permettant de recuperer les modules d'un groupe
+        Etudiant etudiant = new Etudiant();
+        try (PreparedStatement st = con.prepareStatement(
+            """
+            select * from Etudiant
+            where id= ?
+             """    
+        )){
+            st.setInt(1, idEtu);
+            
+                ResultSet tla = st.executeQuery(
+                        ); {
+            while (tla.next()) {
+                etudiant.setid(tla.getInt(1));
+                etudiant.setNom(tla.getString(2));
+                etudiant.setPrenom(tla.getString(3));
+                etudiant.setAdresse(tla.getString(4));
+                etudiant.setMdp(tla.getString(5));
+                etudiant.setDateNaiss(tla.getDate(6));
+                etudiant.setDisponibilite(tla.getString(7));
+                etudiant.setClasse(tla.getString(8));
+            }
+        
+            return etudiant;
         }
      }
     }

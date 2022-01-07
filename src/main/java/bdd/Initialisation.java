@@ -86,7 +86,6 @@ public class Initialisation {
                         prenom varchar(200) not null,
                         adresse varchar(200) not null,
                         mdp varchar(300) not null,
-                        dateNaissance date not null
                         )
                         """);
         }
@@ -101,11 +100,11 @@ public class Initialisation {
     }
 
     public static final String[][] ADMIN = new String[][] {
-            { "Thibaut", "Waechter", "ThibautWaechter@insa-strasbourg.fr", "mdp1", "2002-01-01" },
-            { "Thibault", "Tostain", "ThibaultTostain@insa-strasbourg.fr", "mdp2", "2002-01-01" },
-            { "Volia", "Palisse", "VoliaPalisse@insa-strasbourg.fr", "mdp3", "2002-01-01" },
-            { "Francois", "de Bertrand de Beuvron", "FrancoisDeBertrandDeBeuvron@insa-strasbourg.fr", "tititoto", "1980-01-01" },
-            { "Amadou", "Coulibaly", "AmadouCoulibaly@insa-strasbourg.fr", "tititoto", "1980-01-01" },
+            { "Thibaut", "Waechter", "ThibautWaechter@insa-strasbourg.fr", "mdp1"},
+            { "Thibault", "Tostain", "ThibaultTostain@insa-strasbourg.fr", "mdp2"},
+            { "Volia", "Palisse", "VoliaPalisse@insa-strasbourg.fr", "mdp3"},
+            { "Francois", "de Bertrand de Beuvron", "FrancoisDeBertrandDeBeuvron@insa-strasbourg.fr", "tititoto" },
+            { "Amadou", "Coulibaly", "AmadouCoulibaly@insa-strasbourg.fr", "tititoto" },
     };
 
     public static List<String> prenomsAdmin() {
