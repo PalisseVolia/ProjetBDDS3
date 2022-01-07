@@ -982,6 +982,7 @@ public class Commandes
     public static ArrayList<String> getVoeux(Connection con, int idEtudiant) throws SQLException{
         //méthode permettant de récupérer les voeux de l'étudiant pour tout les semestres
         ArrayList<String> voeux = new ArrayList<String>();
+        for (int i=1;i<4;i++){
         try (PreparedStatement st = con.prepareStatement(
             """
             SELECT Module.intitule,Module.id, Semestre.annee,Semestre.numero from Module 
@@ -989,11 +990,12 @@ public class Commandes
             JOIN Semestre ON Voeux.idSemestre=Semestre.id
             JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
             WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
-            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule=1.
+            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule=?.
             ORDER BY Semestre.annee desc, Semestre.numero desc
              """    
         )){
             st.setInt(1, idEtudiant);
+            st.setInt(2, i);
             
             ResultSet rres = st.executeQuery(
                         ); {
@@ -1007,57 +1009,8 @@ public class Commandes
         
             
         }
-     }  try (PreparedStatement st = con.prepareStatement(
-            """
-            SELECT Module.intitule,Module.id, Semestre.annee,Semestre.numero from Module 
-            JOIN Voeux ON Module.id=Voeux.idModule
-            JOIN Semestre ON Voeux.idSemestre=Semestre.id
-            JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
-            WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
-            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule=2.
-            ORDER BY Semestre.annee desc, Semestre.numero desc
-            """    
-        )){
-            st.setInt(1, idEtudiant);
-        
-            ResultSet rres = st.executeQuery(
-                    ); {
-            while (rres.next()) {
-                System.out.println("'"+rres.getString(1)+"'");
-                voeux.add(rres.getString(1));
-            
-        }if (rres.wasNull()) {
-            voeux.add(" ");
-        }
-    
-        
-    }
- }      try (PreparedStatement st = con.prepareStatement(
-            """
-            SELECT Module.intitule,Module.id, Semestre.annee,Semestre.numero from Module 
-            JOIN Voeux ON Module.id=Voeux.idModule
-            JOIN Semestre ON Voeux.idSemestre=Semestre.id
-            JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
-            WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
-            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule=3.
-            ORDER BY Semestre.annee desc, Semestre.numero desc
-             """    
-        )){
-            st.setInt(1, idEtudiant);
-    
-            ResultSet rres = st.executeQuery(
-                        ); {
-           while (rres.next()) {
-                System.out.println("'"+rres.getString(1)+"'");
-                voeux.add(rres.getString(1));
-            
-        }if (rres.wasNull()) {
-            voeux.add(" ");
-        }
-
-    
-}
-}
+     }
+      }  
      return voeux;
     }
 
