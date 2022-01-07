@@ -19,9 +19,8 @@ public class Commandes
             System.out.println("Méthode sans preparedstatement :");
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
             List<Module> res = new ArrayList<Module>();
-            res= getModule(con, 1, 1);
-            NouvSemestre(con, true, true, false);
-            AjoutGrpModule(con, 5, 3, 1);
+            ArrayList<String> voeux = new ArrayList<String>();
+            voeux= getVoeux(con, 120);
 
 
             
@@ -217,17 +216,18 @@ public class Commandes
 }
 
 
-    public static void AjoutVoeux(Connection con, String idsemestre, String idetudiant, String idmodule) throws SQLException {
+    public static void AjoutVoeux(Connection con, String idsemestre, String idetudiant, String idmodule,String idgrp) throws SQLException {
         //méthode permettant d'ajouter un groupe de module
         try ( PreparedStatement pst = con.prepareStatement(
                 """
-                insert into Voeux (idSemestre,idEtudiant,idModule)
-                values (?,?,?)
+                insert into Voeux (idSemestre,idEtudiant,idModule,idGrpModule)
+                values (?,?,?,?)
                 """)) {
             con.setAutoCommit(false);
             pst.setInt(1, Integer.parseInt(idsemestre));
             pst.setInt(2, Integer.parseInt(idetudiant));
             pst.setInt(3, Integer.parseInt(idmodule));
+            pst.setInt(4, Integer.parseInt(idgrp));
             pst.executeUpdate();
             con.commit();
         }catch (SQLException ex) {
@@ -236,7 +236,7 @@ public class Commandes
         }
     }
 
-    public static void AjoutVoeux(Connection con, int idsemestre, int idetudiant, int idmodule, int numeroVoeux) throws SQLException {
+    public static void AjoutVoeux(Connection con, int idsemestre, int idetudiant, int idmodule, int idgrp, int numeroVoeux) throws SQLException {
         //méthode permettant d'ajouter un groupe de module
         try ( PreparedStatement pst = con.prepareStatement(
                 """
@@ -952,7 +952,7 @@ public class Commandes
         return 0;
     }
     
-    public static ArrayList<String> getVoeux(Connection con, int idEtudiant) throws SQLException{
+    public static ArrayList<String> getAllVoeux(Connection con, int idEtudiant) throws SQLException{
         //méthode permettant de récupérer les voeux de l'étudiant pour tout les semestres
         ArrayList<String> voeux = new ArrayList<String>();
         try (PreparedStatement st = con.prepareStatement(
@@ -979,6 +979,89 @@ public class Commandes
         }
      }
     }
+    public static ArrayList<String> getVoeux(Connection con, int idEtudiant) throws SQLException{
+        //méthode permettant de récupérer les voeux de l'étudiant pour tout les semestres
+        ArrayList<String> voeux = new ArrayList<String>();
+        try (PreparedStatement st = con.prepareStatement(
+            """
+            SELECT Module.intitule,Module.id, Semestre.annee,Semestre.numero from Module 
+            JOIN Voeux ON Module.id=Voeux.idModule
+            JOIN Semestre ON Voeux.idSemestre=Semestre.id
+            JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
+            WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
+            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule=1.
+            ORDER BY Semestre.annee desc, Semestre.numero desc
+             """    
+        )){
+            st.setInt(1, idEtudiant);
+            
+            ResultSet rres = st.executeQuery(
+                        ); {
+           while (rres.next()) {
+                System.out.println("'"+rres.getString(1)+"'");
+                voeux.add(rres.getString(1));
+            
+        }if (rres.wasNull()) {
+            voeux.add(" ");
+        }
+        
+            
+        }
+     }  try (PreparedStatement st = con.prepareStatement(
+            """
+            SELECT Module.intitule,Module.id, Semestre.annee,Semestre.numero from Module 
+            JOIN Voeux ON Module.id=Voeux.idModule
+            JOIN Semestre ON Voeux.idSemestre=Semestre.id
+            JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
+            WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
+            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule=2.
+            ORDER BY Semestre.annee desc, Semestre.numero desc
+            """    
+        )){
+            st.setInt(1, idEtudiant);
+        
+            ResultSet rres = st.executeQuery(
+                    ); {
+            while (rres.next()) {
+                System.out.println("'"+rres.getString(1)+"'");
+                voeux.add(rres.getString(1));
+            
+        }if (rres.wasNull()) {
+            voeux.add(" ");
+        }
+    
+        
+    }
+ }      try (PreparedStatement st = con.prepareStatement(
+            """
+            SELECT Module.intitule,Module.id, Semestre.annee,Semestre.numero from Module 
+            JOIN Voeux ON Module.id=Voeux.idModule
+            JOIN Semestre ON Voeux.idSemestre=Semestre.id
+            JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
+            WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
+            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule=3.
+            ORDER BY Semestre.annee desc, Semestre.numero desc
+             """    
+        )){
+            st.setInt(1, idEtudiant);
+    
+            ResultSet rres = st.executeQuery(
+                        ); {
+           while (rres.next()) {
+                System.out.println("'"+rres.getString(1)+"'");
+                voeux.add(rres.getString(1));
+            
+        }if (rres.wasNull()) {
+            voeux.add(" ");
+        }
+
+    
+}
+}
+     return voeux;
+    }
+
+    
 
     public static boolean VoeuxExiste(Connection con, int idSemestre, int idEtudiant, int idModule){
         //Vérifier qu'un voeux a été fait à un semestre donné
