@@ -988,13 +988,13 @@ public class Commandes
             SELECT Module.intitule,Module.id, Semestre.annee,Semestre.numero from Module 
             JOIN Voeux ON Module.id=Voeux.idModule
             JOIN Semestre ON Voeux.idSemestre=Semestre.id
-            JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
-            WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
-            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule=?.
+            WHERE Voeux.idEtudiant= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
+            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule= ?
             ORDER BY Semestre.annee desc, Semestre.numero desc
              """    
         )){
             st.setInt(1, idEtudiant);
+            System.out.println(i);
             st.setInt(2, i);
             boolean empty=true;
             ResultSet rres = st.executeQuery(
