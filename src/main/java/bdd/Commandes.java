@@ -21,6 +21,9 @@ public class Commandes
             List<Module> res = new ArrayList<Module>();
             ArrayList<String> voeux = new ArrayList<String>();
             voeux= getVoeux(con, 120);
+            for(int i =0;i<voeux.size();i++){
+                System.out.println(voeux.get(i));
+            }
 
 
             
@@ -240,14 +243,15 @@ public class Commandes
         //méthode permettant d'ajouter un groupe de module
         try ( PreparedStatement pst = con.prepareStatement(
                 """
-                insert into Voeux (idSemestre,idEtudiant,idModule,numeroVoeux)
-                values (?,?,?,?)
+                insert into Voeux (idSemestre,idEtudiant,idModule,idGrpModule,numeroVoeux)
+                values (?,?,?,?,?)
                 """)) {
             con.setAutoCommit(false);
             pst.setInt(1, (idsemestre));
             pst.setInt(2, (idetudiant));
             pst.setInt(3, (idmodule));
-            pst.setInt(4, (numeroVoeux));
+            pst.setInt(4, (idgrp));
+            pst.setInt(5, (numeroVoeux));
             pst.executeUpdate();
             con.commit();
         }catch (SQLException ex) {
@@ -994,13 +998,11 @@ public class Commandes
              """    
         )){
             st.setInt(1, idEtudiant);
-            System.out.println(i);
             st.setInt(2, i);
             boolean empty=true;
             ResultSet rres = st.executeQuery(
                         ); {
            while (rres.next()) {
-                System.out.println("'"+rres.getString(1)+"'");
                 voeux.add(rres.getString(1));
                 empty=false;
             
@@ -1045,4 +1047,5 @@ public class Commandes
     }
         return test;
     }
+
 }
