@@ -57,8 +57,8 @@ public class LoginPageContent extends VerticalLayout{
         // TODO: temporaire remplissage de test
         // email.setValue("ThibautWaechter@insa-strasbourg.fr");
         // mdp.setValue("mdp1");
-        email.setValue("JosephLaforge@insa-strasbourg.fr");
-        mdp.setValue("GKbdb1qn");
+        email.setValue("BeltanePariseau@insa-strasbourg.fr");
+        mdp.setValue("Jgfh!FGsFz4");
         valider.setEnabled(true);
 
         //style settings
