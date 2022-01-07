@@ -984,17 +984,17 @@ public class Commandes
      }
     }
     public static ArrayList<String> getVoeux(Connection con, int idEtudiant) throws SQLException{
-        //méthode permettant de récupérer les voeux de l'étudiant pour tout les semestres
+        //méthode permettant de récupérer les voeux de l'étudiant pour un semestre
         ArrayList<String> voeux = new ArrayList<String>();
         for (int i=1;i<4;i++){
         try (PreparedStatement st = con.prepareStatement(
             """
-            SELECT Module.intitule,Module.id, Semestre.annee,Semestre.numero from Module 
+            SELECT Module.intitule from Module 
             JOIN Voeux ON Module.id=Voeux.idModule
             JOIN Semestre ON Voeux.idSemestre=Semestre.id
             WHERE Voeux.idEtudiant= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
-            and Semestre.numero=(SELECT MAX(numero) from Semestre) and Voeux.idGrpModule= ?
-            ORDER BY Semestre.annee desc, Semestre.numero desc
+            and Semestre.numero=(SELECT MAX(numero) from Semestre WHERE Semestre.annee=(SELECT MAX(annee) from Semestre)) 
+			and Voeux.idGrpModule= ?
              """    
         )){
             st.setInt(1, idEtudiant);
