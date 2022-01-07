@@ -104,6 +104,8 @@ public class Initialisation {
             { "Thibaut", "Waechter", "ThibautWaechter@insa-strasbourg.fr", "mdp1", "2002-01-01" },
             { "Thibault", "Tostain", "ThibaultTostain@insa-strasbourg.fr", "mdp2", "2002-01-01" },
             { "Volia", "Palisse", "VoliaPalisse@insa-strasbourg.fr", "mdp3", "2002-01-01" },
+            { "Francois", "de Bertrand de Beuvron", "FrancoisDeBertrandDeBeuvron@insa-strasbourg.fr", "tititoto", "1980-01-01" },
+            { "Amadou", "Coulibaly", "AmadouCoulibaly@insa-strasbourg.fr", "tititoto", "1980-01-01" },
     };
 
     public static List<String> prenomsAdmin() {
@@ -153,7 +155,7 @@ public class Initialisation {
                         prenom varchar(200) not null,
                         adresse varchar(200) not null,
                         mdp varchar(300) not null,
-                        dateNaissance date not null,
+                        dateNaissance date not null ,
                         disponibilite varchar(200) not null,
                         classe varchar(200) not null
                         )
@@ -168,8 +170,7 @@ public class Initialisation {
         List<String> classe = Initialisation.classe();
         for (int i = 0; i < ETUDIANT.length; i++) {
             //TODO HASH
-            System.out.println(noms.get(i)+" mdp :"+security.CreateHashv2(mdps.get(i)));
-            Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i), dates.get(i), "dispo", classe.get(i));
+            Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i),mdps.get(i), dates.get(i), "dispo", classe.get(i));
         }
     }
 
