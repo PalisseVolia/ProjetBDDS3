@@ -17,16 +17,7 @@ public class Commandes
         //pour faire des tests
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             System.out.println("Méthode sans preparedstatement :");
-            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
-            List<Module> res = new ArrayList<Module>();
-            ArrayList<String> voeux = new ArrayList<String>();
-            voeux= getVoeux(con, 120);
-            for(int i =0;i<voeux.size();i++){
-                System.out.println(voeux.get(i));
-            }
-
-
-            
+            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");           
         } catch (Exception err) {
             System.out.println("Error : Commandes.java main() "+err);
         }
@@ -956,18 +947,16 @@ public class Commandes
         return 0;
     }
     
-    public static ArrayList<String> getAllVoeux(Connection con, int idEtudiant) throws SQLException{
+    public static ArrayList<Integer> getAllVoeux(Connection con, int idEtudiant) throws SQLException{
         //méthode permettant de récupérer les voeux de l'étudiant pour tout les semestres
-        ArrayList<String> voeux = new ArrayList<String>();
+        ArrayList<Integer> voeux = new ArrayList<Integer>();
         try (PreparedStatement st = con.prepareStatement(
             """
-            SELECT Module.intitule from Module 
+            SELECT Module.id from Module 
             JOIN Voeux ON Module.id=Voeux.idModule
-            JOIN Semestre ON Voeux.idSemestre=Semestre.id
             JOIN Etudiant ON Voeux.idEtudiant=Etudiant.id
-            WHERE Etudiant.id= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
-            and Semestre.numero=(SELECT MAX(numero) from Semestre)
-            ORDER BY Semestre.annee desc, Semestre.numero desc
+            WHERE Etudiant.id= ? 
+            ORDER BY Voeux.idSemestre desc
              """    
         )){
             st.setInt(1, idEtudiant);
@@ -975,7 +964,7 @@ public class Commandes
             ResultSet rres = st.executeQuery(
                         ); {
             while (rres.next()) {
-                voeux.add(rres.getString(1));
+                voeux.add(rres.getInt(1));
                 
             }
         

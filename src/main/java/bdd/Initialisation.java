@@ -167,6 +167,8 @@ public class Initialisation {
         List<String> dates = Initialisation.datenaiss();
         List<String> classe = Initialisation.classe();
         for (int i = 0; i < ETUDIANT.length; i++) {
+            //TODO HASH
+            System.out.println(noms.get(i)+" mdp :"+security.CreateHashv2(mdps.get(i)));
             Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i), dates.get(i), "dispo", classe.get(i));
         }
     }
@@ -183,7 +185,7 @@ public class Initialisation {
         {"Eugène", "Chrétien", "EugeneChretien@insa-strasbourg.fr","LeBronJames7!8", "2002-03-16","true","GE2"},
         {"Searlas", "Guay", "SearlasGuay@insa-strasbourg.fr", "Xaeo14!5B", "2002-01-28","true","GE2"},
         {"Pierrette", "Gadbois", "PierretteGadbois@insa-strasbourg.fr","fnzhj65H", "2002-05-04","true","GE2"},
-        {"Zurie", "Bonami", "ZurieBonami@insa-strasbourg.fr","nfjezG;14",  "2002-05-23","true","GE2"},
+        {"Zurie", "Bonami", "ZurieBonami@insa-strasbourg.fr","nfjezG14",  "2002-05-23","true","GE2"},
         {"Alphonsine", "Cloutier", "AlphonsineCloutier@insa-strasbourg.fr","dhebdG4","2002-10-03","true","GE2"},
         {"Pierpont", "Dumont", "PierpontDumont@insa-strasbourg.fr",  "thibautlbp01", "2002-11-05","true","GE2"},
         {"Yvon", "Primeau", "YvonPrimeau@insa-strasbourg.fr", "thibautsecritsansl88","2002-09-21","true","GE2"},
