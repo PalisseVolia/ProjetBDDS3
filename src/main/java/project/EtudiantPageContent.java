@@ -2,12 +2,14 @@ package project;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.selection.SingleSelect;
 
 import classes.Module;
@@ -21,6 +23,7 @@ public class EtudiantPageContent extends VerticalLayout{
     private Grid<Module> grid;
     private Button valider;
     private RadioButtonGroup<String> grpselect;
+    private TextArea choisi;
     private Module mod;
 
     public EtudiantPageContent(int id) throws SQLException, ClassNotFoundException {
@@ -34,8 +37,13 @@ public class EtudiantPageContent extends VerticalLayout{
 
         //creation du tableau affichant les modules
         grid = new Grid<>(Module.class, false);
+        grid.setVisible(false);
         setthegridmg();
         add(grid);
+
+        choisi = new TextArea();
+        choisi.setVisible(false);
+        add(choisi);
 
         //creation du bouton permettant la suppression de modules
         valider = new Button();
@@ -44,25 +52,71 @@ public class EtudiantPageContent extends VerticalLayout{
         add(valider);
 
         //style settings
+        valider.setWidth("13em");
+        choisi.setWidth("30em");
         setAlignItems(Alignment.CENTER);
 
         //connexion à la bdd
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
         
-        //lorsqu'on selectionne un autre groupe on actualise le tableau
+        ArrayList<String> listevoeux = Commandes.getVoeux(con, id);
+        try {
+            if (listevoeux.get(0).equals(" ")) {
+                grid.setVisible(true);
+                choisi.setVisible(false);
+                valider.setVisible(true);
+                setthegridmg();
+            } else {
+                grid.setVisible(false);
+                choisi.setVisible(true);
+                valider.setVisible(false);
+                choisi.setValue("Votre voeu pour le premier groupe est :\n" + listevoeux.get(0));
+            }
+        } catch (Exception e) {
+            System.out.println("erreur lors de l'actualisation du tableau de modules");
+        }
         grpselect.addValueChangeListener(t -> {
             try {
                 String value = grpselect.getValue().toString();
                 if (value.contains("Groupe 1")) {
-
+                    if (listevoeux.get(0).equals(" ")) {
+                        grid.setVisible(true);
+                        choisi.setVisible(false);
+                        valider.setVisible(true);
+                        setthegridmg();
+                    } else {
+                        grid.setVisible(false);
+                        choisi.setVisible(true);
+                        valider.setVisible(false);
+                        choisi.setValue("Votre voeu pour le premier groupe est :\n" + listevoeux.get(0));
+                    }
                 }
                 if (value.contains("Groupe 2")) {
-                    
+                    if (listevoeux.get(1).equals(" ")) {
+                        grid.setVisible(true);
+                        choisi.setVisible(false);
+                        valider.setVisible(true);
+                        setthegridmg();
+                    } else {
+                        grid.setVisible(false);
+                        choisi.setVisible(true);
+                        valider.setVisible(false);
+                        choisi.setValue("Votre voeu pour le second groupe est :\n" + listevoeux.get(1));
+                    }
                 }
                 if (value.contains("Groupe 3")) {
-                    
+                    if (listevoeux.get(2).equals(" ")) {
+                        grid.setVisible(true);
+                        choisi.setVisible(false);
+                        valider.setVisible(true);
+                        setthegridmg();
+                    } else {
+                        grid.setVisible(false);
+                        choisi.setVisible(true);
+                        valider.setVisible(false);
+                        choisi.setValue("Votre voeu pour le troisième groupe est :\n" + listevoeux.get(2));
+                    }
                 }
-                setthegridmg();
             } catch (Exception e) {
                 System.out.println("erreur lors de l'actualisation du tableau de modules");
             }
