@@ -85,7 +85,7 @@ public class Initialisation {
                         nom varchar(200) not null,
                         prenom varchar(200) not null,
                         adresse varchar(200) not null,
-                        mdp varchar(300) not null,
+                        mdp varchar(300) not null
                         )
                         """);
         }
@@ -93,9 +93,8 @@ public class Initialisation {
         List<String> prenoms = Initialisation.prenomsAdmin();
         List<String> adresses = Initialisation.adresseAdmin();
         List<String> mdps = Initialisation.mdpAdmin();
-        List<String> dates = Initialisation.datenaissAdmin();
         for (int i = 0; i < ADMIN.length; i++) {
-            Commandes.AjoutAdmin(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i), dates.get(i));
+            Commandes.AjoutAdmin(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i));
         }
     }
 
@@ -135,11 +134,6 @@ public class Initialisation {
         }).toList();
     }
 
-    public static List<String> datenaissAdmin() {
-        return Arrays.stream(ADMIN).map((t) -> {
-            return t[4];
-        }).toList();
-    }
     //-----------------------------------------------------------------
     //              CREATION DE LA TABLE DES ETUDIANTS
     //-----------------------------------------------------------------

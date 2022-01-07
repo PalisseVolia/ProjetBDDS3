@@ -109,19 +109,18 @@ public class Commandes
         }
     }
 
-    public static void AjoutAdmin(Connection con,  String nom, String prenom, String adresse, String mdp, String date) throws SQLException {
+    public static void AjoutAdmin(Connection con,  String nom, String prenom, String adresse, String mdp) throws SQLException {
         //méthode permettant d'ajouter un administrateur à la base de donnée
         try (PreparedStatement pst = con.prepareStatement(
                 """
-                        INSERT INTO Admin (nom,prenom,adresse,mdp,dateNaissance)
-                        VALUES (?,?,?,?,?)
+                        INSERT INTO Admin (nom,prenom,adresse,mdp)
+                        VALUES (?,?,?,?)
                         """)){
             con.setAutoCommit(false);
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, adresse);
             pst.setString(4, security.CreateHashv3(mdp));
-            pst.setDate(5, java.sql.Date.valueOf(date));
             pst.executeUpdate();
             con.commit();
         } catch (SQLException ex) {
