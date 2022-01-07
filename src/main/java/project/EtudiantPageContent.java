@@ -23,7 +23,8 @@ public class EtudiantPageContent extends VerticalLayout{
     private RadioButtonGroup<String> grpselect;
     private Module mod;
 
-    public EtudiantPageContent() throws SQLException, ClassNotFoundException {
+    public EtudiantPageContent(int id) throws SQLException, ClassNotFoundException {
+        System.out.println(id);
         //creation des boutons de choix de groupe à afficher
         grpselect = new RadioButtonGroup<>();
         grpselect.setItems("Groupe 1", "Groupe 2", "Groupe 3");
@@ -51,6 +52,16 @@ public class EtudiantPageContent extends VerticalLayout{
         //lorsqu'on selectionne un autre groupe on actualise le tableau
         grpselect.addValueChangeListener(t -> {
             try {
+                String value = grpselect.getValue().toString();
+                if (value.contains("Groupe 1")) {
+
+                }
+                if (value.contains("Groupe 2")) {
+                    
+                }
+                if (value.contains("Groupe 3")) {
+                    
+                }
                 setthegridmg();
             } catch (Exception e) {
                 System.out.println("erreur lors de l'actualisation du tableau de modules");
@@ -59,7 +70,7 @@ public class EtudiantPageContent extends VerticalLayout{
             valider.setEnabled(false);
         });
 
-        //lorsqu'une ligne du tableau sélectionnée on crée un module
+        //TODO: maj desc (lorsqu'une ligne du tableau sélectionnée on crée un module)
         SingleSelect<Grid<Module>, Module> moduselec = grid.asSingleSelect();
         moduselec.addValueChangeListener(selection -> {
             mod = selection.getValue();
