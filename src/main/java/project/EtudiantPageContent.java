@@ -25,6 +25,7 @@ public class EtudiantPageContent extends VerticalLayout{
     private RadioButtonGroup<String> grpselect;
     private TextArea choisi;
     private Module mod;
+    private ArrayList<String> listevoeux;
 
     public EtudiantPageContent(int id) throws SQLException, ClassNotFoundException {
         System.out.println(id);
@@ -59,7 +60,7 @@ public class EtudiantPageContent extends VerticalLayout{
         //connexion à la bdd
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
         
-        ArrayList<String> listevoeux = Commandes.getVoeux(con, id);
+        listevoeux = Commandes.getVoeux(con, id);
         try {
             if (listevoeux.get(0).equals(" ")) {
                 grid.setVisible(true);
@@ -77,6 +78,7 @@ public class EtudiantPageContent extends VerticalLayout{
         }
         grpselect.addValueChangeListener(t -> {
             try {
+                listevoeux = Commandes.getVoeux(con, id);
                 String value = grpselect.getValue().toString();
                 if (value.contains("Groupe 1")) {
                     if (listevoeux.get(0).equals(" ")) {
@@ -135,7 +137,6 @@ public class EtudiantPageContent extends VerticalLayout{
             //TODO: en fonction de si l'étudiant à déjà un groupe affiche les modules/indicatif de la selection
         });
         
-        //suppression du module selectionné au clic du bouton
         valider.addClickListener(t -> {
             //recuperation du groupe selectionne
             String value = grpselect.getValue().toString();
@@ -151,8 +152,14 @@ public class EtudiantPageContent extends VerticalLayout{
             }
             try {
                 //TODO: ajout du voeu à l'étudiant pour le groupe donné
+                System.out.println(Commandes.getidsem(con));
+                System.out.println(id);
+                System.out.println(mod.getId());
+                System.out.println(idgrp);
+                Commandes.AjoutVoeux(con, Commandes.getidsem(con), id, mod.getId(), idgrp, 1);
                 valider.setVisible(false);
                 grid.setVisible(false);
+                System.out.println(Commandes.getVoeux(con, id));
                 //TODO: ajout d'une zone de texte indiquant le voeux choisi
             } catch (Exception e) {
                 //TODO: handle exception
