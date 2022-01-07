@@ -996,14 +996,15 @@ public class Commandes
         )){
             st.setInt(1, idEtudiant);
             st.setInt(2, i);
-            
+            boolean empty=true;
             ResultSet rres = st.executeQuery(
                         ); {
            while (rres.next()) {
                 System.out.println("'"+rres.getString(1)+"'");
                 voeux.add(rres.getString(1));
+                empty=false;
             
-        }if (rres.wasNull()) {
+        }if (empty==true) {
             voeux.add(" ");
         }
         
