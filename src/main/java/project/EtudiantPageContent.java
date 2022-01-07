@@ -59,13 +59,27 @@ public class EtudiantPageContent extends VerticalLayout{
         //connexion à la bdd
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
         
-        //lorsqu'on selectionne un autre groupe on actualise le tableau
         ArrayList<String> listevoeux = Commandes.getVoeux(con, id);
+        try {
+            if (listevoeux.get(0).equals(" ")) {
+                grid.setVisible(true);
+                choisi.setVisible(false);
+                valider.setVisible(true);
+                setthegridmg();
+            } else {
+                grid.setVisible(false);
+                choisi.setVisible(true);
+                valider.setVisible(false);
+                choisi.setValue("Votre voeu pour le premier groupe est :\n" + listevoeux.get(0));
+            }
+        } catch (Exception e) {
+            System.out.println("erreur lors de l'actualisation du tableau de modules");
+        }
         grpselect.addValueChangeListener(t -> {
             try {
                 String value = grpselect.getValue().toString();
                 if (value.contains("Groupe 1")) {
-                    if (listevoeux.get(0).equals("")) {
+                    if (listevoeux.get(0).equals(" ")) {
                         grid.setVisible(true);
                         choisi.setVisible(false);
                         valider.setVisible(true);
@@ -78,7 +92,7 @@ public class EtudiantPageContent extends VerticalLayout{
                     }
                 }
                 if (value.contains("Groupe 2")) {
-                    if (listevoeux.get(1).equals("")) {
+                    if (listevoeux.get(1).equals(" ")) {
                         grid.setVisible(true);
                         choisi.setVisible(false);
                         valider.setVisible(true);
@@ -91,7 +105,7 @@ public class EtudiantPageContent extends VerticalLayout{
                     }
                 }
                 if (value.contains("Groupe 3")) {
-                    if (listevoeux.get(2).equals("")) {
+                    if (listevoeux.get(2).equals(" ")) {
                         grid.setVisible(true);
                         choisi.setVisible(false);
                         valider.setVisible(true);
