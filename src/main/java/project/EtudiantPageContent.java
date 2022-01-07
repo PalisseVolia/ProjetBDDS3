@@ -152,14 +152,12 @@ public class EtudiantPageContent extends VerticalLayout{
             }
             try {
                 //TODO: ajout du voeu à l'étudiant pour le groupe donné
-                System.out.println(Commandes.getidsem(con));
-                System.out.println(id);
-                System.out.println(mod.getId());
-                System.out.println(idgrp);
                 Commandes.AjoutVoeux(con, Commandes.getidsem(con), id, mod.getId(), idgrp, 1);
+                listevoeux = Commandes.getVoeux(con, id);
                 valider.setVisible(false);
                 grid.setVisible(false);
-                System.out.println(Commandes.getVoeux(con, id));
+                choisi.setVisible(true);
+                choisi.setValue("Votre voeu pour le groupe " + idgrp + " est :\n" + listevoeux.get(idgrp-1));
                 //TODO: ajout d'une zone de texte indiquant le voeux choisi
             } catch (Exception e) {
                 //TODO: handle exception
