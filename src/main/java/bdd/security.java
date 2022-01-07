@@ -80,4 +80,34 @@ public class security {
         //Return, si le programme n'a pas réussi, alors retourne "null" sinon retourne le mdp hashé
         return mdpHash;
     }
+
+    public static String CreateHashv3 (String mdpInit){                                                                                  
+                                                                                                                                   
+        //Initialisation des variables                                                                                                 
+        String mdpHash = null; //Prend le mdp une fois hashé                                                                           
+        byte [] byteMdp; //prend le mdp en forme de tableau de bytes, sert à appliquer la fonction de hash                             
+                                                                                                                                       
+        //Algorithme de hash                                                                                                           
+        byteMdp = mdpInit.getBytes(); //on transforme notre mdp en tableau de byte                                                     
+        try{                                                                                                                           
+            MessageDigest mesDig = MessageDigest.getInstance("SHA-256"); //On dit le style de hash que l'on souhaite, ici le sha-256   
+            mesDig.update(byteMdp); // remplie le mesDig avec une suite de bytes définie pour pouvoir appliquer le code de hash        
+            byte[] byteMdp2 = mesDig.digest(); // On applique le code de hash                                                          
+            for (int i = 0 ; i < 32 ; i++){                                                                                            
+                if(byteMdp2[i]<0){                                                                                                     
+                    byteMdp2[i] = (byte) -byteMdp2[i];                                                                                 
+                }                                                                                                                      
+                mdpHash += ";"+byteMdp2[i];                                                                                            
+            }                                                                                                                          
+            //Pour éviter la création de mdp trop long dans la bdd                                                                     
+            if(mdpHash.length() > 250) {                                                                                               
+                mdpHash = mdpHash.substring(0,249);                                                                                    
+            }                                                                                                                          
+        } catch (NoSuchAlgorithmException e) {                                                                                         
+            System.out.println("Error : security.java / String.CreateHash(String) : "+e);// S'il y a une erreur alors l'afficher       
+        }                                                                                                                              
+                                                                                                                                       
+        //Return, si le programme n'a pas réussi, alors retourne "null" sinon retourne le mdp hashé                                    
+        return mdpHash;                                                                                                                
+    }
 }

@@ -96,7 +96,7 @@ public class Commandes
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, adresse);
-            pst.setString(4,(mdp));
+            pst.setString(4,security.CreateHashv3(mdp));
             pst.setDate(5, java.sql.Date.valueOf(date));
             pst.setString(6, dispo);
             pst.setString(7, classe);
@@ -119,7 +119,7 @@ public class Commandes
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, adresse);
-            pst.setString(4, mdp);
+            pst.setString(4, security.CreateHashv3(mdp));
             pst.setDate(5, java.sql.Date.valueOf(date));
             pst.executeUpdate();
             con.commit();
@@ -628,6 +628,7 @@ public class Commandes
         int test= 3; 
         Etudiant etudiant = new Etudiant();
         Admin admin = new Admin();
+        mdp=security.CreateHashv3(mdp);
         try (PreparedStatement p = con.prepareStatement(r)) {
             p.setString(1, adresse);
             p.setString(2, mdp);
