@@ -17,7 +17,8 @@ public class Commandes
         //pour faire des tests
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             System.out.println("Méthode sans preparedstatement :");
-            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");           
+            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55"); 
+            System.out.println(getEtudiant(con,120).toString());          
         } catch (Exception err) {
             System.out.println("Error : Commandes.java main() "+err);
         }
@@ -96,7 +97,7 @@ public class Commandes
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, adresse);
-            pst.setString(4,(mdp));
+            pst.setString(4,security.CreateHashv3(mdp));
             pst.setDate(5, java.sql.Date.valueOf(date));
             pst.setString(6, dispo);
             pst.setString(7, classe);
@@ -119,7 +120,7 @@ public class Commandes
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, adresse);
-            pst.setString(4, mdp);
+            pst.setString(4, security.CreateHashv3(mdp));
             pst.setDate(5, java.sql.Date.valueOf(date));
             pst.executeUpdate();
             con.commit();
@@ -571,6 +572,35 @@ public class Commandes
         }
      }
     }
+    
+    public static Etudiant getEtudiant(Connection con, int idEtu) throws SQLException {
+        //méthode permettant de recuperer les modules d'un groupe
+        Etudiant etudiant = new Etudiant();
+        try (PreparedStatement st = con.prepareStatement(
+            """
+            select * from Etudiant
+            where id= ?
+             """    
+        )){
+            st.setInt(1, idEtu);
+            
+                ResultSet tla = st.executeQuery(
+                        ); {
+            while (tla.next()) {
+                etudiant.setid(tla.getInt(1));
+                etudiant.setNom(tla.getString(2));
+                etudiant.setPrenom(tla.getString(3));
+                etudiant.setAdresse(tla.getString(4));
+                etudiant.setMdp(tla.getString(5));
+                etudiant.setDateNaiss(tla.getDate(6));
+                etudiant.setDisponibilite(tla.getString(7));
+                etudiant.setClasse(tla.getString(8));
+            }
+        
+            return etudiant;
+        }
+     }
+    }
 
     public static List<Module> getModule(Connection con, int idSemestre, int idGroupe) throws SQLException {
         //méthode permettant de recuperer les modules d'un groupe
@@ -628,6 +658,7 @@ public class Commandes
         int test= 3; 
         Etudiant etudiant = new Etudiant();
         Admin admin = new Admin();
+        mdp=security.CreateHashv3(mdp);
         try (PreparedStatement p = con.prepareStatement(r)) {
             p.setString(1, adresse);
             p.setString(2, mdp);
