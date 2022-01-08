@@ -4,6 +4,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
+// =======================================================================================
+// Entete des pages etudiant
+// =======================================================================================
+
 public class EtudiantPageEntete extends HorizontalLayout {
     private VuePrincipale main;
     

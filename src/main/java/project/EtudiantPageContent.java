@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -17,7 +18,7 @@ import classes.Module;
 import bdd.Commandes;
 
 // =======================================================================================
-// Contenu de la page de gestion de groupes Administrateur
+// Contenu de la page de choix de voeux etudiant
 // =======================================================================================
 
 public class EtudiantPageContent extends VerticalLayout{
@@ -29,7 +30,6 @@ public class EtudiantPageContent extends VerticalLayout{
     private ArrayList<String> listevoeux;
 
     public EtudiantPageContent(int id) throws SQLException, ClassNotFoundException {
-        System.out.println(id);
         //creation des boutons de choix de groupe à afficher
         grpselect = new RadioButtonGroup<>();
         grpselect.setItems("Groupe 1", "Groupe 2", "Groupe 3");
@@ -40,9 +40,10 @@ public class EtudiantPageContent extends VerticalLayout{
         //creation du tableau affichant les modules
         grid = new Grid<>(Module.class, false);
         grid.setVisible(false);
-        setthegridmg();
+        setthegridmg(id);
         add(grid);
 
+        //creation de la zone de texte indiquant le module voulu
         choisi = new TextArea();
         choisi.setVisible(false);
         add(choisi);
@@ -56,18 +57,20 @@ public class EtudiantPageContent extends VerticalLayout{
         //style settings
         valider.setWidth("13em");
         choisi.setWidth("30em");
+        valider.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
         setAlignItems(Alignment.CENTER);
 
         //connexion à la bdd
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
         
+        //Si l'étudiant a déjà fait des voeux dans certain groupes l'interface de selection est remplacée par une indication du voeu effectué
         listevoeux = Commandes.getVoeux(con, id);
         try {
             if (listevoeux.get(0).equals(" ")) {
                 grid.setVisible(true);
                 choisi.setVisible(false);
                 valider.setVisible(true);
-                setthegridmg();
+                setthegridmg(id);
             } else {
                 grid.setVisible(false);
                 choisi.setVisible(true);
@@ -86,7 +89,7 @@ public class EtudiantPageContent extends VerticalLayout{
                         grid.setVisible(true);
                         choisi.setVisible(false);
                         valider.setVisible(true);
-                        setthegridmg();
+                        setthegridmg(id);
                     } else {
                         grid.setVisible(false);
                         choisi.setVisible(true);
@@ -99,7 +102,7 @@ public class EtudiantPageContent extends VerticalLayout{
                         grid.setVisible(true);
                         choisi.setVisible(false);
                         valider.setVisible(true);
-                        setthegridmg();
+                        setthegridmg(id);
                     } else {
                         grid.setVisible(false);
                         choisi.setVisible(true);
@@ -112,7 +115,7 @@ public class EtudiantPageContent extends VerticalLayout{
                         grid.setVisible(true);
                         choisi.setVisible(false);
                         valider.setVisible(true);
-                        setthegridmg();
+                        setthegridmg(id);
                     } else {
                         grid.setVisible(false);
                         choisi.setVisible(true);
@@ -127,7 +130,7 @@ public class EtudiantPageContent extends VerticalLayout{
             valider.setEnabled(false);
         });
 
-        //TODO: maj desc (lorsqu'une ligne du tableau sélectionnée on crée un module)
+        //lorsqu'une ligne du tableau est selectionnée le bouton de validation est activé
         SingleSelect<Grid<Module>, Module> moduselec = grid.asSingleSelect();
         moduselec.addValueChangeListener(selection -> {
             mod = selection.getValue();
@@ -135,9 +138,9 @@ public class EtudiantPageContent extends VerticalLayout{
             if (selection != null) {
                 valider.setEnabled(true);
             }
-            //TODO: en fonction de si l'étudiant à déjà un groupe affiche les modules/indicatif de la selection
         });
         
+        //lorsque le bouton de validation est cliqué on ajoute le module sélectionné comme voeux à l'étudiant
         valider.addClickListener(t -> {
             //recuperation du groupe selectionne
             String value = grpselect.getValue().toString();
@@ -186,7 +189,7 @@ public class EtudiantPageContent extends VerticalLayout{
     }
 
     //methode mettant a jour le tableau de modules
-    public void setthegridmg() throws SQLException, ClassNotFoundException {
+    public void setthegridmg(int id) throws SQLException, ClassNotFoundException {
         grid.removeAllColumns();
         //tableau contenant tous les modules
         grid.addColumn(Module::getIntitule).setHeader("Intitule").setSortable(true).setAutoWidth(true).setFlexGrow(0);
@@ -196,16 +199,39 @@ public class EtudiantPageContent extends VerticalLayout{
         grid.addColumn(Module::getClasseacceptee).setHeader("Classes acceptées").setSortable(true).setAutoWidth(true).setFlexGrow(0);
         //connexion à la base de donnée
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
+        //liste des modules du groupe
         List<Module> module = getModulegrp(con);
+        //liste des modules qui seront ajoutés au tableau
         List<Module> finalmodule = new ArrayList<Module>();
-        Etudiant etu = new Etudiant();
-        
+        //liste de tous les modules choisis par l'étudiant durant les semestres précédents
+        List<Integer> precedents = Commandes.getAllVoeux(con, id);
+        //etudiant actuel
+        Etudiant etu = Commandes.getEtudiant(con, id);
+        //Pour chaque module du groupe
         for (int i = 0; i < module.size(); i++) {
-            if (module.get(i).getClasseacceptee().equals("TOUTES")) {
-                finalmodule.add(module.get(i));
+            //Si toutes les classes sont acceptées ou la classe de l'étudiant est acceptée
+            if (module.get(i).getClasseacceptee().equals("TOUTE")) {
+                boolean dejapris = false;
+                for (int j = 0; j < precedents.size(); j++) {
+                    //on vérifie si les modules du groupe on été séléctionnés auparavant ou non
+                    if (module.get(i).getId() == precedents.get(j)) {
+                        dejapris = true;
+                    }
+                }
+                if (dejapris == false) {
+                    finalmodule.add(module.get(i));
+                }
             }
             if (module.get(i).getClasseacceptee().equals(etu.getClasse())) {
-                finalmodule.add(module.get(i));
+                boolean dejapris = false;
+                for (int j = 0; j < precedents.size(); j++) {
+                    if (module.get(i).getId() == precedents.get(j)) {
+                        dejapris = true;
+                    }
+                }
+                if (dejapris == false) {
+                    finalmodule.add(module.get(i));
+                }
             }
         }
         grid.setItems(finalmodule);
