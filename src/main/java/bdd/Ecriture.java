@@ -4,8 +4,19 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Ecriture {
+
+    public static void main(String[] args) {
+        //à run pour initialiser la bdd
+        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
+            ecrireFichier(con, 4);
+        } catch (Exception err) {
+            System.out.println("Error : Commandes.java main() "+err);
+        }
+
+    }
 
     public static void ecrireFichier (Connection con, int idSemestre) throws SQLException {
         //
@@ -20,13 +31,15 @@ public class Ecriture {
             * NC
             *
             * */
-            final String requeteA ="SELECT ng,nc from Semestres WHERE id = "+idSemestre;
+            final String requeteA ="SELECT ng,nc from Semestre WHERE id = "+idSemestre;
             try ( Statement st = con.createStatement()) {
                 try ( ResultSet res = st.executeQuery(requeteA)) {
+                    while(res.next()){
                     sauv.write(res.getInt(1));
                     sauv.newLine();
                     sauv.write(res.getInt(2));
                     sauv.newLine();
+                    }
                 }
             }
             catch (IOException e) {
@@ -46,7 +59,7 @@ public class Ecriture {
             * */
             sauv.write("MODULES");
             sauv.newLine();
-            final String requeteB ="SELECT DISTINCT Modules.id,GrpModule.id from Semestres Join GrpModule ON "+idSemestre+" = GrpModule.id Join Modules ON GrpModule.id = Modules.id";
+            final String requeteB ="SELECT DISTINCT Module.id, GrpModule.idGroupe from Semestre Join GrpModule ON  GrpModule.idSemestre = "+ idSemestre +" Join Module ON GrpModule.idModule = Module.id";
             try ( Statement st = con.createStatement()) {
                 try ( ResultSet res = st.executeQuery(requeteB)) {
                     while(res.next()) {
@@ -70,6 +83,34 @@ public class Ecriture {
             * FINCHOIX
             *
             * */
+            sauv.write("CHOIX");
+            sauv.newLine();
+            ArrayList<Integer> nb = Commandes.etudiantvoeux(con, idSemestre);
+            for(int i=0;i<nb.size();i++){
+            final String requeteC ="SELECT Voeux.idModule from Voeux where idSemestre= "+idSemestre+ "and idEtudiant = " +nb.get(i);
+            try ( Statement st = con.createStatement()) {
+                try ( ResultSet res = st.executeQuery(requeteC)) {
+                    ArrayList<Integer> v= new ArrayList<Integer>();
+                    while(res.next()) {
+                        v.add(res.getInt(1));
+                        
+                    }
+                    sauv.write(nb.get(i) + ";");
+                    for(int j=0;j<v.size();j++){
+                        sauv.write(v.get(j)+";");
+                     }
+                sauv.newLine(); 
+                }
+            }
+            catch (IOException e) {
+                System.out.println("ERROR : ecricreFichier : Ecriture de NG et NC : ecriture impossible : "+e);
+            }
+             
+        }
+            sauv.write("FINCHOIX");
+            sauv.newLine();
+
+
             sauv.close();
         }
         catch (IOException err) {System.out.println("ERROR : ecricreFichier : impossible de créer le fichier d'écriture");}
