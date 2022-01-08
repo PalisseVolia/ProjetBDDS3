@@ -18,7 +18,7 @@ import classes.Module;
 import bdd.Commandes;
 
 // =======================================================================================
-// Contenu de la page de gestion de groupes Administrateur
+// Contenu de la page de choix de voeux etudiant
 // =======================================================================================
 
 public class EtudiantPageContent extends VerticalLayout{
