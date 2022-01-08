@@ -139,7 +139,6 @@ public class Initialisation {
     //-----------------------------------------------------------------
 
     public static void tableEtudiant(Connection con) throws SQLException {
-        //TODO: finir la disponibilté
         try (Statement st = con.createStatement()) {
             st.executeUpdate("""
                         create table Etudiant(

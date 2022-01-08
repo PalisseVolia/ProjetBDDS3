@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Ecriture {
 
-    private static void MakeListeidGroupeDistinct(List ListeidGroupeDistinct, List ListeidGroupe){
+    private static void MakeListeidGroupeDistinct(List<Integer> ListeidGroupeDistinct, List<Integer> ListeidGroupe){
         int p;
         ListeidGroupeDistinct.add(ListeidGroupe.get(0));
         for(int i = 0 ; i < ListeidGroupe.toArray().length ; i++){
@@ -88,7 +88,7 @@ public class Ecriture {
     public static void ecrireFichier (Connection con, int idSemestre, String chemin) throws SQLException {
         //
         try {
-            BufferedWriter sauv = new BufferedWriter(new FileWriter(chemin + "Choix_Voeux_idSemestre_"+idSemestre+".txt",false));
+            BufferedWriter sauv = new BufferedWriter(new FileWriter(chemin + "/Choix_Voeux_idSemestre_"+idSemestre+".txt",false));
 
             //Initialisation des variables
             String spst; // String PreparedSTatement = spst

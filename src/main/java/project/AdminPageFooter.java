@@ -15,6 +15,7 @@ public class AdminPageFooter extends HorizontalLayout{
     private Button bSemestre;
     private Button bbibliotheque;
     private Button bgroupes;
+    private Button bimpression;
     
     public AdminPageFooter(VuePrincipale mainvue) {
         main = mainvue;
@@ -50,6 +51,11 @@ public class AdminPageFooter extends HorizontalLayout{
         bSemestre.setText("Semestre");
         add(bSemestre);
 
+        //bouton d'impression permettant la création d'un fichier texte
+        bimpression = new Button();
+        bimpression.setText("Impression");
+        add(bimpression);
+
         //Listeners permettant d'afficher le contenu correspondant aux boutons cliqués
         baccueil.addClickListener(t -> {
             baccueil.setVisible(false);
@@ -58,6 +64,7 @@ public class AdminPageFooter extends HorizontalLayout{
             bbibliotheque.setVisible(true);
             bgroupes.setVisible(true);
             bSemestre.setVisible(true);
+            bimpression.setVisible(true);
             try {
                 main.setMainContent(new AdminPageContent()); 
             } catch (Exception e) {
@@ -71,7 +78,7 @@ public class AdminPageFooter extends HorizontalLayout{
             bbibliotheque.setVisible(true);
             bgroupes.setVisible(true);
             bSemestre.setVisible(true);
-
+            bimpression.setVisible(true);
             try {
                 main.setMainContent(new AdminPageContentEtudiant());
             } catch (Exception e) {
@@ -85,7 +92,7 @@ public class AdminPageFooter extends HorizontalLayout{
             bbibliotheque.setVisible(true);
             bgroupes.setVisible(true);
             bSemestre.setVisible(true);
-
+            bimpression.setVisible(true);
             try {
                 main.setMainContent(new AdminPageContentModule());
             } catch (Exception e) {
@@ -99,7 +106,7 @@ public class AdminPageFooter extends HorizontalLayout{
             bbibliotheque.setVisible(false);
             bgroupes.setVisible(true);
             bSemestre.setVisible(true);
-            
+            bimpression.setVisible(true);
             try {
                 main.setMainContent(new AdminPageContentBibliotheqe());
             } catch (Exception e) {
@@ -113,7 +120,7 @@ public class AdminPageFooter extends HorizontalLayout{
             bbibliotheque.setVisible(true);
             bgroupes.setVisible(false);
             bSemestre.setVisible(true);
-
+            bimpression.setVisible(true);
             try {
                 main.setMainContent(new AdminPageContentGroupes());
             } catch (Exception e) {
@@ -127,8 +134,23 @@ public class AdminPageFooter extends HorizontalLayout{
             bbibliotheque.setVisible(true);
             bgroupes.setVisible(true);
             bSemestre.setVisible(false);
+            bimpression.setVisible(true);
             try {
                 main.setMainContent(new AdminPageContentSemestre());
+            } catch (Exception e) {
+                System.out.println("problème durant la création de la page d'ajout de Semestre");
+            }
+        });
+        bimpression.addClickListener(t -> {
+            baccueil.setVisible(true);
+            bEtudiant.setVisible(true);
+            bModule.setVisible(true);
+            bbibliotheque.setVisible(true);
+            bgroupes.setVisible(true);
+            bSemestre.setVisible(true);
+            bimpression.setVisible(false);
+            try {
+                main.setMainContent(new AdminPageContentImpression());
             } catch (Exception e) {
                 System.out.println("problème durant la création de la page d'ajout de Semestre");
             }
