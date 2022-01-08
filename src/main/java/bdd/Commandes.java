@@ -541,6 +541,47 @@ public class Commandes
             }
         }
     }
+
+    public static int etudiantsize(Connection con) throws SQLException {
+        //méthode permettant de recuperer le nombre d'etudiant
+        int nb=0;
+        try ( Statement st = con.createStatement()) {
+            try ( ResultSet rres = st.executeQuery(
+                    """
+                    select COUNT(*) from Etudiant
+                     """)) {
+            while (rres.next()) {
+                nb= (rres.getInt(1));  
+            }
+        
+            return nb;
+        }
+     }
+    }
+
+    public static ArrayList<Integer> etudiantvoeux(Connection con, int idSemestre) throws SQLException {
+        //méthode permettant de recuperer les etudiants ayant fait des voeux pour un semestre donné
+        ArrayList<Integer> a= new ArrayList<Integer>();
+        try (PreparedStatement st = con.prepareStatement(
+            """
+            select idEtudiant from Voeux
+            where idSemestre= ?
+             """    
+        )){
+            st.setInt(1, idSemestre);
+            
+                ResultSet tla = st.executeQuery(
+                        ); {
+            while (tla.next()) {
+                a.add(tla.getInt(1));
+            }
+        
+            return a;
+        }
+     }
+    }
+
+
     
     public static Etudiant getEtudiant(Connection con, int idEtu) throws SQLException {
         //méthode permettant de recuperer les modules d'un groupe
