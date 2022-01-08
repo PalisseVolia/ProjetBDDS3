@@ -20,12 +20,12 @@ public class Ecriture {
             * NC
             *
             * */
-            final String requeteA ="SELECT ng,nc from Semestres WHERE id = '"+idSemestre+"'";
+            final String requeteA ="SELECT ng,nc from Semestres WHERE id = "+idSemestre;
             try ( Statement st = con.createStatement()) {
                 try ( ResultSet res = st.executeQuery(requeteA)) {
-                    sauv.write(res.getString(1));
+                    sauv.write(res.getInt(1));
                     sauv.newLine();
-                    sauv.write(res.getString(1));
+                    sauv.write(res.getInt(2));
                     sauv.newLine();
                 }
             }
@@ -50,7 +50,7 @@ public class Ecriture {
             try ( Statement st = con.createStatement()) {
                 try ( ResultSet res = st.executeQuery(requeteB)) {
                     while(res.next()) {
-                        sauv.write(res.getString(1) + ";"+ res.getString(2) );
+                        sauv.write(res.getInt(1) + ";"+ res.getInt(2) );
                         sauv.newLine();
                     }
                 }
