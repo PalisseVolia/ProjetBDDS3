@@ -8,7 +8,7 @@ import java.sql.*;
 public class Initialisation {
 
     public static void main(String[] args) {
-        //pour faire des tests
+        //à run pour initialiser la bdd
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             init();
         } catch (Exception err) {
