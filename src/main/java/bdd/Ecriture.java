@@ -59,7 +59,7 @@ public class Ecriture {
             * */
             sauv.write("MODULES");
             sauv.newLine();
-            final String requeteB ="SELECT DISTINCT Module.id, GrpModule.idGroupe from Semestre Join GrpModule ON  GrpModule.idSemestre = "+ idSemestre +" Join Module ON GrpModule.idModule = Module.id";
+            final String requeteB ="SELECT DISTINCT Module.id, GrpModule.idGroupe from Semestre Join GrpModule ON  GrpModule.idSemestre = "+ idSemestre +" Join Module ON GrpModule.idModule = Module.id order by GrpModule.idGroupe";
             try ( Statement st = con.createStatement()) {
                 try ( ResultSet res = st.executeQuery(requeteB)) {
                     while(res.next()) {
