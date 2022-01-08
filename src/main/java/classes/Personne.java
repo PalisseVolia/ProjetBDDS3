@@ -1,15 +1,19 @@
 package classes;
 
+// =======================================================================================
+// Classe permettant de créer des objets "personne"
+// =======================================================================================
+
 public abstract class Personne {
-//on crée cette classe mère afin de différencier les administrateurs des étudiants
+//on crée cette classe mère qui sert de base aux admins et aux étudiants
 //Ces deux classes ont des attributs en commun mais doivent être différenciés
 
     //définition des attributs
-    private int id;
-    private String nom;
-    private String prenom;
-    private String adresse;
-    private String mdp;
+    private int id;             //identifiant de la personne
+    private String nom;         //nom
+    private String prenom;      //prenom
+    private String adresse;     //email
+    private String mdp;         //mot de passe
 
     //Constructeur
     public Personne(int id,String nom, String prenom, String adresse, String mdp) {
@@ -21,7 +25,6 @@ public abstract class Personne {
     }
 
     public Personne() {
-
     }
 
     //méthodes get
@@ -66,6 +69,7 @@ public abstract class Personne {
         this.mdp = mdp;
     }
 
+    //toString
     public String toString(){
         String s = this.getNom() + ";" + this.getPrenom() + ";" + this.getAdresse() + ";" + this.getMdp();
         return s;
@@ -83,6 +87,5 @@ public abstract class Personne {
 
         return s;
     }
-
 
 }

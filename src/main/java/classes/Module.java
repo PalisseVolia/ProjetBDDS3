@@ -1,16 +1,20 @@
 package classes;
 
+// =======================================================================================
+// Classe permettant de créer des objets "module"
+// =======================================================================================
+
 public class Module {
 
-    //Attributs
-    int id; //id du module
-    String intitule; // nom du module
-    String description; // description du module
-    int nbPlaceMax; // nombre de personne maximum pouvant s'inscire au module
-    int nbPlaceMin; // nombre de personne nécessaire à l'ouverture du module
-    String classeacceptee; // exemple GE/GCE/MIQ
+    //définition des attributs
+    int id;                 //id unique du module
+    String intitule;        //nom du module
+    String description;     //description du module
+    int nbPlaceMax;         //nombre de personne maximum pouvant s'inscire au module
+    int nbPlaceMin;         //nombre de personne nécessaire à l'ouverture du module
+    String classeacceptee;  //exemple GE/GCE/MIQ
 
-    //Constructeur
+    //Constructeurs
     public Module(int id, String intitule, String description, int nbPlaceMax, int nbPlaceMin, String classeacceptee) {
         this.id = id;
         this.intitule = intitule;
@@ -20,19 +24,14 @@ public class Module {
         this.classeacceptee = classeacceptee;
     }
 
+    public Module(){
+    }
+    
+    //méthodes get
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Module(){
-
-    }
-
-    //méthodes get
     public String getIntitule() {
         return intitule;
     }
@@ -54,6 +53,10 @@ public class Module {
     }
 
     //méthodes set
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setIntitule(String intitule) {
         this.intitule = intitule;
     }
@@ -74,6 +77,7 @@ public class Module {
         this.classeacceptee = classeacceptee;
     }
 
+    //toString
     public String toString() {
         return "Module{" + "intitule=" + intitule + ", description=" + description + ", nbPlaceMax=" + nbPlaceMax
                 + ", nbPlaceMin=" + nbPlaceMin + ", classeacceptee=" + classeacceptee + '}';
