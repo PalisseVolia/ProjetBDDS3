@@ -439,12 +439,23 @@ public class Commandes
         boolean test=false;
         int count=0;
         String r = "SELECT COUNT(*) from etudiant WHERE adresse = ? ";
+        //on cherche chez les étudiant
         try (PreparedStatement st = con.prepareStatement(r)){
             st.setString(1, adresse);
                 ResultSet rres = st.executeQuery(
                         ); {
             while (rres.next()) {
                 count = rres.getInt(1);
+            }
+
+            String s = "SELECT COUNT(*) from admin WHERE adresse = ? ";
+            //on cherche chez les admins
+            try (PreparedStatement t = con.prepareStatement(s)){
+            t.setString(1, adresse);
+                ResultSet res = st.executeQuery(
+                        ); {
+            while (rres.next()) {
+                count = count + res.getInt(1);
             }
 
             if (count >= 1){
@@ -456,7 +467,9 @@ public class Commandes
         
         return test;
                         }
-    }
+                }
+            }
+        }
     }
 
     public static void NouvSemestre(Connection con, boolean g1, boolean g2, boolean g3)throws SQLException{
