@@ -63,7 +63,6 @@ public class AdminPageContentSemestre extends VerticalLayout{
                     if (value.contains("Groupe 3")) {
                         grp3 = true;
                     }
-                //TODO: groupe 3 non copié
                 Commandes.NouvSemestre(con, grp1, grp2, grp3);
                 Notification notif = Notification.show("Nouveau semestre créé");
                 notif.setPosition(Position.BOTTOM_CENTER);
