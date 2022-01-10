@@ -134,7 +134,7 @@ public class AdminPageContentModule extends VerticalLayout{
             String maxstr = String.valueOf(tmp2);
             try {
                 Commandes.AjoutModule(con, intitule.getValue(), desc.getValue(), maxstr, minstr, dispo.getValue());
-                Notification notif = Notification.show("L'adresse Email existe déjà :(");
+                Notification notif = Notification.show("Le module " + intitule.getValue() + " a été ajouté.");
                 notif.setPosition(Position.BOTTOM_CENTER);
             } catch (Exception e) {
                 System.out.println("Erreur lors de l'ajout d'un module depuis l'interface graphique");

@@ -37,6 +37,7 @@ public class VuePrincipale extends VerticalLayout{
         //remplacement par les layouts de la page de Login
         this.setEntete(new LoginPageEntete());
         this.setMainContent(new LoginPageContent(this));
+        this.setFooter(new LoginPageFooter());
         //style de la page de login
         setHeight("75%");
         setAlignItems(Alignment.CENTER);
