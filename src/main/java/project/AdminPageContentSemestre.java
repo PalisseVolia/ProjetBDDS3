@@ -8,6 +8,8 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
 
 import bdd.Commandes;
 
@@ -61,8 +63,9 @@ public class AdminPageContentSemestre extends VerticalLayout{
                     if (value.contains("Groupe 3")) {
                         grp3 = true;
                     }
-                //TODO: groupe 3 non copié
                 Commandes.NouvSemestre(con, grp1, grp2, grp3);
+                Notification notif = Notification.show("Nouveau semestre créé");
+                notif.setPosition(Position.BOTTOM_CENTER);
             } catch (Exception e) {
                 System.out.println("erreur durant la connexion à la bdd : ajout de semestre IG");
             }

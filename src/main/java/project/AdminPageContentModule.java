@@ -7,6 +7,8 @@ import java.util.List;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -132,6 +134,8 @@ public class AdminPageContentModule extends VerticalLayout{
             String maxstr = String.valueOf(tmp2);
             try {
                 Commandes.AjoutModule(con, intitule.getValue(), desc.getValue(), maxstr, minstr, dispo.getValue());
+                Notification notif = Notification.show("L'adresse Email existe déjà :(");
+                notif.setPosition(Position.BOTTOM_CENTER);
             } catch (Exception e) {
                 System.out.println("Erreur lors de l'ajout d'un module depuis l'interface graphique");
             }

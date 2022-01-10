@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.sql.*;
 
-//classe contenant tout les éléments permettant d'initialiser la base de donnée
+// =======================================================================================
+// Classe permettant d'initialiser la base de donnée
+// =======================================================================================
+
 public class Initialisation {
 
     public static void main(String[] args) {
-        //pour faire des tests
+        //à run pour initialiser la bdd
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             init();
         } catch (Exception err) {
@@ -21,8 +24,6 @@ public class Initialisation {
     public static void init() {
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             //suppression des tables
-           
-            
             Commandes.tabledrop(con, "etudiant");
             System.out.println("etudiant supprimee");
             Commandes.tabledrop(con, "admin");
@@ -35,8 +36,6 @@ public class Initialisation {
             System.out.println("grpmod supprimee");
             Commandes.tabledrop(con, "voeux");
             System.out.println("voeu supprimee");
-            //Commandes.dataBaseDrop(con, "postgres");
-
             System.out.println("Suppression des tables terminée");
 
             //création des tables
@@ -52,26 +51,12 @@ public class Initialisation {
             System.out.println("grpmod cree");
             tableVoeux(con);
             System.out.println("voeux cree");
-
             System.out.println("Création des tables terminée");
 
         } catch (Exception err) {
             System.out.println(err);
         }
     }
-
-    public static void testrequete() {
-        //méthode a utiliser pour tester les requetes : la bdd doit deja etre initialisée
-        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
-            
-            System.out.println("Méthode sans preparedstatement :");
-            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55");
-
-        } catch (Exception err) {
-            System.out.println(err);
-        }
-    }
-
 
     //-----------------------------------------------------------------
     //              CREATION DE LA TABLE DES ADMINS
@@ -139,7 +124,6 @@ public class Initialisation {
     //-----------------------------------------------------------------
 
     public static void tableEtudiant(Connection con) throws SQLException {
-        //TODO: finir la disponibilté
         try (Statement st = con.createStatement()) {
             st.executeUpdate("""
                         create table Etudiant(
@@ -162,7 +146,6 @@ public class Initialisation {
         List<String> dates = Initialisation.datenaiss();
         List<String> classe = Initialisation.classe();
         for (int i = 0; i < ETUDIANT.length; i++) {
-            //TODO HASH
             Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i),mdps.get(i), dates.get(i), "dispo", classe.get(i));
         }
     }
@@ -648,8 +631,6 @@ public class Initialisation {
             return t[2];
         }).toList();
     }
-
-
 
     //-----------------------------------------------------------------
     //              CREATION DE LA TABLE VOEUX
