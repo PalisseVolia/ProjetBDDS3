@@ -11,7 +11,7 @@ import java.sql.*;
 public class Initialisation {
 
     public static void main(String[] args) {
-        //à run pour initialiser la bdd
+        //pour faire des tests
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             init();
         } catch (Exception err) {
@@ -79,7 +79,6 @@ public class Initialisation {
         List<String> adresses = Initialisation.adresseAdmin();
         List<String> mdps = Initialisation.mdpAdmin();
         for (int i = 0; i < ADMIN.length; i++) {
-            //on ajoute tout les admins à la bdd
             Commandes.AjoutAdmin(con, noms.get(i), prenoms.get(i), adresses.get(i), mdps.get(i));
         }
     }
@@ -143,10 +142,11 @@ public class Initialisation {
         List<String> prenoms = Initialisation.prenoms();
         List<String> adresses = Initialisation.adresse();
         List<String> mdps = Initialisation.mdp();
+        //on hash le mot de passe
         List<String> dates = Initialisation.datenaiss();
         List<String> classe = Initialisation.classe();
         for (int i = 0; i < ETUDIANT.length; i++) {
-            //on ajoute tout les étudiants à la bdd
+            //TODO HASH
             Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i),mdps.get(i), dates.get(i), "dispo", classe.get(i));
         }
     }
@@ -276,49 +276,42 @@ public class Initialisation {
    };
 
     public static List<String> noms() {
-        //retourne la colonne des noms
         return Arrays.stream(ETUDIANT).map((t) -> {
             return t[1];
         }).toList();
     }
 
     public static List<String> prenoms() {
-        //retourne la colonne des prenoms
         return Arrays.stream(ETUDIANT).map((t) -> {
             return t[0];
         }).toList();
     }
 
     public static List<String> adresse() {
-         //retourne la colonne des adresses
         return Arrays.stream(ETUDIANT).map((t) -> {
             return t[2];
         }).toList();
     }
 
     public static List<String> mdp() {
-         //retourne la colonne des mdp
         return Arrays.stream(ETUDIANT).map((t) -> {
             return t[3];
         }).toList();
     }
 
     public static List<String> datenaiss() {
-         //retourne la colonne des dates de naissances
         return Arrays.stream(ETUDIANT).map((t) -> {
             return t[4];
         }).toList();
     }
 
     public static List<String> dispo() {
-         //retourne la colonne de la disponibilité
         return Arrays.stream(ETUDIANT).map((t) -> {
             return t[5];
         }).toList();
     }
 
     public static List<String> classe() {
-         //retourne la colonne de la classe
         return Arrays.stream(ETUDIANT).map((t) -> {
             return t[6];
         }).toList();
@@ -494,28 +487,24 @@ public class Initialisation {
     };
 
     public static List<String> annee() {
-        //retourne la colonne des années
         return Arrays.stream(SEMESTRE).map((t) -> {
             return t[0];
         }).toList();
     }
 
     public static List<String> numero() {
-        //retourne la colonne des numero
         return Arrays.stream(SEMESTRE).map((t) -> {
             return t[1];
         }).toList();
     }
 
     public static List<String> ng() {
-        //retourne la colonne des ng
         return Arrays.stream(SEMESTRE).map((t) -> {
             return t[2];
         }).toList();
     }
 
     public static List<String> nc() {
-        //retourne la colonne des nc
         return Arrays.stream(SEMESTRE).map((t) -> {
             return t[3];
         }).toList();
@@ -628,20 +617,17 @@ public class Initialisation {
     };
 
     public static List<String> idsemestre() {
-        //retourne la colonne des idSemestres
         return Arrays.stream(GRPMODULE).map((t) -> {
             return t[0];
         }).toList();
     }
 
     public static List<String> grpmodule() {
-        //retourne la colonne des idGrpModule
         return Arrays.stream(GRPMODULE).map((t) -> {
             return t[1];
         }).toList();
     }
     public static List<String> module() {
-        //retourne la colonne des idModule
         return Arrays.stream(GRPMODULE).map((t) -> {
             return t[2];
         }).toList();
@@ -677,15 +663,7 @@ public class Initialisation {
                     add constraint moduleOuvert
                     foreign key (idModule) references module(id) 
                     ON DELETE CASCADE
-                      """);
-                      
-            st.executeUpdate(
-                    """
-                    alter table Voeux
-                    add constraint grpSemestre
-                    foreign key (idSemestre) references Semestre(id) 
-                    ON DELETE CASCADE
-                      """); 
+                      """);          
         }
 
         List<String> semestre = Initialisation.idsemestreVoeux();
@@ -700,7 +678,7 @@ public class Initialisation {
     }
     public static final String[][] VOEUX = new String[][]{
             //Etudiant 1, n'a fait des electifs qu'au S2 2020, il a donc choisi 3 modules de 3 Groupes différents
-            //idSemestre,idEtudiant,idModule,idgrp
+            //idSemestre,idEtudiant,idModule
             {"4", "1","13","1"},
             {"4", "1", "3","2"},
             {"4", "1", "8","3"},
@@ -892,26 +870,22 @@ public class Initialisation {
     };
 
     public static List<String> idsemestreVoeux() {
-        //retourne la colonne des idSemestre
         return Arrays.stream(VOEUX).map((t) -> {
             return t[0];
         }).toList();
     }
 
     public static List<String> etudiantVoeux() {
-        //retourne la colonne des idEtudiants
         return Arrays.stream(VOEUX).map((t) -> {
             return t[1];
         }).toList();
     }
     public static List<String> moduleVoeux() {
-        //retourne la colonne des idModule
         return Arrays.stream(VOEUX).map((t) -> {
             return t[2];
         }).toList();
     }
     public static List<String> groupevoeux() {
-        //retourne la colonne des numero de groupe
         return Arrays.stream(VOEUX).map((t) -> {
             return t[3];
         }).toList();

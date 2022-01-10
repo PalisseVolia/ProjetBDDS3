@@ -148,8 +148,6 @@ public class AdminPageContentEtudiant extends VerticalLayout{
                 if(Commandes.adresseExiste(con, email.getValue()) == false){
                     //si l'adresse n'existe pas encore dans la bdd
                     Commandes.AjoutEtudiant(con, nom.getValue(), prenom.getValue(), email.getValue(), mdp.getValue(), tmp.toString(), dispo, classe.getValue());
-                    Notification notif = Notification.show("Etudiant "+nom.getValue()+" "+ prenom.getValue()+" a été ajouté de la base de données");
-                    notif.setPosition(Position.BOTTOM_CENTER);
                 }
                 else{
                     Notification notif = Notification.show("L'adresse Email existe déjà :(");

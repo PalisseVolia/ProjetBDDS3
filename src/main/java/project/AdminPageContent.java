@@ -10,8 +10,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.selection.SingleSelect;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.Position;
 
 import classes.Etudiant;
 import bdd.Commandes;
@@ -60,9 +58,6 @@ public class AdminPageContent extends VerticalLayout {
         delete.addClickListener(t -> {
             try {
                 Commandes.deleteEtudiant(con, et.getAdresse());
-                Notification notif = Notification.show("Etudiant "+et.getNom()+" "+ et.getPrenom()+" a été supprimé de la base de données");
-                notif.setPosition(Position.BOTTOM_CENTER);
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -70,7 +65,7 @@ public class AdminPageContent extends VerticalLayout {
                 setthegride();
                 delete.setEnabled(false);
             } catch (Exception e) {
-                System.out.println("Problème lors de l'actualisation du tableau d'accueil admin");
+                System.out.println("Problème lors de l'actualsiation du tableau d'accueil admin");
             }
         });
     }
