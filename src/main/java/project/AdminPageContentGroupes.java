@@ -10,6 +10,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.data.selection.SingleSelect;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
 
 import classes.Module;
 import bdd.Commandes;
@@ -88,8 +90,11 @@ public class AdminPageContentGroupes extends VerticalLayout{
             try {
                 //suppression du module selectionne
                 Commandes.removeModule(con, mod.getId(), idgrp, Commandes.getidsem(con));
+                Notification notif = Notification.show("Module "+ mod.getIntitule()+  " a été supprimé du groupe "+ idgrp);
+                notif.setPosition(Position.BOTTOM_CENTER);
                 setthegridmg();
                 del.setEnabled(false);
+                
             } catch (Exception e) {
                 System.out.println("erreur lors de la suppression de module");
             }
