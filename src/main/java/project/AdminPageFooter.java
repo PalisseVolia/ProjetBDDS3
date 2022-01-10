@@ -101,7 +101,7 @@ public class AdminPageFooter extends HorizontalLayout{
             bSemestre.setVisible(true);
             
             try {
-                main.setMainContent(new AdminPageContentBibliotheqe());
+                main.setMainContent(new AdminPageContentBibliotheque());
             } catch (Exception e) {
                 System.out.println("problème durant la création de la page de bibliotheque");
             }
