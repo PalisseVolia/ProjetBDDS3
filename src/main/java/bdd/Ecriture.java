@@ -202,9 +202,9 @@ public class Ecriture {
                 pst.setInt(1, idSemestre);
                 ResultSet rset = pst.executeQuery(); {
                     while (rset.next()) {
-                        sauv.write(rset.getString(1)+" ");
+                        sauv.write(rset.getString(1));
                         sauv.newLine();
-                        sauv.write(rset.getString(1)+" ");
+                        sauv.write(rset.getString(1));
                         sauv.newLine();
                     }
                 }
