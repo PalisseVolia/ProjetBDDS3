@@ -38,7 +38,7 @@ public class AdminPageEntete extends HorizontalLayout{
             main.setEntete(new LoginPageEntete());
             main.setAlignment(1);
             main.setMainContent(new LoginPageContent(main));
-            main.setFooter(new MyHorizontalLayout());
+            main.setFooter(new LoginPageFooter());
         });
     }
 }

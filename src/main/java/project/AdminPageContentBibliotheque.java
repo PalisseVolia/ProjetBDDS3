@@ -23,13 +23,13 @@ import bdd.Commandes;
 // Contenu de la Bibliotheque de modules Administrateur
 // =======================================================================================
 
-public class AdminPageContentBibliotheqe extends VerticalLayout{
+public class AdminPageContentBibliotheque extends VerticalLayout{
     private Grid<Module> grid;
     private Button add;
     private CheckboxGroup<String> groupes;
     private Module mod;
 
-    public AdminPageContentBibliotheqe() throws SQLException, ClassNotFoundException{
+    public AdminPageContentBibliotheque() throws SQLException, ClassNotFoundException{
         //creation du tableau contenant les etudiants
         grid = new Grid<>(Module.class, false);
         setthegridm();
