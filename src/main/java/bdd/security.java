@@ -3,6 +3,10 @@ package bdd;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+// =======================================================================================
+// Classe de hash des mots de passe
+// =======================================================================================
+
 public class security {
 
     public static String CreateHash (String mdpInit){

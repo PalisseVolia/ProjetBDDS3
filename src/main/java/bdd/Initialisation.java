@@ -146,7 +146,6 @@ public class Initialisation {
         List<String> dates = Initialisation.datenaiss();
         List<String> classe = Initialisation.classe();
         for (int i = 0; i < ETUDIANT.length; i++) {
-            //TODO HASH
             Commandes.AjoutEtudiant(con, noms.get(i), prenoms.get(i), adresses.get(i),mdps.get(i), dates.get(i), "dispo", classe.get(i));
         }
     }

@@ -6,25 +6,24 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class Ecriture {
+// =======================================================================================
+// Classe permettant l'écriture du fichier texte d'historique
+// =======================================================================================
 
+public class Ecriture {
     public static void main(String[] args) {
         //à run pour initialiser la bdd
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
-            ecrireFichier(con, 4);
+            ecrireFichier(con, 4, "C:/Users/Volia/Desktop");
         } catch (Exception err) {
             System.out.println("Error : Commandes.java main() "+err);
         }
 
     }
 
-    public static void ecrireFichier (Connection con, int idSemestre) throws SQLException {
-        //
+    public static void ecrireFichier (Connection con, int idSemestre, String chemin) throws SQLException {
         try {
-            BufferedWriter sauv = new BufferedWriter(new FileWriter("Choix_Voeux_idSemestre_"+idSemestre+".txt",false));
-
-
-
+            BufferedWriter sauv = new BufferedWriter(new FileWriter(chemin + "/Choix_Voeux_idSemestre_"+idSemestre+".txt",false));
             /*Ecriture de NG et NC
             *
             * NG
@@ -35,9 +34,9 @@ public class Ecriture {
             try ( Statement st = con.createStatement()) {
                 try ( ResultSet res = st.executeQuery(requeteA)) {
                     while(res.next()){
-                    sauv.write(res.getInt(1));
+                    sauv.write(res.getInt(1)+" ");
                     sauv.newLine();
-                    sauv.write(res.getInt(2));
+                    sauv.write(res.getInt(2)+" ");
                     sauv.newLine();
                     }
                 }
@@ -45,9 +44,6 @@ public class Ecriture {
             catch (IOException e) {
                 System.out.println("ERROR : ecricreFichier : Ecriture de NG et NC : ecriture impossible : "+e);
             }
-
-
-
             /*Description des Modules :
             *
             * MODULES
@@ -73,9 +69,6 @@ public class Ecriture {
             }
             sauv.write("FINMODULES");
             sauv.newLine();
-
-
-
             /* Description des choix
             *
             * CHOIX
@@ -87,30 +80,26 @@ public class Ecriture {
             sauv.newLine();
             ArrayList<Integer> nb = Commandes.etudiantvoeux(con, idSemestre);
             for(int i=0;i<nb.size();i++){
-            final String requeteC ="SELECT Voeux.idModule from Voeux where idSemestre= "+idSemestre+ "and idEtudiant = " +nb.get(i);
-            try ( Statement st = con.createStatement()) {
-                try ( ResultSet res = st.executeQuery(requeteC)) {
-                    ArrayList<Integer> v= new ArrayList<Integer>();
-                    while(res.next()) {
-                        v.add(res.getInt(1));
-                        
+                final String requeteC ="SELECT Voeux.idModule from Voeux where idSemestre= "+idSemestre+ "and idEtudiant = " +nb.get(i);
+                try ( Statement st = con.createStatement()) {
+                    try ( ResultSet res = st.executeQuery(requeteC)) {
+                        ArrayList<Integer> v= new ArrayList<Integer>();
+                        while(res.next()) {
+                            v.add(res.getInt(1));
+                        }
+                        sauv.write(nb.get(i) + ";");
+                        for(int j=0;j<v.size();j++){
+                            sauv.write(v.get(j)+";");
+                        }
+                    sauv.newLine(); 
                     }
-                    sauv.write(nb.get(i) + ";");
-                    for(int j=0;j<v.size();j++){
-                        sauv.write(v.get(j)+";");
-                     }
-                sauv.newLine(); 
+                }
+                catch (IOException e) {
+                    System.out.println("ERROR : ecricreFichier : Ecriture de NG et NC : ecriture impossible : "+e);
                 }
             }
-            catch (IOException e) {
-                System.out.println("ERROR : ecricreFichier : Ecriture de NG et NC : ecriture impossible : "+e);
-            }
-             
-        }
             sauv.write("FINCHOIX");
             sauv.newLine();
-
-
             sauv.close();
         }
         catch (IOException err) {System.out.println("ERROR : ecricreFichier : impossible de créer le fichier d'écriture");}

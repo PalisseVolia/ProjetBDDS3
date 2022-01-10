@@ -48,7 +48,7 @@ public class AdminPageContentImpression extends VerticalLayout {
                 Ecriture.ecrireFichier(con, Commandes.getidsem(con), chemin);
                 System.out.println("ecriture ok");
             } catch (Exception e) {
-                //TODO: handle exception
+                System.out.println("erreur lors de l'écriture du fichier d'historique");
             }
         });
     }
