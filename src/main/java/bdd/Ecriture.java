@@ -107,7 +107,7 @@ public class Ecriture {
     }
 
 
-    private static void MakeListeidGroupeDistinct(List ListeidGroupeDistinct, List ListeidGroupe){
+    private static void MakeListeidGroupeDistinct(List<Integer> ListeidGroupeDistinct, List<Integer> ListeidGroupe){
         int p;
         ListeidGroupeDistinct.add(ListeidGroupe.get(0));
         for(int i = 0 ; i < ListeidGroupe.toArray().length ; i++){
