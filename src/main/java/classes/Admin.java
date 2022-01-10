@@ -1,7 +1,12 @@
 package classes;
 
+// =======================================================================================
+// Classe permettant de créer des objets "admin"
+// =======================================================================================
+
 public class Admin extends Personne {
 
+    //Constructeurs
     public Admin(int id,String nom, String prenom, String adresse, String mdp) {
         super(id, nom, prenom, adresse, mdp);
     }
@@ -9,6 +14,7 @@ public class Admin extends Personne {
     public Admin() {
     }
 
+    //méthodes get
     @Override
     public String getAdresse() {
         return super.getAdresse();
@@ -34,6 +40,7 @@ public class Admin extends Personne {
         return super.getid();
     }
     
+    //méthodes set
     @Override
     public void setid(int id) {
         super.setid(id);
@@ -60,25 +67,10 @@ public class Admin extends Personne {
         super.setPrenom(prenom);
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {    
-        return super.clone();
-    }
-
-    @Override
-    public boolean equals(Object arg0) {    
-        return super.equals(arg0);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
+    //toString
     @Override
     public String toString() {
         return super.toString();
     }
 
-    
 }
