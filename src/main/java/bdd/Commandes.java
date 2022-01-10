@@ -46,7 +46,6 @@ public class Commandes
         try {
             try (Statement st = con.createStatement()) {
                 st.executeUpdate("drop table " + nomtable+" cascade");
-                //le drop cascade permet de supprimer les tables sans avoir à supprimer les contraintes
             }
         } catch (Exception e) {
             System.out.println("table " + nomtable + " inexistante, première éxécution ?");
@@ -101,7 +100,7 @@ public class Commandes
             pst.setString(1, nom);
             pst.setString(2, prenom);
             pst.setString(3, adresse);
-            pst.setString(4,security.CreateHashv3(mdp)); //on hash le mot de passe pour plus de sécurité
+            pst.setString(4,security.CreateHashv3(mdp));
             pst.setDate(5, java.sql.Date.valueOf(date));
             pst.setString(6, dispo);
             pst.setString(7, classe);
@@ -419,7 +418,6 @@ public class Commandes
         boolean test=false;
         int count=0;
         String r = "SELECT COUNT(*) from etudiant WHERE adresse = ? ";
-        //on cherche chez les étudiant
         try (PreparedStatement st = con.prepareStatement(r)){
             st.setString(1, adresse);
                 ResultSet rres = st.executeQuery(
@@ -427,37 +425,19 @@ public class Commandes
             while (rres.next()) {
                 count = rres.getInt(1);
             }
-
-            String s = "SELECT COUNT(*) from admin WHERE adresse = ? ";
-            //on cherche chez les admins
-            try (PreparedStatement t = con.prepareStatement(s)){
-            t.setString(1, adresse);
-                ResultSet res = st.executeQuery(
-                        ); {
-            while (res.next()) {
-                count = count + res.getInt(1);
-            }
-
             if (count >= 1){
                 //si il y a une fois ou plus l'adresse 
                 test = true;
             }else{
                 test=false;
             }
-        
-        return test;
-                        }
-                }
+            return test;
             }
-        }catch (Exception e) {
-            System.out.println("Erreur durant adresseexiste");
         }
-        return test;
     }
 
     public static void NouvSemestre(Connection con, boolean g1, boolean g2, boolean g3)throws SQLException{
-        //méthode qui permet de créer un nouveau semestre automatiquement, tout en permettant de copier les groupes du semestre précédent
-        //les boolean en entrée permettent de savoir si l'utilisateur souhaite copier les groupes de modules du semestre précédent
+        //méthode qui permet de savoir connaitre l'annee et le numero d'un nouveau semestre
         Semestre sem = new Semestre();
         ArrayList<Semestre> list =new ArrayList<Semestre>();
         try ( Statement st = con.createStatement()) {
@@ -476,57 +456,39 @@ public class Commandes
                 Semestre s1 = list.get(0);
                 Semestre s2 = list.get(1);
                 if(s1.getAnnee()==s2.getAnnee()){
-                    //si les deux semestres précédents le nouveaux ont la même année
                     sem.setAnnee(s1.getAnnee()+1);
-                    //alors le nouveau semestre se déroule une année après
                     sem.setNumero(1);
-                    //et sera le semestre 1 de la nouvelle année
                 }else{
-                    //si les deux semestres précédents n'ont pas la même année
                     sem.setAnnee(s1.getAnnee());
-                    //le nouveau semestre aura l'année du semestre précédent
                     sem.setNumero(2);
-                    //et sera le semestre 2 de cette année
                 }
                 sem.setNg(3);
                 sem.setNc(1);
-                //on fixe ng et nc à 3 et 1
                 sem.setId(s1.getId()+1);
                 
                 AjoutSemestre(con, String.valueOf(sem.getAnnee()) , String.valueOf(sem.getNumero()), String.valueOf(sem.getNg()), String.valueOf(sem.getNc()));
-                //on ajoute le semestre crée à la BDD
                 ArrayList<Integer> groupe = new ArrayList<Integer>();
                 System.out.println(sem.toString());
                 if(g1==true){
-                    //l'utilisateur souhaite copier le groupe 1 du module précédent
                     groupe=getGrp(con, 1, s1.getId());
-                    //getGrp permet de récupérer les id des modules d'un groupe, ici les id des modules du groupe 1 du semestre précédent
-
                     for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 1, groupe.get(i));
-                        //on ajoute le groupe de module au nouveau semestre
                     }
                     groupe.clear();   
                 }
 
                 if(g2==true){
-                    //l'utilisateur souhaite copier le groupe 2 du module précédent
                     groupe=getGrp(con, 2, s1.getId());
-                    //getGrp permet de récupérer les id des modules d'un groupe, ici les id des modules du groupe 2 du semestre précédent
                     for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 2, groupe.get(i));
-                        //on ajoute le groupe de module au nouveau semestre
                     }
                     groupe.clear();   
                 }
 
                 if(g3==true){
-                    //l'utilisateur souhaite copier le groupe 3 du module précédent
                     groupe=getGrp(con, 3, s1.getId());
-                    //getGrp permet de récupérer les id des modules d'un groupe, ici les id des modules du groupe 3 du semestre précédent
                     for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 3, groupe.get(i));
-                        //on ajoute le groupe de module au nouveau semestre
                     }
                     groupe.clear();    
                 }
@@ -535,7 +497,7 @@ public class Commandes
     }
 
     public static ArrayList<Integer> getGrp(Connection con, int idGrp, int idSemestre ) throws SQLException{
-        //permet de recuperer la liste des idModule d'un groupe de module pur un semestre donné
+        //méthode permettant de récupérer les groupes d'un semestre donné
         ArrayList<Integer> groupe = new ArrayList<Integer>();
         try (PreparedStatement st = con.prepareStatement(
             """
@@ -579,50 +541,9 @@ public class Commandes
             }
         }
     }
-
-    public static int etudiantsize(Connection con) throws SQLException {
-        //méthode permettant de recuperer le nombre d'etudiant
-        int nb=0;
-        try ( Statement st = con.createStatement()) {
-            try ( ResultSet rres = st.executeQuery(
-                    """
-                    select COUNT(*) from Etudiant
-                     """)) {
-            while (rres.next()) {
-                nb= (rres.getInt(1));  
-            }
-        
-            return nb;
-        }
-     }
-    }
-
-    public static ArrayList<Integer> etudiantvoeux(Connection con, int idSemestre) throws SQLException {
-        //méthode permettant de recuperer les etudiants ayant fait des voeux pour un semestre donné
-        ArrayList<Integer> a= new ArrayList<Integer>();
-        try (PreparedStatement st = con.prepareStatement(
-            """
-            select idEtudiant from Voeux
-            where idSemestre= ?
-             """    
-        )){
-            st.setInt(1, idSemestre);
-            
-                ResultSet tla = st.executeQuery(
-                        ); {
-            while (tla.next()) {
-                a.add(tla.getInt(1));
-            }
-        
-            return a;
-        }
-     }
-    }
-
-
     
     public static Etudiant getEtudiant(Connection con, int idEtu) throws SQLException {
-        //méthode permettant de recuperer les informations d'un étudiant à partir de son id
+        //méthode permettant de recuperer les modules d'un groupe
         Etudiant etudiant = new Etudiant();
         try (PreparedStatement st = con.prepareStatement(
             """
@@ -680,21 +601,18 @@ public class Commandes
 
     public static Personne login(Connection con, String adresse, String mdp) throws SQLException {
         //permet de verifier si une adresse mail et un mdp appartiennent a la bdd
-        //retourne une personne : soit un étudiant soit un admin
+        //mdp = security.CreateHash(mdp);
         String r = "SELECT * from etudiant WHERE adresse = ? and mdp = ?";
-        int test= 3; //entier dont la valeur variera en fonction des résultats des recherches
+        int test= 3; 
         Etudiant etudiant = new Etudiant();
         Admin admin = new Admin();
-        mdp=security.CreateHashv3(mdp); //on hash le mot de passe afin de le comparer au mot de passe hashé contenus dans la BDD
+        mdp=security.CreateHashv3(mdp);
         try (PreparedStatement p = con.prepareStatement(r)) {
-            //on cherche d'abord dans la table des étudiants
             p.setString(1, adresse);
             p.setString(2, mdp);
             try ( ResultSet tla = p.executeQuery(
                 )) {
                 while (tla.next()) {
-                    //si un étudiant possède la même adresse et le même mot de passe que ce qui ont été rentré par l'utilisateur :
-                    //on récupère les informations de l'étudiant correspondant
                     etudiant.setid(tla.getInt(1));
                     etudiant.setNom(tla.getString(2));
                     etudiant.setPrenom(tla.getString(3));
@@ -703,11 +621,11 @@ public class Commandes
                     etudiant.setDateNaiss(tla.getDate(6));
                     etudiant.setDisponibilite(tla.getString(7));
                     etudiant.setClasse(tla.getString(8));
-                    test=1; //signifie qu'un étudiant a été trouvé
+                    test=1;
                     System.out.println("test etudiant"+test);
                 }
                 if(test==3){
-                    //si aucune adresse et mdp ne correspond a ceux d'un etudiant, alors test!=1 et on regarde alors chez les admin
+                    //si aucune adresse et mdp ne correspond a ceux d'un etudiant on regarde alors chez les admin
                     String r2 = "SELECT * from admin WHERE adresse = ? and mdp = ?"; 
                     try (PreparedStatement p2 = con.prepareStatement(r2)) {
                         p2.setString(1, adresse);
@@ -715,15 +633,13 @@ public class Commandes
                         try ( ResultSet ta = p2.executeQuery(
                             )) {
                             while (ta.next()) {
-                                //on récupère les informations de l'admin correspondant
                                 admin.setid(ta.getInt(1));
                                 admin.setNom(ta.getString(2));
                                 System.out.println(admin.getNom());
                                 admin.setPrenom(ta.getString(3));
                                 admin.setAdresse(ta.getString(4));
                                 admin.setMdp(ta.getString(5));
-                                
-                                test=2;//signifie qu'un admin a été trouvé
+                                test=2;
                                 System.out.println("test admin"+test);
                             }
                         }
@@ -742,15 +658,15 @@ public class Commandes
             return admin;
         
             case 3:
-            //aucun n'a été trouvé
             break;
             }
-        return admin; //si aucune information n'a été trouvé, on retourn un admin "vide", ne contenant aucune information 
+        return admin;  
         }  
     }
 
     public static boolean TrueEtudiantID(Connection con, int id){
         //Vérifier qu'un étudiant existe
+        //Vérifier qu'un admin existe
         int count = 0;
         boolean test=false;
         String r="SELECT COUNT(*) FROM etudiant WHERE id = ?";
@@ -775,7 +691,7 @@ public class Commandes
     }
 
     public static boolean TrueEtudiantAdresse(Connection con, String adresse){
-        //Vérifier qu'une adresse mail existe (elle doit être unique)
+        //Vérifier qu'un étudiant existe
         int count = 0;
         boolean test=false;
         String r="SELECT COUNT(*) FROM etudiant WHERE adresse = ?";
@@ -976,7 +892,6 @@ public class Commandes
     }
 
     public static int getidsem(Connection con) throws SQLException, ClassNotFoundException {
-        //permet de récuperer l'id du dernier semestre
         try ( Statement st = con.createStatement()) {
             try ( ResultSet rres = st.executeQuery(
                 """
@@ -1017,41 +932,33 @@ public class Commandes
     }
 
     public static ArrayList<String> getVoeux(Connection con, int idEtudiant) throws SQLException{
-        //méthode permettant de récupérer les intitulé de voeux d'un étudiant du dernier semestre
+        //méthode permettant de récupérer les voeux de l'étudiant pour un semestre
         ArrayList<String> voeux = new ArrayList<String>();
         for (int i=1;i<4;i++){
-            //on teste pour les groupes 1,2 et 3
-        try (PreparedStatement st = con.prepareStatement(
-            """
-            SELECT Module.intitule from Module 
-            JOIN Voeux ON Module.id=Voeux.idModule
-            JOIN Semestre ON Voeux.idSemestre=Semestre.id
-            WHERE Voeux.idEtudiant= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
-            and Semestre.numero=(SELECT MAX(numero) from Semestre WHERE Semestre.annee=(SELECT MAX(annee) from Semestre)) 
-			and Voeux.idGrpModule= ?
-             """    
-        )){
-            st.setInt(1, idEtudiant);
-            st.setInt(2, i);
-            boolean empty=true; 
-            ResultSet rres = st.executeQuery(
-                        ); {
-           while (rres.next()) {
-                voeux.add(rres.getString(1));
-                //si l'étudiant à fait un voeux pour un groupe donné, alors on ajoute l'intitulé du module à la liste
-                empty=false; //signifie que le résultset n'est pas vide
-            
-        }if (empty==true) {
-            //si le résultset est vide
-            voeux.add(" ");
-            //si l'étudiant n'a pas encore fait de voeux, on ajoute " " à la liste
-        }
-        
-            
-        }
-     }
-      }  
-     return voeux;
+            try (PreparedStatement st = con.prepareStatement(
+                """
+                SELECT Module.intitule from Module 
+                JOIN Voeux ON Module.id=Voeux.idModule
+                JOIN Semestre ON Voeux.idSemestre=Semestre.id
+                WHERE Voeux.idEtudiant= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
+                and Semestre.numero=(SELECT MAX(numero) from Semestre WHERE Semestre.annee=(SELECT MAX(annee) from Semestre)) 
+                and Voeux.idGrpModule= ?
+                """    
+            )){
+                st.setInt(1, idEtudiant);
+                st.setInt(2, i);
+                boolean empty=true;
+                ResultSet rres = st.executeQuery(); {
+                    while (rres.next()) {
+                        voeux.add(rres.getString(1));
+                        empty=false;
+                    }if (empty==true) {
+                        voeux.add(" ");
+                    } 
+                }
+            }
+        }  
+        return voeux;
     }
 
     public static boolean VoeuxExiste(Connection con, int idSemestre, int idEtudiant, int idModule){
