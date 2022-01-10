@@ -13,6 +13,8 @@ import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.selection.SingleSelect;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
 
 import classes.Module;
 import bdd.Commandes;
@@ -83,14 +85,20 @@ public class AdminPageContentBibliotheqe extends VerticalLayout{
                 if (value.contains("Groupe 1")) {
                     Commandes.AjoutGrpModule(con, idSem, 1, mod.getId());
                     //on ajoute au groupe 1
+                    Notification notif = Notification.show("Module "+mod.getIntitule()+" a été ajouté au groupe 1");
+                    notif.setPosition(Position.BOTTOM_CENTER);
                 }
                 if (value.contains("Groupe 2")) {
                     Commandes.AjoutGrpModule(con, idSem, 2, mod.getId());
                     //on ajoute au groupe 2
+                    Notification notif = Notification.show("Module "+mod.getIntitule()+" a été ajouté au groupe 2");
+                    notif.setPosition(Position.BOTTOM_CENTER);
                 }
                 if (value.contains("Groupe 3")) {
                     Commandes.AjoutGrpModule(con, idSem, 3, mod.getId());
                     //on ajoute au groupe 3
+                    Notification notif = Notification.show("Module "+mod.getIntitule()+" a été ajouté au groupe 3");
+                    notif.setPosition(Position.BOTTOM_CENTER);
                 }
         }   catch (Exception err) {
                 System.out.println("problème lors de la connexion");
