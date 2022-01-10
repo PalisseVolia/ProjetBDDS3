@@ -454,7 +454,7 @@ public class Commandes
             t.setString(1, adresse);
                 ResultSet res = st.executeQuery(
                         ); {
-            while (rres.next()) {
+            while (res.next()) {
                 count = count + res.getInt(1);
             }
 
@@ -469,7 +469,10 @@ public class Commandes
                         }
                 }
             }
+        }catch (Exception e) {
+            System.out.println("Erreur durant adresseexiste");
         }
+        return test;
     }
 
     public static void NouvSemestre(Connection con, boolean g1, boolean g2, boolean g3)throws SQLException{
