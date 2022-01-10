@@ -627,7 +627,7 @@ public class Commandes
         ArrayList<Integer> a= new ArrayList<Integer>();
         try (PreparedStatement st = con.prepareStatement(
             """
-            select idEtudiant from Voeux
+            select distinct idEtudiant from Voeux
             where idSemestre= ?
              """    
         )){

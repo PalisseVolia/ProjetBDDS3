@@ -23,8 +23,6 @@ public class Ecriture {
         try {
             BufferedWriter sauv = new BufferedWriter(new FileWriter("Choix_Voeux_idSemestre_"+idSemestre+".txt",false));
 
-
-
             /*Ecriture de NG et NC
             *
             * NG
@@ -35,9 +33,9 @@ public class Ecriture {
             try ( Statement st = con.createStatement()) {
                 try ( ResultSet res = st.executeQuery(requeteA)) {
                     while(res.next()){
-                    sauv.write(res.getInt(1));
+                    sauv.write(res.getInt(1)+" ");
                     sauv.newLine();
-                    sauv.write(res.getInt(2));
+                    sauv.write(res.getInt(2)+" ");
                     sauv.newLine();
                     }
                 }
