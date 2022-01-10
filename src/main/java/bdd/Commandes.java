@@ -10,6 +10,9 @@ import classes.Etudiant;
 import classes.Personne;
 import classes.Semestre;
 
+// =======================================================================================
+// Classe Contenant toutes les méthodes liées à la base de donnée
+// =======================================================================================
 
 public class Commandes 
 {
@@ -151,7 +154,7 @@ public class Commandes
     }
 
     public static void AjoutSemestre(Connection con, String annee, String numero, String ng, String nc) throws SQLException {
-        //méthode permettant d'ajouter un module à la base de donnée
+        //méthode permettant d'ajouter un semestre à la base de donnée
         try (PreparedStatement pst = con.prepareStatement(
             """
                     INSERT INTO Semestre (annee,numero, ng, nc)
@@ -171,8 +174,7 @@ public class Commandes
     }
 
     public static void AjoutGrpModule(Connection con, int idSemestre,int idGrpModule, int idModule) throws SQLException {
-    //méthode permettant d'ajouter un groupe de module
-   
+        //méthode permettant d'ajouter un groupe de module  (variante int)
         try ( PreparedStatement pst = con.prepareStatement(
                 """
                 insert into GrpModule (idSemestre,idGroupe,idModule)
@@ -188,10 +190,10 @@ public class Commandes
             con.rollback();
             System.out.println("ERROR : problem during AjoutGrpModule");
         }
-    
-}
+    }
+
     public static void AjoutGrpModule(Connection con, String idsemestre, String idGrp, String module) throws SQLException {
-        //méthode permettant d'ajouter un groupe de module
+        //méthode permettant d'ajouter un groupe de module (variante string)
         try ( PreparedStatement pst = con.prepareStatement(
                 """
                 insert into GrpModule (idSemestre,idGroupe,idModule) 
@@ -206,12 +208,32 @@ public class Commandes
         }catch (SQLException ex) {
             con.rollback();
             System.out.println("ERROR : problem during AjoutGrpModule");
+        }
     }
-}
-
-
+    
+    public static void AjoutVoeux(Connection con, int idsemestre, int idetudiant, int idmodule, int idgrp, int numeroVoeux) throws SQLException {
+        //méthode permettant d'ajouter un voeux (variante int)
+        try ( PreparedStatement pst = con.prepareStatement(
+            """
+            insert into Voeux (idSemestre,idEtudiant,idModule,idGrpModule,numeroVoeux)
+            values (?,?,?,?,?)
+            """)) {
+            con.setAutoCommit(false);
+            pst.setInt(1, (idsemestre));
+            pst.setInt(2, (idetudiant));
+            pst.setInt(3, (idmodule));
+            pst.setInt(4, (idgrp));
+            pst.setInt(5, (numeroVoeux));
+            pst.executeUpdate();
+            con.commit();
+        }catch (SQLException ex) {
+            con.rollback();
+            System.out.println("ERROR : problem during AjoutVoeux");
+        }
+    }
+    
     public static void AjoutVoeux(Connection con, String idsemestre, String idetudiant, String idmodule,String idgrp) throws SQLException {
-        //méthode permettant d'ajouter un groupe de module
+        //méthode permettant d'ajouter un voeux (variante string)
         try ( PreparedStatement pst = con.prepareStatement(
                 """
                 insert into Voeux (idSemestre,idEtudiant,idModule,idGrpModule)
@@ -222,27 +244,6 @@ public class Commandes
             pst.setInt(2, Integer.parseInt(idetudiant));
             pst.setInt(3, Integer.parseInt(idmodule));
             pst.setInt(4, Integer.parseInt(idgrp));
-            pst.executeUpdate();
-            con.commit();
-        }catch (SQLException ex) {
-            con.rollback();
-            System.out.println("ERROR : problem during AjoutVoeux");
-        }
-    }
-
-    public static void AjoutVoeux(Connection con, int idsemestre, int idetudiant, int idmodule, int idgrp, int numeroVoeux) throws SQLException {
-        //méthode permettant d'ajouter un groupe de module
-        try ( PreparedStatement pst = con.prepareStatement(
-                """
-                insert into Voeux (idSemestre,idEtudiant,idModule,idGrpModule,numeroVoeux)
-                values (?,?,?,?,?)
-                """)) {
-            con.setAutoCommit(false);
-            pst.setInt(1, (idsemestre));
-            pst.setInt(2, (idetudiant));
-            pst.setInt(3, (idmodule));
-            pst.setInt(4, (idgrp));
-            pst.setInt(5, (numeroVoeux));
             pst.executeUpdate();
             con.commit();
         }catch (SQLException ex) {
@@ -347,27 +348,7 @@ public class Commandes
             con.rollback();
             System.out.println("ERROR : problem during removeModule");
         }
-
-
     }
-
-    public static void deleteModule(Connection con, int id) throws SQLException{
-        //méthode qui permet de supprimer un module grâce à son id
-        try ( PreparedStatement pst = con.prepareStatement(
-                """
-                delete from Module where id = ?
-                """)) {
-            con.setAutoCommit(false);
-            pst.setInt(1, id);
-            pst.executeUpdate();
-            con.commit();
-        }catch (SQLException ex) {
-            con.rollback();
-            System.out.println("ERROR : problem during deleteModule");
-        }
-    }
-
-    
 
     public static void deleteGrpModule(Connection con, int idgrp, int idSemestre) throws SQLException{
         //méthode qui permet de supprimer un groupe de module
@@ -427,10 +408,9 @@ public class Commandes
             while (rres.next()) {
                 res.add(rres.getString(c));
             }
-        
             return res;
+            }
         }
-    }
     }
 
     public static boolean adresseExiste(Connection con, String adresse) throws SQLException{
@@ -445,17 +425,15 @@ public class Commandes
             while (rres.next()) {
                 count = rres.getInt(1);
             }
-
             if (count >= 1){
                 //si il y a une fois ou plus l'adresse 
                 test = true;
             }else{
                 test=false;
             }
-        
-        return test;
-                        }
-    }
+            return test;
+            }
+        }
     }
 
     public static void NouvSemestre(Connection con, boolean g1, boolean g2, boolean g3)throws SQLException{
@@ -493,20 +471,16 @@ public class Commandes
                 System.out.println(sem.toString());
                 if(g1==true){
                     groupe=getGrp(con, 1, s1.getId());
-
                     for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 1, groupe.get(i));
-
                     }
-                    groupe.clear();
-                        
+                    groupe.clear();   
                 }
 
                 if(g2==true){
                     groupe=getGrp(con, 2, s1.getId());
                     for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 2, groupe.get(i));
-
                     }
                     groupe.clear();   
                 }
@@ -515,7 +489,6 @@ public class Commandes
                     groupe=getGrp(con, 3, s1.getId());
                     for(int i=0; i<groupe.size();i++){
                         AjoutGrpModule(con, sem.getId(), 3, groupe.get(i));
-
                     }
                     groupe.clear();    
                 }
@@ -524,6 +497,7 @@ public class Commandes
     }
 
     public static ArrayList<Integer> getGrp(Connection con, int idGrp, int idSemestre ) throws SQLException{
+        //méthode permettant de récupérer les groupes d'un semestre donné
         ArrayList<Integer> groupe = new ArrayList<Integer>();
         try (PreparedStatement st = con.prepareStatement(
             """
@@ -538,13 +512,11 @@ public class Commandes
             while (rres.next()) {
                 groupe.add(rres.getInt(3));    
             }
-
-        return groupe;
+            return groupe;
+            }
+        }
     }
-}
-}
 
-    
     public static List<Etudiant> getEtudiant(Connection con) throws SQLException {
         //méthode permettant de recuperer une colonne c de la table "table"
         ArrayList<Etudiant> res = new ArrayList<Etudiant>();
@@ -564,12 +536,10 @@ public class Commandes
                 etudiant.setDisponibilite(rres.getString(7));
                 etudiant.setClasse(rres.getString(8));
                 res.add(etudiant);
-                
             }
-        
             return res;
+            }
         }
-     }
     }
     
     public static Etudiant getEtudiant(Connection con, int idEtu) throws SQLException {
@@ -595,10 +565,9 @@ public class Commandes
                 etudiant.setDisponibilite(tla.getString(7));
                 etudiant.setClasse(tla.getString(8));
             }
-        
             return etudiant;
+            }
         }
-     }
     }
 
     public static List<Module> getModule(Connection con, int idSemestre, int idGroupe) throws SQLException {
@@ -625,30 +594,10 @@ public class Commandes
                 mod.setClasseacceptee(rres.getString(6));
                 res.add(mod);
             }
-        
             return res;
+            }
         }
-     }
     }
-
-
-    public static int findPersonne(Connection con, String table, String nom, String prenom) throws SQLException {
-        //Trouve la PREMIERE personne qui a ce nom et prénom et renvoie son identifiant
-        int id = -1;
-        try (PreparedStatement pst = con.prepareStatement(
-                """
-                SELECT id FROM ? WHERE nom = ? and prenom = ?
-                """)) {
-            pst.setString(1,table);
-            pst.setString(2,nom);
-            pst.setString(3,prenom);
-            id = Integer.parseInt(String.valueOf(pst.executeQuery()));
-        }
-        return id;
-    }
-    
-
-
 
     public static Personne login(Connection con, String adresse, String mdp) throws SQLException {
         //permet de verifier si une adresse mail et un mdp appartiennent a la bdd
@@ -672,7 +621,6 @@ public class Commandes
                     etudiant.setDateNaiss(tla.getDate(6));
                     etudiant.setDisponibilite(tla.getString(7));
                     etudiant.setClasse(tla.getString(8));
-                    
                     test=1;
                     System.out.println("test etudiant"+test);
                 }
@@ -691,7 +639,6 @@ public class Commandes
                                 admin.setPrenom(ta.getString(3));
                                 admin.setAdresse(ta.getString(4));
                                 admin.setMdp(ta.getString(5));
-                                
                                 test=2;
                                 System.out.println("test admin"+test);
                             }
@@ -717,7 +664,6 @@ public class Commandes
         }  
     }
 
-
     public static boolean TrueEtudiantID(Connection con, int id){
         //Vérifier qu'un étudiant existe
         //Vérifier qu'un admin existe
@@ -731,21 +677,17 @@ public class Commandes
             while (rres.next()) {
                 count = rres.getInt(1);
             }
-
             if (count >= 1){
                 //si il y a une fois ou plus l'adresse 
                 test = true;
             }else{
                 test=false;
             }
-        
-        
-                        }
-    }catch (SQLException e) {
-
+            }
+        }catch (SQLException e) {
         System.out.println("Error : Commandes.java Trueetudiant(con,id) "+e);
-    }
-    return test;
+        }
+        return test;
     }
 
     public static boolean TrueEtudiantAdresse(Connection con, String adresse){
@@ -760,27 +702,22 @@ public class Commandes
             while (rres.next()) {
                 count = rres.getInt(1);
             }
-
             if (count >= 1){
                 //si il y a une fois ou plus l'adresse 
                 test = true;
             }else{
                 test=false;
             }
-        
-        
-                        }
-    }catch (SQLException e) {
-
+            }
+        }catch (SQLException e) {
         System.out.println("Error : Commandes.java Trueetudiant(con,id) "+e);
-    }
-    return test;
+        }
+        return test;
     }
 
     public static void ModulesDuSemestre(Connection con, int annee, int numero) throws SQLException {
         //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
         final String requete ="SELECT Modules.id FROM Semestres JOIN GrpModule ON GrpModule.idSemestre = Semestres.id Join Modules ON Modules.id = GrpModule.idGroupe WHERE Semestres.annee = '"+annee+"' and Semestres.numero = '"+numero+"'";
-        
         try ( Statement st = con.createStatement()) {
             try ( ResultSet res = st.executeQuery(requete)) {
                 while (res.next()) {
@@ -790,7 +727,6 @@ public class Commandes
         }
     }
     
-
     public static boolean TrueAdminID(Connection con, int id) throws SQLException{
         //Vérifier qu'un admin existe
         int count = 0;
@@ -803,22 +739,19 @@ public class Commandes
             while (rres.next()) {
                 count = rres.getInt(1);
             }
-
             if (count >= 1){
                 //si il y a une fois ou plus l'adresse 
                 test = true;
             }else{
                 test=false;
             }
-        
-        
-                        }
-    }catch (SQLException e) {
+            }
+        }catch (SQLException e) {
+            System.out.println("Error : Commandes.java TrueAdmin(con,id) "+e);
+        }
+        return test;
+    }
 
-        System.out.println("Error : Commandes.java TrueAdmin(con,id) "+e);
-    }
-    return test;
-    }
     public static boolean TrueAdminAdresse(Connection con, String adresse) throws SQLException{
         //Vérifier qu'un admin existe
         int count = 0;
@@ -831,21 +764,17 @@ public class Commandes
             while (rres.next()) {
                 count = rres.getInt(1);
             }
-
             if (count >= 1){
                 //si il y a une fois ou plus l'adresse 
                 test = true;
             }else{
                 test=false;
             }
-        
-        
-                        }
-    }catch (SQLException e) {
-
-        System.out.println("Error : Commandes.java TrueAdmin(con,id) "+e);
-    }
-    return test;
+            }
+        }catch (SQLException e) {
+            System.out.println("Error : Commandes.java TrueAdmin(con,id) "+e);
+        }
+        return test;
     }
 
     public static boolean TrueGrpModule(Connection con, int idSemestre, int idGrpModule, int idModule){
@@ -868,14 +797,13 @@ public class Commandes
             } else {
                 test= false;
             }
-        } 
+            } 
         }catch (SQLException e) {
-            
             System.out.println("Error : Commandes.java TrueGrpModule(con,id) "+e);
-        
-    }
+        }
         return test;
     }
+
     public static List<String> ModulesDuSemestre(Connection con, int idSemestre) throws SQLException {
         //méthode qui permet à un étudiant ou un admin de voir la liste des modules et leur groupe
         final String requete ="SELECT Modules.id FROM Semestres JOIN GrpModule ON GrpModule.idSemestre = Semestres.id Join Modules ON Modules.id = GrpModule.idGroupe WHERE Semestres.id '"+idSemestre+"'";
@@ -999,44 +927,39 @@ public class Commandes
             }
         
             return voeux;
+            }
         }
-     }
     }
+
     public static ArrayList<String> getVoeux(Connection con, int idEtudiant) throws SQLException{
         //méthode permettant de récupérer les voeux de l'étudiant pour un semestre
         ArrayList<String> voeux = new ArrayList<String>();
         for (int i=1;i<4;i++){
-        try (PreparedStatement st = con.prepareStatement(
-            """
-            SELECT Module.intitule from Module 
-            JOIN Voeux ON Module.id=Voeux.idModule
-            JOIN Semestre ON Voeux.idSemestre=Semestre.id
-            WHERE Voeux.idEtudiant= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
-            and Semestre.numero=(SELECT MAX(numero) from Semestre WHERE Semestre.annee=(SELECT MAX(annee) from Semestre)) 
-			and Voeux.idGrpModule= ?
-             """    
-        )){
-            st.setInt(1, idEtudiant);
-            st.setInt(2, i);
-            boolean empty=true;
-            ResultSet rres = st.executeQuery(
-                        ); {
-           while (rres.next()) {
-                voeux.add(rres.getString(1));
-                empty=false;
-            
-        }if (empty==true) {
-            voeux.add(" ");
-        }
-        
-            
-        }
-     }
-      }  
-     return voeux;
+            try (PreparedStatement st = con.prepareStatement(
+                """
+                SELECT Module.intitule from Module 
+                JOIN Voeux ON Module.id=Voeux.idModule
+                JOIN Semestre ON Voeux.idSemestre=Semestre.id
+                WHERE Voeux.idEtudiant= ? and Semestre.annee=(SELECT MAX(annee) from Semestre)
+                and Semestre.numero=(SELECT MAX(numero) from Semestre WHERE Semestre.annee=(SELECT MAX(annee) from Semestre)) 
+                and Voeux.idGrpModule= ?
+                """    
+            )){
+                st.setInt(1, idEtudiant);
+                st.setInt(2, i);
+                boolean empty=true;
+                ResultSet rres = st.executeQuery(); {
+                    while (rres.next()) {
+                        voeux.add(rres.getString(1));
+                        empty=false;
+                    }if (empty==true) {
+                        voeux.add(" ");
+                    } 
+                }
+            }
+        }  
+        return voeux;
     }
-
-    
 
     public static boolean VoeuxExiste(Connection con, int idSemestre, int idEtudiant, int idModule){
         //Vérifier qu'un voeux a été fait à un semestre donné
@@ -1048,22 +971,20 @@ public class Commandes
             pst.setInt(1,idSemestre);
             pst.setInt(2,idEtudiant);
             pst.setInt(3,idModule);
-                ResultSet rres = pst.executeQuery(
+            ResultSet rres = pst.executeQuery(
                         ); {
-            while (rres.next()) {
-                res = rres.getInt(1);
+                while (rres.next()) {
+                    res = rres.getInt(1);
+                }
+                if (res >= 1){
+                    test=true;
+                } else {
+                    test= false;
+                }
             }
-            if (res >= 1){
-                test=true;
-            } else {
-                test= false;
-            }
-        } 
-        }catch (SQLException e) {
-            
-            System.out.println("Error : Commandes.java VoeuxExiste(con,id) "+e);
-        
-    }
+        } catch (SQLException e) {
+            System.out.println("Error : Commandes.java VoeuxExiste(con,id) "+e);  
+        }
         return test;
     }
 
