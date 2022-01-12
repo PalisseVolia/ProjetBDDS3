@@ -24,7 +24,7 @@ public class AdminPageFooter extends HorizontalLayout{
         baccueil = new Button();
         baccueil.setText("Accueil");
         add(baccueil);
-        baccueil.setVisible(false);
+        baccueil.setEnabled(false);
 
         //bouton de d'accès à la page d'ajout d'étudiant
         bEtudiant = new Button();
@@ -56,15 +56,24 @@ public class AdminPageFooter extends HorizontalLayout{
         bimpression.setText("Impression");
         add(bimpression);
 
+        //style settings
+        baccueil.setWidth("8em");
+        bEtudiant.setWidth("8em");
+        bModule.setWidth("8em");
+        bbibliotheque.setWidth("8em");
+        bgroupes.setWidth("8em");
+        bSemestre.setWidth("8em");
+        bimpression.setWidth("8em");
+
         //Listeners permettant d'afficher le contenu correspondant aux boutons cliqués
         baccueil.addClickListener(t -> {
-            baccueil.setVisible(false);
-            bEtudiant.setVisible(true);
-            bModule.setVisible(true);
-            bbibliotheque.setVisible(true);
-            bgroupes.setVisible(true);
-            bSemestre.setVisible(true);
-            bimpression.setVisible(true);
+            baccueil.setEnabled(false);
+            bEtudiant.setEnabled(true);
+            bModule.setEnabled(true);
+            bbibliotheque.setEnabled(true);
+            bgroupes.setEnabled(true);
+            bSemestre.setEnabled(true);
+            bimpression.setEnabled(true);
             try {
                 main.setMainContent(new AdminPageContent()); 
             } catch (Exception e) {
@@ -72,13 +81,13 @@ public class AdminPageFooter extends HorizontalLayout{
             }
         });
         bEtudiant.addClickListener(t -> {
-            baccueil.setVisible(true);
-            bEtudiant.setVisible(false);
-            bModule.setVisible(true);
-            bbibliotheque.setVisible(true);
-            bgroupes.setVisible(true);
-            bSemestre.setVisible(true);
-            bimpression.setVisible(true);
+            baccueil.setEnabled(true);
+            bEtudiant.setEnabled(false);
+            bModule.setEnabled(true);
+            bbibliotheque.setEnabled(true);
+            bgroupes.setEnabled(true);
+            bSemestre.setEnabled(true);
+            bimpression.setEnabled(true);
             try {
                 main.setMainContent(new AdminPageContentEtudiant());
             } catch (Exception e) {
@@ -86,13 +95,13 @@ public class AdminPageFooter extends HorizontalLayout{
             }
         });
         bModule.addClickListener(t -> {
-            baccueil.setVisible(true);
-            bEtudiant.setVisible(true);
-            bModule.setVisible(false);
-            bbibliotheque.setVisible(true);
-            bgroupes.setVisible(true);
-            bSemestre.setVisible(true);
-            bimpression.setVisible(true);
+            baccueil.setEnabled(true);
+            bEtudiant.setEnabled(true);
+            bModule.setEnabled(false);
+            bbibliotheque.setEnabled(true);
+            bgroupes.setEnabled(true);
+            bSemestre.setEnabled(true);
+            bimpression.setEnabled(true);
             try {
                 main.setMainContent(new AdminPageContentModule());
             } catch (Exception e) {
@@ -100,13 +109,13 @@ public class AdminPageFooter extends HorizontalLayout{
             }
         });
         bbibliotheque.addClickListener(t -> {
-            baccueil.setVisible(true);
-            bEtudiant.setVisible(true);
-            bModule.setVisible(true);
-            bbibliotheque.setVisible(false);
-            bgroupes.setVisible(true);
-            bSemestre.setVisible(true);
-            bimpression.setVisible(true);
+            baccueil.setEnabled(true);
+            bEtudiant.setEnabled(true);
+            bModule.setEnabled(true);
+            bbibliotheque.setEnabled(false);
+            bgroupes.setEnabled(true);
+            bSemestre.setEnabled(true);
+            bimpression.setEnabled(true);
             try {
                 main.setMainContent(new AdminPageContentBibliotheque());
             } catch (Exception e) {
@@ -114,13 +123,13 @@ public class AdminPageFooter extends HorizontalLayout{
             }
         });
         bgroupes.addClickListener(t -> {
-            baccueil.setVisible(true);
-            bEtudiant.setVisible(true);
-            bModule.setVisible(true);
-            bbibliotheque.setVisible(true);
-            bgroupes.setVisible(false);
-            bSemestre.setVisible(true);
-            bimpression.setVisible(true);
+            baccueil.setEnabled(true);
+            bEtudiant.setEnabled(true);
+            bModule.setEnabled(true);
+            bbibliotheque.setEnabled(true);
+            bgroupes.setEnabled(false);
+            bSemestre.setEnabled(true);
+            bimpression.setEnabled(true);
             try {
                 main.setMainContent(new AdminPageContentGroupes());
             } catch (Exception e) {
@@ -128,13 +137,13 @@ public class AdminPageFooter extends HorizontalLayout{
             }
         });
         bSemestre.addClickListener(t -> {
-            baccueil.setVisible(true);
-            bEtudiant.setVisible(true);
-            bModule.setVisible(true);
-            bbibliotheque.setVisible(true);
-            bgroupes.setVisible(true);
-            bSemestre.setVisible(false);
-            bimpression.setVisible(true);
+            baccueil.setEnabled(true);
+            bEtudiant.setEnabled(true);
+            bModule.setEnabled(true);
+            bbibliotheque.setEnabled(true);
+            bgroupes.setEnabled(true);
+            bSemestre.setEnabled(false);
+            bimpression.setEnabled(true);
             try {
                 main.setMainContent(new AdminPageContentSemestre());
             } catch (Exception e) {
@@ -142,13 +151,13 @@ public class AdminPageFooter extends HorizontalLayout{
             }
         });
         bimpression.addClickListener(t -> {
-            baccueil.setVisible(true);
-            bEtudiant.setVisible(true);
-            bModule.setVisible(true);
-            bbibliotheque.setVisible(true);
-            bgroupes.setVisible(true);
-            bSemestre.setVisible(true);
-            bimpression.setVisible(false);
+            baccueil.setEnabled(true);
+            bEtudiant.setEnabled(true);
+            bModule.setEnabled(true);
+            bbibliotheque.setEnabled(true);
+            bgroupes.setEnabled(true);
+            bSemestre.setEnabled(true);
+            bimpression.setEnabled(false);
             try {
                 main.setMainContent(new AdminPageContentImpression());
             } catch (Exception e) {

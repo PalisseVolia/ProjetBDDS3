@@ -21,7 +21,7 @@ import bdd.Commandes;
 // Contenu de la page de choix de voeux etudiant
 // =======================================================================================
 
-public class EtudiantPageContent extends VerticalLayout{
+public class EtudiantPageContentVoeux extends VerticalLayout{
     private Grid<Module> grid;
     private Button valider;
     private RadioButtonGroup<String> grpselect;
@@ -29,7 +29,7 @@ public class EtudiantPageContent extends VerticalLayout{
     private Module mod;
     private ArrayList<String> listevoeux;
 
-    public EtudiantPageContent(int id) throws SQLException, ClassNotFoundException {
+    public EtudiantPageContentVoeux(int id) throws SQLException, ClassNotFoundException {
         //creation des boutons de choix de groupe à afficher
         grpselect = new RadioButtonGroup<>();
         grpselect.setItems("Groupe 1", "Groupe 2", "Groupe 3");
