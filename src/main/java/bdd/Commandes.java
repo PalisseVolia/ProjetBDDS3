@@ -18,7 +18,11 @@ public class Commandes
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
             System.out.println("Méthode sans preparedstatement :");
             Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55"); 
-            System.out.println(getEtudiant(con,120).toString());          
+            System.out.println(getEtudiant(con,120).toString());  
+            List<Module> res = historique(con,120);  
+            for(int i=0;i<res.size();i++){
+                System.out.println(res.get(i).getIntitule());
+            }     
         } catch (Exception err) {
             System.out.println("Error : Commandes.java main() "+err);
         }
@@ -965,14 +969,31 @@ public class Commandes
         }
     }
 
-    public static ResultSet historique(Connection con, int idEtud) throws SQLException {
-        //méthode pour récuperer l'historique des voeux de modules d'un étudiant
-        try (PreparedStatement pst = con.prepareStatement(
-                """
-                SELECT Voeux.idSemestre,Voeux.idModule,Voeux.numeroVoeux FROM Voeux JOIN Etudiants ON Etudiants.id = Voeux.idEtudiant WHERE Etudiant.id = ?
-                """)) {
-            pst.setInt(1,idEtud);
-            return pst.executeQuery();
+    public static List<Module> historique(Connection con, int idEtu) throws SQLException {
+        //méthode permettant de recuperer les modules d'un groupe
+        ArrayList<Module> res = new ArrayList<Module>();
+        try (PreparedStatement st = con.prepareStatement(
+            """
+            SELECT Module.id, Module.intitule, Module.description, Module.NbPlaceMax,
+            Module.nbplaceMin, Module.classeacceptee 
+            from Voeux join Module on Voeux.idModule = Module.id where Voeux.idEtudiant = ?
+             """    
+        )){
+            st.setInt(1, idEtu);
+                ResultSet rres = st.executeQuery(
+                        ); {
+            while (rres.next()) {
+                Module mod = new Module();
+                mod.setId(rres.getInt(1));
+                mod.setIntitule(rres.getString(2));
+                mod.setDescription(rres.getString(3));
+                mod.setNbPlaceMax(rres.getInt(4));
+                mod.setNbPlaceMin(rres.getInt(5));
+                mod.setClasseacceptee(rres.getString(6));
+                res.add(mod);
+            }
+            return res;
+            }
         }
     }
 
@@ -1098,5 +1119,6 @@ public class Commandes
         }
         return test;
     }
+
     
 }
