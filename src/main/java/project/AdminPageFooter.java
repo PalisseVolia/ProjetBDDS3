@@ -4,7 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 // =======================================================================================
-// Footer du panel d'administration, contient les boutons permettant l'accès aux différentes donctions
+// Footer du panel d'administration, contient les boutons permettant l'accès aux différentes fonctions
 // =======================================================================================
 
 public class AdminPageFooter extends HorizontalLayout{

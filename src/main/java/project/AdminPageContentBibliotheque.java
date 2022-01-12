@@ -30,7 +30,7 @@ public class AdminPageContentBibliotheque extends VerticalLayout{
     private Module mod;
 
     public AdminPageContentBibliotheque() throws SQLException, ClassNotFoundException{
-        //creation du tableau contenant les etudiants
+        //creation du tableau contenant les modules
         grid = new Grid<>(Module.class, false);
         setthegridm();
         add(grid);

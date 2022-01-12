@@ -53,13 +53,6 @@ public class LoginPageContent extends VerticalLayout{
         valider.setText("Valider");
         valider.setEnabled(false);
         add(valider);
-        
-        // TODO: temporaire remplissage de test
-        // email.setValue("ThibautWaechter@insa-strasbourg.fr");
-        // mdp.setValue("mdp1");
-        email.setValue("BeltanePariseau@insa-strasbourg.fr");
-        mdp.setValue("Jgfh!FGsFz4");
-        valider.setEnabled(true);
 
         //style settings
         email.setWidth("20em");

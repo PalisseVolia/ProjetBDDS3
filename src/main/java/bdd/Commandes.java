@@ -11,23 +11,7 @@ import classes.Personne;
 import classes.Semestre;
 
 
-public class Commandes 
-{
-    public static void main(String[] args) {
-        //pour faire des tests
-        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
-            System.out.println("Méthode sans preparedstatement :");
-            Commandes.login(con, "PaulineGiroux@insa-strasbourg.fr", "Milita!recreux55"); 
-            System.out.println(getEtudiant(con,120).toString());  
-            List<Module> res = historique(con,120);  
-            for(int i=0;i<res.size();i++){
-                System.out.println(res.get(i).getIntitule());
-            }     
-        } catch (Exception err) {
-            System.out.println("Error : Commandes.java main() "+err);
-        }
-
-    }
+public class Commandes {
 
     //-----------------------------------------------------------------
     //           METHODES GENERALES
@@ -970,7 +954,7 @@ public class Commandes
     }
 
     public static List<Module> historique(Connection con, int idEtu) throws SQLException {
-        //méthode permettant de recuperer les modules d'un groupe
+        //méthode permettant de recuperer tous les modules selectionnés par l'étudiant
         ArrayList<Module> res = new ArrayList<Module>();
         try (PreparedStatement st = con.prepareStatement(
             """

@@ -10,16 +10,6 @@ import java.sql.*;
 
 public class Initialisation {
 
-    public static void main(String[] args) {
-        //à run pour initialiser la bdd
-        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
-            init();
-        } catch (Exception err) {
-            System.out.println("Error : Commandes.java main() "+err);
-        }
-
-    }
-
     // méthode à appeler pour initialiser la base de donnée
     public static void init() {
         try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
@@ -613,8 +603,6 @@ public class Initialisation {
             {"4", "3", "7"},
             {"4", "3", "8"},
             {"4", "3", "11"},
-
-
     };
 
     public static List<String> idsemestre() {
@@ -851,9 +839,7 @@ public class Initialisation {
             {"4", "29", "3","2"},
             {"4", "29", "8","3"},
 
-
             //Etudiant 120, GE4, a fait les modules au  s2 2019, et au s1 et s2 2020
-
             //s2 2019
             {"2", "120", "5","1"},
             {"2", "120", "6","2"},
@@ -866,8 +852,6 @@ public class Initialisation {
             {"4", "120", "14","1"},
             {"4", "120", "3","2"},
             {"4", "120", "8","3"},
-
-
     };
 
     public static List<String> idsemestreVoeux() {

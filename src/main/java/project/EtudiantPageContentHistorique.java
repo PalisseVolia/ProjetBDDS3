@@ -8,17 +8,23 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import bdd.Commandes;
+import classes.Module;
+
+// =======================================================================================
+// Contenu de la page affichant l'historique des modules suivis par l'étudiant
+// =======================================================================================
 
 public class EtudiantPageContentHistorique extends VerticalLayout{
     private Grid<Module> grid;
-    
-    public EtudiantPageContentHistorique() {
+
+    public EtudiantPageContentHistorique(int id) throws SQLException, ClassNotFoundException{
+        //creation du tableau contenant les modules
         grid = new Grid<>(Module.class, false);
-        setthegridm();
+        setthegridh(id);
         add(grid);
     }
 
-    public void setthegridm() throws SQLException, ClassNotFoundException {
+    public void setthegridh(int id) throws SQLException, ClassNotFoundException {
         grid.removeAllColumns();
         //tableau contenant tous les modules
         grid.addColumn(Module::getIntitule).setHeader("Intitule").setSortable(true).setAutoWidth(true).setFlexGrow(0);
@@ -28,7 +34,7 @@ public class EtudiantPageContentHistorique extends VerticalLayout{
         grid.addColumn(Module::getClasseacceptee).setHeader("Classes acceptées").setSortable(true).setAutoWidth(true).setFlexGrow(0);
         //connexion à la base de donnée
         Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass");
-        List<Module> module = getModule(con);
+        List<Module> module = Commandes.historique(con, id);
         grid.setItems(module);
     }
 }

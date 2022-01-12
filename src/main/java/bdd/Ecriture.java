@@ -11,16 +11,7 @@ import java.util.ArrayList;
 // =======================================================================================
 
 public class Ecriture {
-    public static void main(String[] args) {
-        //à run pour initialiser la bdd
-        try (Connection con = Commandes.connect("localhost", 5432, "postgres", "postgres", "pass")) {
-            ecrireFichier(con, 4, "C:/Users/Volia/Desktop");
-        } catch (Exception err) {
-            System.out.println("Error : Commandes.java main() "+err);
-        }
-
-    }
-
+    
     public static void ecrireFichier (Connection con, int idSemestre, String chemin) throws SQLException {
         try {
             BufferedWriter sauv = new BufferedWriter(new FileWriter(chemin + "/Choix_Voeux_idSemestre_"+idSemestre+".txt",false));
